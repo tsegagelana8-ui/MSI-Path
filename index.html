@@ -1,1 +1,258 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101827"><link rel="manifest" href="manifest.webmanifest"><title>Pathology MCQ Exam Prep</title><style>body{margin:0;background:#0b1220;color:#edf3ff;font:16px system-ui;padding:24px}main{max-width:760px;margin:8vh auto}.card{display:block;color:inherit;text-decoration:none;padding:22px;margin:14px 0;border:1px solid #2a3a55;border-radius:16px;background:#142139}.card:hover{border-color:#7c9cff}h1{font-size:clamp(28px,5vw,44px)}p{color:#a6b4ca}small{color:#7c9cff}</style><main><small>PATHOLOGY / EXAM PREP</small><h1>Choose your question set</h1><p>Interactive MCQs with instant feedback, explanations, question flags, exam mode, timer, progress tracking and results export.</p><a class="card" href="2015-images.html"><h2>2015 · Image questions</h2><p>30 questions transcribed from the four supplied images.</p></a><a class="card" href="2016.html"><h2>2016 · PDF question set</h2><p>22 questions from the uploaded PDF (the document itself labels its content “MSIS Pathology 2018”).</p></a><a class="card" href="2017.html"><h2>2017 · PDF question set</h2><p>41 questions from the uploaded Patho MSSI PDF.</p></a><p>For Android, host this folder over HTTPS and open it in Chrome, then choose Install app or Add to Home screen.</p></main><script>if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js');</script></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="description" content="Choose a pathology exam set and practice university-level questions.">
+  <title>Pathology Exam Sets</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0b1120;
+      --card: #151e30;
+      --card-hover: #1b2940;
+      --text: #f1f5f9;
+      --muted: #a5b4c8;
+      --accent: #38bdf8;
+      --border: #29364c;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(100% - 32px, 1000px);
+      margin: 0 auto;
+      padding: 55px 0;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      margin-bottom: 16px;
+      border: 1px solid #075985;
+      border-radius: 50px;
+      color: var(--accent);
+      background: #082f49;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(30px, 6vw, 46px);
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    header p {
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .exam-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .exam-card {
+      display: flex;
+      flex-direction: column;
+      padding: 25px;
+      min-height: 300px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      transition: transform 0.2s, border-color 0.2s,
+                  background 0.2s;
+    }
+
+    .exam-card:hover {
+      transform: translateY(-4px);
+      background: var(--card-hover);
+      border-color: var(--accent);
+    }
+
+    .exam-year {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .exam-card h2 {
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    .question-count {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 7px 12px;
+      margin-bottom: 18px;
+      background: #0c253b;
+      color: #7dd3fc;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .contents-label {
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .contents {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    .start-button {
+      display: block;
+      width: 100%;
+      margin-top: auto;
+      padding: 13px 18px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #082032;
+      text-align: center;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .start-button:hover {
+      background: #7dd3fc;
+    }
+
+    footer {
+      margin-top: 42px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 35px 0;
+      }
+
+      header {
+        margin-bottom: 30px;
+      }
+
+      .exam-card {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+
+    <header>
+      <div class="badge">Pathology Revision</div>
+      <h1>Choose an Exam Set</h1>
+      <p>
+        Select an exam set and test your knowledge with
+        pathology questions.
+      </p>
+    </header>
+
+    <section class="exam-list" aria-label="Available pathology exams">
+
+      <!-- 2015 EXAM -->
+      <article class="exam-card">
+        <div class="exam-year">2015</div>
+        <h2>2015 Pathology</h2>
+
+        <div class="question-count">30 Questions</div>
+
+        <div class="contents-label">Contents</div>
+        <p class="contents">
+          General pathology, skin pathology, bone and joint
+          disorders, and related pathology topics.
+        </p>
+
+        <a class="start-button" href="/2015-images.html">
+          Start Exam Set
+        </a>
+      </article>
+
+      <!-- 2016 EXAM -->
+      <article class="exam-card">
+        <div class="exam-year">2016</div>
+        <h2>2016 Pathology</h2>
+
+        <div class="question-count">22 Questions</div>
+
+        <div class="contents-label">Contents</div>
+        <p class="contents">
+          Skin pathology, bone and joint disorders,
+          neuromuscular diseases, and peripheral nerve disorders.
+        </p>
+
+        <a class="start-button" href="/2016.html">
+          Start Exam Set
+        </a>
+      </article>
+
+      <!-- 2017 EXAM -->
+      <article class="exam-card">
+        <div class="exam-year">2017</div>
+        <h2>2017 Pathology</h2>
+
+        <div class="question-count">41 Questions</div>
+
+        <div class="contents-label">Contents</div>
+        <p class="contents">
+          Skin diseases, bone and joint disorders,
+          neuromuscular diseases, fractures, and bone
+          and soft-tissue tumors.
+        </p>
+
+        <a class="start-button" href="/2017.html">
+          Start Exam Set
+        </a>
+      </article>
+
+    </section>
+
+    <footer>
+      Pathology Exam Practice
+    </footer>
+
+  </main>
+</body>
+</html>
