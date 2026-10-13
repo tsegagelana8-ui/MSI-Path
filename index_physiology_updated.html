@@ -115,6 +115,11 @@ section[id] { scroll-margin-top: 84px; }
   box-shadow: 0 0 8px var(--success);
 }
 
+.user-chip.is-admin::before {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
 .ghost-btn {
   padding: 7px 14px;
   border: 1px solid var(--border);
@@ -136,6 +141,27 @@ section[id] { scroll-margin-top: 84px; }
 }
 
 .ghost-btn b { color: var(--gold); }
+
+/* Hidden admin button — only visible to the site owner */
+.admin-access-btn {
+  padding: 7px 14px;
+  border: 1px solid rgba(251,191,36,.45);
+  border-radius: 999px;
+  background: rgba(251,191,36,.12);
+  color: var(--gold);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.admin-access-btn:hover {
+  background: rgba(251,191,36,.22);
+  color: #fff;
+  border-color: var(--gold);
+}
 
 /* ---------- HERO ---------- */
 .welcome {
@@ -764,7 +790,7 @@ footer {
   position: fixed;
   left: 50%;
   bottom: 26px;
-  z-index: 200;
+  z-index: 600;
   transform: translate(-50%, 20px);
   padding: 11px 20px;
   border: 1px solid var(--border);
@@ -784,6 +810,107 @@ footer {
   transform: translate(-50%, 0);
 }
 
+/* ---------- MODAL (password prompt + confirm) ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 550;
+  background: rgba(5,10,20,.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-card {
+  width: min(100%, 400px);
+  padding: 26px 24px 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(160deg, #131c2e, #0d1626);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  text-align: center;
+}
+
+.modal-icon {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.modal-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  letter-spacing: .3px;
+}
+
+.modal-card p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.modal-card .field { text-align: left; }
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.modal-actions button {
+  flex: 1 1 0;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+}
+
+.modal-actions button:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+.modal-actions button.primary {
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), #60a5fa);
+  color: #06202f;
+}
+
+.modal-actions button.primary:hover {
+  filter: brightness(1.08);
+}
+
+.modal-actions button.danger {
+  border: 0;
+  background: linear-gradient(135deg, #f87171, #ef4444);
+  color: #450a0a;
+}
+
+.modal-actions button.danger:hover {
+  filter: brightness(1.08);
+}
+
+.modal-error {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid #7f1d1d;
+  border-radius: 9px;
+  background: #2b1216;
+  color: #fca5a5;
+  font-size: 13px;
+}
+
 /* ---------- ADMIN OVERLAY ---------- */
 .admin-overlay {
   position: fixed;
@@ -799,7 +926,7 @@ footer {
 }
 
 .admin-panel {
-  width: min(100%, 820px);
+  width: min(100%, 900px);
   max-height: 90vh;
   overflow-y: auto;
   padding: 26px 24px 22px;
@@ -815,6 +942,7 @@ footer {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
 .admin-header h2 {
@@ -892,6 +1020,22 @@ footer {
   box-shadow: 0 0 0 3px rgba(56,189,248,.15);
 }
 
+.admin-lock-banner {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(248,113,113,.45);
+  border-radius: 12px;
+  background: rgba(248,113,113,.1);
+  color: #fca5a5;
+  font-size: 13.5px;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.admin-lock-banner strong { color: #fff; display: block; margin-bottom: 3px; }
+
 .admin-table {
   display: grid;
   gap: 8px;
@@ -924,8 +1068,19 @@ footer {
 .admin-row .col.name { font-weight: bold; color: var(--text); }
 .admin-row .col.email { color: #7dd3fc; }
 .admin-row .col.date { color: var(--muted); font-size: 12.5px; }
-
 .admin-row .col.dismiss-wrap { text-align: right; }
+
+.admin-row.is-me {
+  border-color: rgba(251,191,36,.5);
+  background: rgba(251,191,36,.07);
+}
+
+.admin-row.is-me .col.name::after {
+  content: " (you)";
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 12px;
+}
 
 .dismiss-btn {
   padding: 6px 12px;
@@ -945,6 +1100,11 @@ footer {
   background: rgba(248,113,113,.25);
   color: #fff;
   border-color: var(--danger);
+}
+
+.dismiss-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
 }
 
 .admin-empty {
@@ -1006,11 +1166,23 @@ footer {
   border-color: var(--danger);
 }
 
+.admin-btn.gold {
+  border-color: rgba(251,191,36,.5);
+  color: var(--gold);
+}
+
+.admin-btn.gold:hover {
+  background: rgba(251,191,36,.15);
+  color: #fff;
+  border-color: var(--gold);
+}
+
 /* ---------- MOBILE ---------- */
 @media (max-width: 560px) {
   .topbar-inner { width: min(100% - 22px, 1080px); padding: 8px 0; }
   .user-chip { max-width: 120px; font-size: 11.5px; }
-  .ghost-btn { padding: 6px 11px; font-size: 11.5px; }
+  .ghost-btn,
+  .admin-access-btn { padding: 6px 10px; font-size: 11px; }
 }
 
 @media (max-width: 480px) {
@@ -1113,6 +1285,9 @@ footer {
       <a class="brand-link" href="#top">Tsega<span>Tech</span></a>
 
       <div class="topbar-actions">
+        <!-- ADMIN BUTTON: only shown to the site owner -->
+        <button type="button" class="admin-access-btn" id="adminAccessBtn" hidden>🛡 Admin Panel</button>
+
         <button type="button" class="ghost-btn" id="favShortcut">
           ★ Favourites <b id="favCountTop">0</b>
         </button>
@@ -1348,18 +1523,18 @@ footer {
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ============================================================
-     ADMIN OVERLAY (hidden by default)
+     ADMIN OVERLAY
      ============================================================ -->
 <div class="admin-overlay" id="adminOverlay" hidden>
   <div class="admin-panel">
 
     <div class="admin-header">
       <h2>🛡 Admin <span>Control Room</span></h2>
-      <span class="admin-badge" id="adminBadge">Authenticated</span>
+      <span class="admin-badge" id="adminBadge">Owner Access</span>
     </div>
 
     <p class="admin-subtitle">
-      Private dashboard — visible only to the site owner. Manage registered users below.
+      Private dashboard — visible only to the site owner's signed-in account.
     </p>
 
     <div class="admin-stats">
@@ -1381,6 +1556,15 @@ footer {
       </div>
     </div>
 
+    <!-- Lock banner (visible only when site is locked) -->
+    <div class="admin-lock-banner" id="lockBanner" hidden>
+      <span style="font-size:20px;">🔒</span>
+      <div>
+        <strong>Site access is currently LOCKED for everyone except you.</strong>
+        Students cannot sign in. Click "Unlock All" below to restore access.
+      </div>
+    </div>
+
     <input type="text" class="admin-search" id="adminSearch"
            placeholder="🔍  Search by name or email…" autocomplete="off">
 
@@ -1390,6 +1574,7 @@ footer {
       <div class="left" id="adminFooterInfo"></div>
       <div class="right">
         <button type="button" class="admin-btn" id="adminRefresh">↻ Refresh</button>
+        <button type="button" class="admin-btn gold" id="adminToggleLock">🔒 Lock All</button>
         <button type="button" class="admin-btn danger" id="adminDismissAll">Dismiss All</button>
         <button type="button" class="admin-btn" id="adminClose">Close</button>
       </div>
@@ -1406,9 +1591,12 @@ footer {
   'use strict';
 
   /* ============================================================
-     ⚙️ SECRET ADMIN KEY — CHANGE THIS TO YOUR OWN PRIVATE CODE
+     ⚙️ OWNER CONFIGURATION
+     ------------------------------------------------------------
+     Change these two values if you ever need to.
      ============================================================ */
-  const ADMIN_KEY = 'tsega-admin-2024';
+  const OWNER_EMAIL = 'tsegagelana8@gmail.com';   // ← your sign-in email
+  const ADMIN_PASSWORD = 'Tse06@ge';              // ← admin panel password
 
   /* ============================================================
      DOM HELPERS
@@ -1446,13 +1634,6 @@ footer {
     el.hidden = false;
     el.className = 'auth-error';
   }
-  function setSuccess(id, msg) {
-    const el = $(id);
-    if (!el) return;
-    el.textContent = msg;
-    el.hidden = false;
-    el.className = 'auth-success';
-  }
   function clearBox(id) {
     const el = $(id);
     if (el) { el.hidden = true; el.textContent = ''; }
@@ -1477,6 +1658,7 @@ footer {
      ============================================================ */
   const USERS_KEY = 'tt_users';
   const SESSION_KEY = 'tt_session';
+  const LOCK_KEY = 'tt_site_locked';
 
   function getUsers() {
     try {
@@ -1490,6 +1672,7 @@ footer {
   function saveUsers(list) {
     try { localStorage.setItem(USERS_KEY, JSON.stringify(list)); } catch (e) {}
   }
+
   function getSession() {
     try {
       const raw = localStorage.getItem(SESSION_KEY);
@@ -1518,13 +1701,27 @@ footer {
     try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
   }
 
-  /* ---------- FAVOURITES HELPERS ---------- */
+  /* ---------- SITE LOCK ---------- */
+  function isSiteLocked() {
+    try { return localStorage.getItem(LOCK_KEY) === '1'; }
+    catch (e) { return false; }
+  }
+  function setSiteLocked(v) {
+    try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
+  }
+
+  /* ---------- FAVOURITES ---------- */
   function favKey(email) {
     return 'tt_favs_' + (email || 'guest');
   }
   function getFavsFor(email) {
     try { return JSON.parse(localStorage.getItem(favKey(email)) || '[]'); }
     catch (e) { return []; }
+  }
+
+  /* ---------- OWNER CHECK ---------- */
+  function isOwnerEmail(email) {
+    return String(email || '').toLowerCase() === OWNER_EMAIL.toLowerCase();
   }
 
   /* ============================================================
@@ -1566,6 +1763,11 @@ footer {
     if (password.length < 6) return setError('signupError', 'Password must be at least 6 characters.');
     if (password !== confirm) return setError('signupError', 'The two passwords do not match.');
 
+    /* 🔒 If the site is locked, block all NEW sign-ups except the owner */
+    if (isSiteLocked() && !isOwnerEmail(email)) {
+      return setError('signupError', 'Access is temporarily closed. Please contact the admin on Telegram.');
+    }
+
     const users = getUsers();
     if (users.some((u) => u.email === email)) {
       return setError('signupError', 'This email is already registered. Please sign in.');
@@ -1605,6 +1807,11 @@ footer {
       return setError('signinError', 'Incorrect email or password.');
     }
 
+    /* 🔒 If the site is locked, block all non-owner sign-ins */
+    if (isSiteLocked() && !isOwnerEmail(email)) {
+      return setError('signinError', 'Access is temporarily closed. Please contact the admin on Telegram.');
+    }
+
     $('signinForm').reset();
     const account = { name: user.name, email: user.email };
     setSession(account);
@@ -1618,6 +1825,7 @@ footer {
   $('logoutBtn').addEventListener('click', () => {
     clearSession();
     $('userChip').textContent = '';
+    $('adminAccessBtn').hidden = true;
     showScreen('auth');
     showAuthView('signin');
     toast('Signed out.');
@@ -1628,18 +1836,19 @@ footer {
      ============================================================ */
   function startApp(account) {
     showScreen('app');
-    renderUserChip(account.name);
+    renderUserChip(account.name, account.email);
     updateWelcomeText(account.name);
     initStars();
     renderFavorites();
+    updateAdminButtonVisibility(account.email);
   }
 
-  function renderUserChip(name) {
+  function renderUserChip(name, email) {
     const chip = $('userChip');
     if (chip) {
       chip.textContent = name || '';
-      const s = getSession();
-      chip.title = s ? s.email : '';
+      chip.title = email || '';
+      chip.classList.toggle('is-admin', isOwnerEmail(email));
     }
   }
 
@@ -1649,6 +1858,13 @@ footer {
       const first = name.split(/\s+/)[0];
       el.textContent = 'Welcome back, ' + first + '. A focused revision space with organized pathology, biochemistry and physiology exam practice sets.';
     }
+  }
+
+  /* Show admin button only for the owner's signed-in account */
+  function updateAdminButtonVisibility(email) {
+    const btn = $('adminAccessBtn');
+    if (!btn) return;
+    btn.hidden = !isOwnerEmail(email);
   }
 
   /* ============================================================
@@ -1827,9 +2043,143 @@ footer {
      🛡 ADMIN SYSTEM
      ============================================================ */
 
-  /* ---------- Secret shortcut detection ---------- */
   const adminOverlay = $('adminOverlay');
   let adminOpen = false;
+
+  /* ---------- Generic modal helper ---------- */
+  function openModal(opts) {
+    /* opts: { icon, title, message, fields: [{id, label, type, placeholder}], confirmText, confirmClass, onConfirm } */
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+
+    const card = document.createElement('div');
+    card.className = 'modal-card';
+
+    if (opts.icon) {
+      const i = document.createElement('div');
+      i.className = 'modal-icon';
+      i.textContent = opts.icon;
+      card.appendChild(i);
+    }
+
+    const h = document.createElement('h3');
+    h.textContent = opts.title || '';
+    card.appendChild(h);
+
+    if (opts.message) {
+      const p = document.createElement('p');
+      p.textContent = opts.message;
+      card.appendChild(p);
+    }
+
+    const errorEl = document.createElement('p');
+    errorEl.className = 'modal-error';
+    errorEl.hidden = true;
+    card.appendChild(errorEl);
+
+    const fields = {};
+    if (opts.fields) {
+      opts.fields.forEach((f) => {
+        const label = document.createElement('label');
+        label.className = 'field';
+        const span = document.createElement('span');
+        span.textContent = f.label;
+        const input = document.createElement('input');
+        input.type = f.type || 'text';
+        input.placeholder = f.placeholder || '';
+        input.autocomplete = 'off';
+        label.appendChild(span);
+        label.appendChild(input);
+        card.appendChild(label);
+        fields[f.id] = input;
+      });
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'modal-actions';
+
+    const cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.textContent = opts.cancelText || 'Cancel';
+    cancel.addEventListener('click', () => overlay.remove());
+
+    const confirm = document.createElement('button');
+    confirm.type = 'button';
+    confirm.textContent = opts.confirmText || 'Confirm';
+    if (opts.confirmClass) confirm.className = opts.confirmClass;
+    else confirm.className = 'primary';
+
+    confirm.addEventListener('click', () => {
+      const values = {};
+      let hasEmpty = false;
+      Object.keys(fields).forEach((k) => {
+        values[k] = fields[k].value;
+        if (opts.fields.some((f) => f.id === k && f.required !== false) && !values[k].trim()) {
+          hasEmpty = true;
+        }
+      });
+      if (hasEmpty) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.hidden = false;
+        return;
+      }
+      const ok = opts.onConfirm ? opts.onConfirm(values, errorEl) : true;
+      if (ok !== false) overlay.remove();
+    });
+
+    actions.appendChild(cancel);
+    actions.appendChild(confirm);
+    card.appendChild(actions);
+
+    overlay.appendChild(card);
+    overlay.addEventListener('click', (ev) => { if (ev.target === overlay) overlay.remove(); });
+    document.addEventListener('keydown', function esc(ev) {
+      if (ev.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', esc); }
+    });
+
+    document.body.appendChild(overlay);
+
+    /* Focus first field */
+    const firstKey = Object.keys(fields)[0];
+    if (firstKey) setTimeout(() => fields[firstKey].focus(), 60);
+
+    /* Enter key submits */
+    Object.values(fields).forEach((input) => {
+      input.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); confirm.click(); }
+      });
+    });
+  }
+
+  /* ---------- Open admin (password protected) ---------- */
+  function requestAdminOpen() {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) {
+      toast('Admin panel is not available.');
+      return;
+    }
+    if (adminOpen) return;
+
+    openModal({
+      icon: '🔐',
+      title: 'Admin Password Required',
+      message: 'Enter the owner password to open the admin panel.',
+      fields: [
+        { id: 'pw', label: 'Password', type: 'password', placeholder: '••••••••' }
+      ],
+      confirmText: 'Unlock',
+      confirmClass: 'primary',
+      onConfirm: (values, errorEl) => {
+        if (values.pw !== ADMIN_PASSWORD) {
+          errorEl.textContent = 'Incorrect password.';
+          errorEl.hidden = false;
+          return false;
+        }
+        openAdmin();
+        return true;
+      }
+    });
+  }
 
   function openAdmin() {
     if (adminOpen) return;
@@ -1845,29 +2195,8 @@ footer {
     document.body.style.overflow = '';
   }
 
-  /* ---------- Detect secret code typed anywhere ---------- */
-  let typedBuffer = '';
-  document.addEventListener('keydown', (e) => {
-    /* Only letters/digits/hyphens for the buffer */
-    if (e.key.length === 1 && /[a-zA-Z0-9-]/.test(e.key)) {
-      typedBuffer += e.key.toLowerCase();
-      if (typedBuffer.length > 64) typedBuffer = typedBuffer.slice(-64);
-
-      if (typedBuffer.endsWith(ADMIN_KEY)) {
-        typedBuffer = '';
-        openAdmin();
-      }
-    }
-  });
-
-  /* ---------- Also allow a URL hash: #admin ---------- */
-  function checkHashForAdmin() {
-    if (window.location.hash === '#admin') {
-      openAdmin();
-    }
-  }
-  window.addEventListener('hashchange', checkHashForAdmin);
-  checkHashForAdmin();
+  /* ---------- Admin button click ---------- */
+  $('adminAccessBtn').addEventListener('click', requestAdminOpen);
 
   /* ---------- Refresh / close buttons ---------- */
   $('adminRefresh').addEventListener('click', () => {
@@ -1876,7 +2205,7 @@ footer {
   });
   $('adminClose').addEventListener('click', closeAdmin);
 
-  /* ---------- Escape key closes ---------- */
+  /* ---------- Escape key closes admin ---------- */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && adminOpen) closeAdmin();
   });
@@ -1886,19 +2215,83 @@ footer {
 
   /* ---------- Dismiss all ---------- */
   $('adminDismissAll').addEventListener('click', () => {
-    const users = getUsers();
-    if (!users.length) return toast('No users to dismiss.');
-    const ok = confirm('Dismiss ALL ' + users.length + ' users? This cannot be undone.');
-    if (!ok) return;
-    if (!confirm('Are you absolutely sure? All local accounts will be deleted.')) return;
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
 
-    /* Also clear their favourites */
-    users.forEach((u) => {
-      try { localStorage.removeItem(favKey(u.email)); } catch (e) {}
+    const users = getUsers();
+    const others = users.filter((u) => !isOwnerEmail(u.email));
+
+    if (!others.length) return toast('No other users to dismiss.');
+
+    openModal({
+      icon: '⚠️',
+      title: 'Dismiss All Users?',
+      message: 'This removes all ' + others.length + ' registered students from this device. Your own account will be kept. This cannot be undone.',
+      confirmText: 'Yes, dismiss all',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        /* Clear favourites for dismissed users */
+        others.forEach((u) => {
+          try { localStorage.removeItem(favKey(u.email)); } catch (e) {}
+        });
+        saveUsers(users.filter((u) => isOwnerEmail(u.email)));
+        toast('All students dismissed.');
+        renderAdmin();
+        return true;
+      }
     });
-    saveUsers([]);
-    toast('All users dismissed.');
-    renderAdmin();
+  });
+
+  /* ---------- Lock / unlock toggle ---------- */
+  function updateLockButton() {
+    const btn = $('adminToggleLock');
+    if (!btn) return;
+    if (isSiteLocked()) {
+      btn.textContent = '🔓 Unlock All';
+      btn.classList.remove('gold');
+      btn.classList.add('danger');
+    } else {
+      btn.textContent = '🔒 Lock All';
+      btn.classList.remove('danger');
+      btn.classList.add('gold');
+    }
+  }
+
+  $('adminToggleLock').addEventListener('click', () => {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+
+    if (isSiteLocked()) {
+      /* Unlock */
+      openModal({
+        icon: '🔓',
+        title: 'Unlock Site Access?',
+        message: 'Students will be able to sign in again.',
+        confirmText: 'Unlock',
+        confirmClass: 'primary',
+        onConfirm: () => {
+          setSiteLocked(false);
+          toast('Site access unlocked.');
+          renderAdmin();
+          return true;
+        }
+      });
+    } else {
+      /* Lock */
+      openModal({
+        icon: '🔒',
+        title: 'Lock Site Access?',
+        message: 'All students (except you) will be blocked from signing in. Existing sessions stay active until they log out — but new sign-ins will be refused.',
+        confirmText: 'Lock All',
+        confirmClass: 'danger',
+        onConfirm: () => {
+          setSiteLocked(true);
+          toast('Site access locked.');
+          renderAdmin();
+          return true;
+        }
+      });
+    }
   });
 
   /* ---------- Helpers ---------- */
@@ -1923,6 +2316,13 @@ footer {
 
   /* ---------- Render the dashboard ---------- */
   function renderAdmin() {
+    /* Re-verify owner (in case session changed) */
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) {
+      closeAdmin();
+      return;
+    }
+
     const users = getUsers().slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     const now = Date.now();
     const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
@@ -1934,6 +2334,11 @@ footer {
     $('statWithFavs').textContent = String(
       users.filter((u) => getFavsFor(u.email).length > 0).length
     );
+
+    /* Lock banner */
+    const banner = $('lockBanner');
+    banner.hidden = !isSiteLocked();
+    updateLockButton();
 
     /* Search filter */
     const searchEl = $('adminSearch');
@@ -1958,8 +2363,9 @@ footer {
       table.appendChild(empty);
     } else {
       filtered.forEach((u) => {
+        const isMe = isOwnerEmail(u.email);
         const row = document.createElement('div');
-        row.className = 'admin-row';
+        row.className = 'admin-row' + (isMe ? ' is-me' : '');
 
         const nameCol = document.createElement('div');
         nameCol.className = 'col name';
@@ -1980,8 +2386,13 @@ footer {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'dismiss-btn';
-        btn.textContent = 'Dismiss';
-        btn.addEventListener('click', () => dismissUser(u.email));
+        btn.textContent = isMe ? '—' : 'Dismiss';
+        if (isMe) {
+          btn.disabled = true;
+          btn.title = 'You cannot dismiss your own account';
+        } else {
+          btn.addEventListener('click', () => dismissUser(u.email));
+        }
 
         dismissCol.appendChild(btn);
 
@@ -2004,28 +2415,32 @@ footer {
 
   /* ---------- Dismiss a single user ---------- */
   function dismissUser(email) {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+    if (isOwnerEmail(email)) {
+      toast('You cannot dismiss your own account.');
+      return;
+    }
+
     const users = getUsers();
     const user = users.find((u) => u.email === email);
     if (!user) return;
 
-    const ok = confirm('Dismiss "' + (user.name || user.email) + '"?\n\nTheir account will be removed and they will not be able to sign in again on this device.');
-    if (!ok) return;
-
-    const next = users.filter((u) => u.email !== email);
-    saveUsers(next);
-
-    try { localStorage.removeItem(favKey(email)); } catch (e) {}
-
-    /* If the current session is that user, log them out */
-    const session = getSession();
-    if (session && session.email === email) {
-      clearSession();
-      showScreen('auth');
-      showAuthView('signin');
-    }
-
-    toast('User dismissed.');
-    renderAdmin();
+    openModal({
+      icon: '⚠️',
+      title: 'Dismiss User?',
+      message: 'Dismiss "' + (user.name || user.email) + '"?\n\nTheir account will be removed from this device.',
+      confirmText: 'Dismiss',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        const next = users.filter((u) => u.email !== email);
+        saveUsers(next);
+        try { localStorage.removeItem(favKey(email)); } catch (e) {}
+        toast('User dismissed.');
+        renderAdmin();
+        return true;
+      }
+    });
   }
 
   /* ============================================================
