@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>Biochemistry 2018</title>
+<style>
+:root{
+  --bg:#0c1220; --card:#151d2d; --text:#eef3ff; --muted:#a9b3c6; --line:#2a3549;
+  --primary:#2857d9; --primary2:#6d4cff; --good:#138a55; --bad:#c7354e;
+  --shadow:0 14px 38px rgba(19,31,55,.10); --radius:18px;
+}
+[data-theme="dark"]{
+  --bg:#0c1220; --card:#151d2d; --text:#eef3ff; --muted:#a9b3c6; --line:#2a3549;
+  --primary:#6d8cff; --primary2:#9a7cff; --good:#43c88b; --bad:#ff6d84;
+  --shadow:0 18px 48px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#080d18,#0c1220 55%,#10182a); color:var(--text);
+}
+[data-theme="dark"] body{background:var(--bg)}
+button{font:inherit}
+.app{max-width:1180px;margin:0 auto;padding:18px}
+.topbar{
+  position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);
+  backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:18px;
+  box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px
+}
+.brand{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+.title{font-size:clamp(20px,4vw,30px);font-weight:850;letter-spacing:-.03em}
+.subtitle{color:var(--muted);font-size:13px;margin-top:3px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{
+  border:1px solid var(--line);background:var(--card);color:var(--text);padding:9px 12px;border-radius:12px;
+  cursor:pointer;font-weight:700;transition:.18s transform,.18s box-shadow,.18s background
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(40,87,217,.12)}
+.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border:0}
+.btn.danger{color:#fff;background:var(--bad);border:0}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.mode{
+  display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)
+}
+.mode button{border:0;background:transparent;padding:9px 12px;color:var(--muted);font-weight:800;cursor:pointer}
+.mode button.active{background:var(--primary);color:#fff}
+.dashboard{display:grid;grid-template-columns:1fr 320px;gap:16px}
+@media(max-width:900px){.dashboard{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stats{padding:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 92%,var(--primary) 8%)}
+.stat b{display:block;font-size:20px}.stat span{font-size:11px;color:var(--muted);font-weight:700}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));width:0;transition:.3s}
+.question-card{padding:22px}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}
+.qnum{font-size:13px;color:var(--muted);font-weight:800}
+.flag{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:800}
+.flag.on{color:#fff;background:#e3a31a;border-color:#e3a31a}
+.question{font-size:clamp(18px,2.6vw,24px);font-weight:800;line-height:1.42;margin-bottom:18px}
+.options{display:grid;gap:11px}
+.option{
+  position:relative;display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;
+  padding:14px;border:1.5px solid var(--line);background:var(--card);color:var(--text);
+  border-radius:14px;cursor:pointer;transition:.18s ease;overflow:hidden
+}
+.option:hover{border-color:var(--primary);transform:translateY(-1px)}
+.option.selected{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent),0 0 24px color-mix(in srgb,var(--primary) 18%,transparent)}
+.option.correct{border-color:var(--good);background:color-mix(in srgb,var(--good) 10%,var(--card));box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 15%,transparent)}
+.option.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 9%,var(--card))}
+.letter{width:30px;height:30px;display:grid;place-items:center;flex:0 0 30px;border-radius:9px;background:var(--bg);font-weight:900}
+.option .txt{line-height:1.45}
+.feedback{margin-top:17px;padding:16px;border-radius:14px;border:1px solid var(--line);background:color-mix(in srgb,var(--primary) 5%,var(--card));display:none}
+.feedback.show{display:block}
+.feedback h3{margin:0 0 8px;font-size:16px}
+.answer-line{font-weight:900;margin-bottom:10px}
+.exp{padding:9px 0;border-top:1px dashed var(--line);line-height:1.5;font-size:14px}
+.exp b{display:inline-block;min-width:26px}
+.explain-good{color:var(--good)} .explain-bad{color:var(--bad)}
+.actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}
+.actions .left,.actions .right{display:flex;gap:8px;flex-wrap:wrap}
+.palette{padding:15px;position:sticky;top:92px}
+.palette h3{margin:0 0 10px;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.pill{
+  aspect-ratio:1;border:1px solid var(--line);background:var(--card);color:var(--text);
+  border-radius:9px;font-weight:800;cursor:pointer
+}
+.pill.current{outline:3px solid color-mix(in srgb,var(--primary) 25%,transparent);border-color:var(--primary)}
+.pill.answered{background:color-mix(in srgb,var(--primary) 12%,var(--card))}
+.pill.flagged{box-shadow:inset 0 -4px 0 #e3a31a}
+.pill.correct{background:color-mix(in srgb,var(--good) 18%,var(--card));border-color:var(--good)}
+.pill.wrong{background:color-mix(in srgb,var(--bad) 14%,var(--card));border-color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:11px;color:var(--muted)}
+.legend span{display:flex;gap:4px;align-items:center}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.timer{font-variant-numeric:tabular-nums;font-weight:900;color:var(--primary)}
+.timer.warn{color:#d17d00}.timer.danger{color:var(--bad)}
+.result{
+  margin:0 0 16px;padding:18px;border-radius:18px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;display:none
+}
+.result.show{display:block}
+.result h2{margin:0 0 5px}.result p{margin:4px 0;opacity:.92}
+.result .big{font-size:38px;font-weight:950}
+.notice{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,#e3a31a 10%,var(--card));border:1px solid color-mix(in srgb,#e3a31a 35%,var(--line));font-size:13px;color:var(--muted);margin-top:12px}
+.footer{padding:20px;text-align:center;color:var(--muted);font-size:12px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#111827;color:#fff;padding:11px 14px;border-radius:11px;font-weight:700;z-index:50;transition:.2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+kbd{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div>
+        <div class="title">Biochemistry 2018</div>
+        <div class="subtitle">Interactive MCQ • 16 questions • Study & online Exam modes</div>
+      </div>
+      <div class="controls">
+        <div class="mode" aria-label="Quiz mode">
+          <button id="studyMode">Study</button>
+          <button id="examMode">Exam</button>
+        </div>
+        <button class="btn" id="themeBtn" title="Toggle theme">◐ Theme</button>
+        <button class="btn" id="fullBtn" title="Fullscreen">⛶ Fullscreen</button>
+        <button class="btn" id="resetBtn">↻ Reset</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Progress</span><b id="progressText">0 / 16</b><div class="progress"><i id="progressBar"></i></div></div>
+      <div class="stat"><span>Score</span><b id="scoreText">—</b></div>
+      <div class="stat"><span>Flagged</span><b id="flagText">0</b></div>
+      <div class="stat"><span>Time</span><b class="timer" id="timer">—</b></div>
+    </div>
+  </header>
+
+  <section class="result" id="result">
+    <div class="big" id="resultScore">0%</div>
+    <h2 id="resultTitle">Exam submitted</h2>
+    <p id="resultDetails"></p>
+  </section>
+
+  <div class="dashboard">
+    <main class="card question-card">
+      <div class="qhead">
+        <div class="qnum" id="qnum"></div>
+        <button class="flag" id="flagBtn">⚑ Flag question</button>
+      </div>
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="notice" id="modeNotice"></div>
+      <div class="actions">
+        <div class="left">
+          <button class="btn" id="prevBtn">← Previous</button>
+          <button class="btn" id="nextBtn">Next →</button>
+        </div>
+        <div class="right">
+          <button class="btn" id="clearBtn">Clear answer</button>
+          <button class="btn" id="revealBtn">Show answer</button>
+          <button class="btn primary" id="submitBtn">Submit exam</button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="card palette">
+      <h3>Question navigator</h3>
+      <div class="grid" id="palette"></div>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--primary)"></i>Answered</span>
+        <span><i class="dot" style="background:#e3a31a"></i>Flagged</span>
+        <span><i class="dot" style="background:var(--good)"></i>Correct</span>
+        <span><i class="dot" style="background:var(--bad)"></i>Wrong</span>
+      </div>
+      <div class="notice">Autosave is on. Your current answers, flags and mode are kept on this device.</div>
+    </aside>
+  </div>
+  <div class="footer">Keyboard: <kbd>←</kbd>/<kbd>→</kbd> navigate • <kbd>1–4</kbd> select an option • <kbd>F</kbd> flag</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const quiz = {
+  title: "Biochemistry 2018",
+  questions: [["In the blood, which form of calcium is diffusible and physiologically active?",["Free","Protein bound","Anion bound","None of the above"],0,"Ionized (free) calcium is the biologically active and diffusible fraction of circulating calcium.",["Free calcium is the ionized fraction and is directly available for physiological functions.","Protein-bound calcium, mainly albumin-bound, is not freely diffusible or immediately biologically active.","Calcium complexed with anions is diffusible to a degree but is not the main physiologically active fraction.","Incorrect because free/ionized calcium is the physiologically active form."]],["Humoral hypercalcemia is caused by the hypersecretion of PTH-related peptides. The humoral hypercalcemia is characterized by the following, except",["Hypercalcemia","Hypophosphatemia","Increased urinary phosphate excretion","Increased serum PTH levels"],3,"Humoral hypercalcemia of malignancy is usually mediated by PTH-related peptide (PTHrP), while intact PTH is suppressed.",["Hypercalcemia is the defining biochemical abnormality.","PTHrP increases renal phosphate wasting, contributing to hypophosphatemia.","Renal phosphate excretion is increased because PTHrP has PTH-like phosphaturic effects.","Intact serum PTH is usually low/suppressed, so increased PTH is the exception."]],["Which enzyme is responsible for cleavage of collagen triple helix during tissue remodeling?",["Elastase","Lipase","Peptidase","Collagenase"],3,"Collagenases are matrix metalloproteinases that cleave native collagen triple helices during extracellular-matrix remodeling.",["Elastase preferentially degrades elastin and some other proteins, not native collagen triple helices as its main target.","Lipase hydrolyzes lipids rather than collagen.","Peptidases can degrade peptide bonds, but collagenase is the specific enzyme class classically associated with cleavage of native collagen.","Collagenase cleaves collagen and initiates its breakdown during tissue remodeling."]],["Which of the following is NOT the role of intracellular calcium?",["Muscle contraction","Buffering","Hormone secretion","Enzyme activity"],1,"Intracellular Ca2+ is a major second messenger for contraction, secretion and enzyme regulation; buffering is mainly a mechanism that controls free intracellular Ca2+, rather than a principal signaling role.",["Ca2+ binding to troponin C is essential for skeletal and cardiac muscle contraction.","Buffering regulates free cytosolic Ca2+ concentration; it is not usually listed as a primary physiological signaling role of intracellular calcium.","Ca2+ triggers exocytosis and therefore participates in hormone and neurotransmitter secretion.","Ca2+ activates or modulates numerous enzymes and signaling proteins."]],["Which bone cell type secretes proteolytic enzymes for its activity?",["Osteoblast","Osteoclast","Osteocyte","B and C are correct"],1,"Osteoclasts resorb bone by secreting acid and proteolytic enzymes, especially cathepsin K, into the resorption lacuna.",["Osteoblasts synthesize osteoid and promote mineralization rather than being the main proteolytic bone-resorbing cells.","Osteoclasts secrete acid and proteases to dissolve mineral and degrade the organic matrix.","Osteocytes are embedded mechanosensory cells and do not perform the osteoclast-type resorption process.","Only B is correct; osteocytes are not the cell type responsible for this proteolytic resorption activity."]],["Which of the following is responsible for bone repair and hydroxyapatite growth?",["Osteocalcin","Osteonectin","Growth factor","Fibronectin"],1,"Osteonectin (SPARC) is a bone matrix protein that binds collagen and hydroxyapatite and participates in mineralization and matrix organization.",["Osteocalcin is a major non-collagenous bone protein involved in mineral regulation, but it is not the best match to the wording about binding hydroxyapatite and matrix organization.","Osteonectin binds both collagen and mineral and contributes to bone formation and hydroxyapatite deposition.","Growth factors regulate osteoblast proliferation and differentiation, but this option is too nonspecific for the described matrix role.","Fibronectin mainly supports cell adhesion and matrix organization and is not the characteristic protein linked to hydroxyapatite growth here."]],["Primary hyperparathyroidism is a disorder caused by the parathyroid adenoma. The following biochemical results are the characteristic feature of hyperparathyroidism, EXCEPT",["Increased PTH hormone","Increased Vitamin D3","Increased urinary cAMP & calcium excretion","Decreased serum calcium and phosphate"],3,"Primary hyperparathyroidism generally produces high calcium and low phosphate; therefore decreased serum calcium is not characteristic.",["PTH is elevated in primary hyperparathyroidism.","PTH stimulates renal 1-alpha-hydroxylase, increasing active vitamin D production.","PTH increases urinary cAMP and, in hypercalcemic states, urinary calcium excretion can rise.","Serum calcium is usually increased, not decreased; phosphate is typically decreased."]],["The following statements are true except...",["Procollagen is the precursor of the collagen","Type-1 collagen is most abundant in the human body","Usually, the three polypeptide chains of collagen are held together by H-bonds.","None of these"],3,"The first three statements are accepted descriptions of collagen biosynthesis and structure, so there is no false statement among A-C.",["Procollagen is the soluble precursor from which mature collagen is formed after extracellular processing.","Type I collagen is the most abundant collagen type in the body.","Hydrogen bonds help stabilize the collagen triple helix.","Because A-C are true, this is the best choice for a 'true except' question."]],["Which of the following statements incorrectly describes an aspect of slow-twitch muscle tissues?",["They provide relatively low tension but is highly resistant to fatigue","They produce ATP by the relatively slow but steady process of phosphorylation.","During active state, they use ATP faster than it should be replaced.","All except A."],2,"Slow-twitch (type I) fibers are oxidative and fatigue resistant; they generally have ATP production that keeps pace with demand, so C is the incorrect statement.",["Type I fibers generate relatively lower force but are highly fatigue resistant.","They rely heavily on oxidative phosphorylation, which is slower but sustainable.","This reverses the key feature: ATP supply is maintained efficiently enough to support prolonged activity rather than being chronically outpaced.","This is not the best answer because B is a correct description and C is the specific incorrect statement."]],["Which of the following is bone-specific protein which involved in regulating bone formation and mineralization?",["Osteonectin","Calcitonin","Osteopontin","Osteocalcin"],3,"Osteocalcin is a bone-specific non-collagenous protein produced by osteoblasts and is commonly used as a marker of bone formation.",["Osteonectin is a bone matrix protein involved in collagen-mineral interactions, but osteocalcin is the classic bone-specific marker of osteoblast activity.","Calcitonin is a hormone, not a bone-specific matrix protein.","Osteopontin is a non-collagenous matrix protein involved in cell adhesion and mineral regulation, but is less specific as a bone-formation marker.","Osteocalcin is produced by osteoblasts and is strongly associated with bone formation and mineralization."]],["Which enzyme is responsible for crosslinking of collagen fibers?",["lysyl oxidase","Tyrosinase","Peptidyl transferase","Glutathione peroxidase"],0,"Lysyl oxidase oxidatively deaminates lysine/hydroxylysine residues, enabling covalent collagen cross-link formation.",["Lysyl oxidase initiates the formation of aldehydes needed for covalent collagen cross-links.","Tyrosinase is involved in melanin synthesis and related tyrosine oxidation, not collagen cross-linking.","Peptidyl transferase forms peptide bonds during protein translation.","Glutathione peroxidase detoxifies peroxides; it does not form collagen cross-links."]],["A clinical condition which characterized by mineral deprivation and an increase in the percentage of the nonmineralized organic matrix within bone",["Osteomalacia","Rickets","Thyroid cancer","Osteoporosis"],0,"Osteomalacia is defective mineralization of mature bone, increasing the proportion of unmineralized osteoid.",["Osteomalacia is defective mineralization of adult bone and matches the description directly.","Rickets is the corresponding mineralization disorder in growing children, with growth-plate abnormalities.","Thyroid cancer is not defined by defective mineralization of osteoid.","Osteoporosis reduces bone mass with relatively normal mineralization of the remaining bone matrix."]],["Which of the following motifs are highly repeated in collagen?",["Glycine-Lysine-X and Glycine-X-Valine","Lysine-Valine-X and Lysine-X-Proline","Glycine-Proline-X and Leucine-X-Isoleucine","Glycine-Proline-X and Glycine-X-Hydroxyproline"],3,"Collagen has a repeating Gly-X-Y sequence; proline and hydroxyproline are especially common in the X/Y positions.",["These sequences do not represent the characteristic Gly-X-Y collagen repeat.","Lysine/valine-centered repeats are not the defining collagen motif.","The first sequence partly resembles collagen composition, but the second lacks the characteristic glycine-centered repeat.","Gly-X-Y repeats frequently contain proline and hydroxyproline, making this the best option."]],["One is wrong about anaerobic metabolism",["It is not as efficient in producing energy as is aerobic metabolism","The process also produces acidic waste products","A biological process when cells use to create energy from carbohydrates & protein","The process occur in the cell's cytoplasm"],2,"Anaerobic glycolysis is primarily the rapid breakdown of glucose/glycogen to lactate; the option describing energy production from both carbohydrates and protein is too broad for anaerobic glycolysis.",["Anaerobic metabolism yields less ATP per glucose molecule than complete aerobic oxidation.","Lactate and associated proton accumulation are linked with the acidic environment during intense anaerobic glycolysis.","Anaerobic glycolysis is specifically a carbohydrate pathway; protein catabolism is not the defining process.","Glycolysis occurs in the cytoplasm."]],["Which of the following doesn't contain collagen fibres?",["Bone","Extracellular space","Tendons","None of these"],3,"Bone and tendons contain abundant collagen, and collagen fibers are components of the extracellular matrix, so none of A-C is correct as a 'doesn't contain' choice.",["Bone contains abundant type I collagen in its organic matrix.","Collagen fibers are major components of extracellular matrix in many tissues.","Tendons are rich in parallel type I collagen fibers.","Therefore none of the listed structures is a correct 'doesn't contain collagen' answer."]],["What endogenous substrate source provides the most energy during moderate to high intensity exercise?",["Liver glycogen","Muscle glycogen","Intramuscular lipid","Adipose tissue lipid"],1,"At moderate to high exercise intensity, muscle glycogen is a major readily available fuel for working skeletal muscle.",["Liver glycogen primarily maintains blood glucose rather than directly fueling contracting muscle.","Muscle glycogen is stored within muscle and can rapidly supply glucose for ATP production during exercise.","Intramuscular triglycerides contribute substantially, especially at lower/moderate intensities, but are not the dominant rapid source at high intensity.","Adipose fat contributes fatty acids, but their oxidation is slower and less dominant as intensity rises."]]],
+  yearKey: "Biochemistry2018"
+};
+
+const LETTERS=["A","B","C","D","E"];
+const STORE="biochem_quiz_"+quiz.yearKey;
+const EXAM_MINUTES=25;
+
+let state={
+  mode:"study", index:0, answers:Array(quiz.questions.length).fill(null),
+  flags:Array(quiz.questions.length).fill(false), submitted:false,
+  startedAt:null, remaining:EXAM_MINUTES*60, theme:"dark"
+};
+
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(STORE,JSON.stringify(state))}
+function load(){
+  try{
+    const raw=localStorage.getItem(STORE);
+    if(raw){
+      const s=JSON.parse(raw);
+      if(s && Array.isArray(s.answers) && s.answers.length===quiz.questions.length) state={...state,...s};
+    }
+  }catch(e){}
+}
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.classList.remove("show"),1700);
+}
+function setTheme(){
+  document.documentElement.dataset.theme=state.theme==="dark"?"dark":"light";
+  $("themeBtn").textContent=state.theme==="dark"?"☀ Light":"◐ Theme";
+}
+function formatTime(sec){
+  sec=Math.max(0,Math.floor(sec)); const m=Math.floor(sec/60),s=sec%60;
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+function answeredCount(){return state.answers.filter(x=>x!==null).length}
+function flaggedCount(){return state.flags.filter(Boolean).length}
+function score(){
+  let n=0; state.answers.forEach((a,i)=>{if(a===quiz.questions[i][2])n++}); return n;
+}
+function renderStats(){
+  const a=answeredCount(), n=quiz.questions.length;
+  $("progressText").textContent=`${a} / ${n}`;
+  $("progressBar").style.width=(a/n*100)+"%";
+  $("flagText").textContent=flaggedCount();
+  $("scoreText").textContent=state.submitted?`${score()} / ${n}`:"—";
+  if(state.mode==="exam" && !state.submitted){
+    $("timer").textContent=formatTime(state.remaining);
+    $("timer").className="timer"+(state.remaining<=120?" danger":state.remaining<=300?" warn":"");
+  }else $("timer").textContent="—";
+}
+function renderPalette(){
+  const p=$("palette"); p.innerHTML="";
+  quiz.questions.forEach((q,i)=>{
+    const b=document.createElement("button"); b.className="pill";
+    if(i===state.index)b.classList.add("current");
+    if(state.answers[i]!==null)b.classList.add("answered");
+    if(state.flags[i])b.classList.add("flagged");
+    if(state.submitted){
+      if(state.answers[i]===q[2])b.classList.add("correct"); else b.classList.add("wrong");
+    }
+    b.textContent=i+1; b.onclick=()=>{state.index=i;save();render()};
+    p.appendChild(b);
+  });
+}
+function optionButton(text,i,q){
+  const b=document.createElement("button"); b.className="option";
+  if(state.answers[state.index]===i)b.classList.add("selected");
+  const letter=document.createElement("span"); letter.className="letter"; letter.textContent=LETTERS[i];
+  const txt=document.createElement("span"); txt.className="txt"; txt.textContent=text;
+  b.append(letter,txt);
+  if(state.submitted){
+    if(i===q[2])b.classList.add("correct");
+    if(state.answers[state.index]===i && i!==q[2])b.classList.add("wrong");
+  }else if(state.mode==="study" && state.answers[state.index]!==null){
+    if(i===q[2])b.classList.add("correct");
+    if(state.answers[state.index]===i && i!==q[2])b.classList.add("wrong");
+  }
+  b.onclick=()=>choose(i);
+  return b;
+}
+function renderFeedback(force=false){
+  const q=quiz.questions[state.index], selected=state.answers[state.index];
+  const visible=state.submitted || (state.mode==="study" && selected!==null) || force;
+  const box=$("feedback");
+  if(!visible){box.classList.remove("show");box.innerHTML="";return}
+  const ok=selected===q[2];
+  let h=`<h3>${state.submitted ? (ok?"✓ Correct":"✕ Review this question") : (ok?"✓ Correct":"✕ Not quite")}</h3>`;
+  h+=`<div class="answer-line">Correct answer: ${LETTERS[q[2]]}. ${htmlEscape(q[1][q[2]])}</div>`;
+  h+=`<div style="margin-bottom:8px;line-height:1.55">${htmlEscape(q[3])}</div>`;
+  q[4].forEach((e,i)=>{
+    h+=`<div class="exp"><b>${LETTERS[i]}.</b> ${htmlEscape(e)} ${i===q[2]?"<strong class='explain-good'>✓ Correct</strong>":""}</div>`;
+  });
+  box.innerHTML=h; box.classList.add("show");
+}
+function htmlEscape(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function render(){
+  const q=quiz.questions[state.index];
+  $("qnum").textContent=`Question ${state.index+1} of ${quiz.questions.length}`;
+  $("question").textContent=q[0];
+  $("options").innerHTML="";
+  q[1].forEach((o,i)=>$("options").appendChild(optionButton(o,i,q)));
+  $("flagBtn").classList.toggle("on",!!state.flags[state.index]);
+  $("flagBtn").textContent=state.flags[state.index]?"⚑ Flagged":"⚑ Flag question";
+  $("studyMode").classList.toggle("active",state.mode==="study");
+  $("examMode").classList.toggle("active",state.mode==="exam");
+  $("clearBtn").disabled=state.answers[state.index]===null || state.submitted;
+  $("revealBtn").disabled=state.mode==="exam" && !state.submitted;
+  $("submitBtn").style.display=state.mode==="exam" && !state.submitted?"inline-block":"none";
+  $("modeNotice").textContent=state.mode==="exam"
+    ? (state.submitted?"Exam submitted. Answers and explanations are now visible.":"Exam mode: answer keys and explanations stay hidden until submission. Timer and autosave are active.")
+    : "Study mode: tap an option to see the answer and full explanation immediately.";
+  renderFeedback();
+  renderStats(); renderPalette(); setTheme();
+}
+function choose(i){
+  if(state.submitted)return;
+  state.answers[state.index]=i; save(); render();
+}
+function clearAnswer(){
+  if(state.submitted)return; state.answers[state.index]=null; save(); render();
+}
+function reveal(){
+  if(state.mode==="exam" && !state.submitted)return;
+  renderFeedback(true);
+}
+function setMode(mode){
+  if(state.mode===mode)return;
+  if(state.mode==="exam" && !state.submitted){
+    if(!confirm("Switching modes will reset this attempt. Continue?"))return;
+    reset(false);
+  }
+  state.mode=mode; state.submitted=false;
+  state.startedAt=mode==="exam"?Date.now():null;
+  state.remaining=EXAM_MINUTES*60;
+  save(); render();
+  toast(mode==="exam"?"Exam started — timer running":"Study mode enabled");
+}
+function submitExam(){
+  if(state.submitted)return;
+  const unanswered=quiz.questions.length-answeredCount();
+  if(unanswered>0 && !confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`))return;
+  state.submitted=true; state.startedAt=null; save(); render();
+  const pct=Math.round(score()/quiz.questions.length*100);
+  $("result").classList.add("show");
+  $("resultScore").textContent=pct+"%";
+  $("resultTitle").textContent=pct>=80?"Excellent performance":pct>=60?"Good work":"Keep reviewing";
+  $("resultDetails").textContent=`${score()} correct out of ${quiz.questions.length}. ${flaggedCount()} flagged question(s).`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function reset(ask=true){
+  if(ask && !confirm("Reset this quiz and clear the saved attempt?"))return;
+  state={mode:"study",index:0,answers:Array(quiz.questions.length).fill(null),flags:Array(quiz.questions.length).fill(false),submitted:false,startedAt:null,remaining:EXAM_MINUTES*60,theme:state.theme||"dark"};
+  localStorage.removeItem(STORE); $("result").classList.remove("show"); save(); render(); toast("Quiz reset");
+}
+function tick(){
+  if(state.mode==="exam" && !state.submitted && state.startedAt){
+    const elapsed=Math.floor((Date.now()-state.startedAt)/1000);
+    state.remaining=Math.max(0,EXAM_MINUTES*60-elapsed); save(); renderStats();
+    if(state.remaining<=0){toast("Time is up — submitting exam");submitExam()}
+  }
+}
+$("prevBtn").onclick=()=>{if(state.index>0){state.index--;save();render()}};
+$("nextBtn").onclick=()=>{if(state.index<quiz.questions.length-1){state.index++;save();render()}};
+$("clearBtn").onclick=clearAnswer;
+$("revealBtn").onclick=reveal;
+$("submitBtn").onclick=submitExam;
+$("flagBtn").onclick=()=>{state.flags[state.index]=!state.flags[state.index];save();render()};
+$("studyMode").onclick=()=>setMode("study");
+$("examMode").onclick=()=>setMode("exam");
+$("resetBtn").onclick=()=>reset(true);
+$("themeBtn").onclick=()=>{state.theme=state.theme==="dark"?"light":"dark";save();setTheme()};
+$("fullBtn").onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+document.addEventListener("keydown",e=>{
+  if(["INPUT","TEXTAREA"].includes(document.activeElement.tagName))return;
+  if(e.key==="ArrowRight")$("nextBtn").click();
+  if(e.key==="ArrowLeft")$("prevBtn").click();
+  if(e.key.toLowerCase()==="f")$("flagBtn").click();
+  if(/^[1-5]$/.test(e.key)){const i=+e.key-1;if(i<quiz.questions[state.index][1].length)choose(i)}
+});
+load(); setTheme(); render(); setInterval(tick,1000);
+</script>
+</body>
+</html>
