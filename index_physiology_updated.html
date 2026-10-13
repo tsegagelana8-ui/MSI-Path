@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1120">
+<meta name="description" content="Tsega Tech medical exam practice website for pathology and biochemistry revision.">
+<title>Tsega Tech | Medical Exam Practice</title>
+
+<style>
+:root {
+  --bg: #0b1120;
+  --card: #151e30;
+  --hover: #1b2940;
+  --text: #f1f5f9;
+  --muted: #a5b4c8;
+  --accent: #38bdf8;
+  --accent-2: #818cf8;
+  --border: #29364c;
+  --telegram: #229ed9;
+  --success: #34d399;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56,189,248,.12), transparent 30rem),
+    radial-gradient(circle at 90% 20%, rgba(129,140,248,.09), transparent 28rem),
+    var(--bg);
+  line-height: 1.6;
+}
+
+.container {
+  width: min(100% - 32px, 1080px);
+  margin: 0 auto;
+  padding: 42px 0 30px;
+}
+
+/* Hero */
+.welcome {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: clamp(30px, 6vw, 58px) 22px;
+  margin-bottom: 42px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: linear-gradient(135deg, rgba(21,30,48,.98), rgba(12,37,59,.94));
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.welcome::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(56,189,248,.08);
+  top: -90px;
+  right: -70px;
+}
+
+.welcome-tag {
+  position: relative;
+  display: inline-block;
+  padding: 6px 13px;
+  margin-bottom: 17px;
+  border: 1px solid #075985;
+  border-radius: 999px;
+  background: #082f49;
+  color: #7dd3fc;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.welcome h1 {
+  position: relative;
+  font-size: clamp(30px, 6vw, 48px);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.welcome h1 span {
+  color: var(--accent);
+}
+
+.welcome p {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: clamp(15px, 2.5vw, 18px);
+}
+
+.brand {
+  color: #e0f2fe;
+  font-weight: bold;
+}
+
+/* Sections */
+.exam-section {
+  margin-bottom: 46px;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section-heading h2 {
+  font-size: clamp(25px, 4vw, 32px);
+  margin-bottom: 5px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* Cards */
+.exam-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+  gap: 20px;
+}
+
+.exam-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 290px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+}
+
+.exam-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  background: var(--hover);
+  box-shadow: 0 14px 35px rgba(0,0,0,.22);
+}
+
+.biochemistry .exam-card:hover {
+  border-color: var(--accent-2);
+}
+
+.exam-year {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.biochemistry .exam-year {
+  color: #a5b4fc;
+}
+
+.exam-card h3 {
+  font-size: 23px;
+  margin-bottom: 14px;
+}
+
+.question-count {
+  align-self: flex-start;
+  padding: 7px 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background: #0c253b;
+  color: #7dd3fc;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.biochemistry .question-count {
+  background: #202044;
+  color: #c7d2fe;
+}
+
+.contents-label {
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.contents {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+/* Buttons */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #082032;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  transition: filter .2s, transform .2s;
+}
+
+.button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.biochemistry .button {
+  background: var(--accent-2);
+  color: #11152f;
+}
+
+a:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 3px;
+}
+
+/* Quick navigation */
+.quick-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 38px;
+}
+
+.quick-nav a {
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(21,30,48,.72);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: bold;
+  transition: .2s;
+}
+
+.quick-nav a:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+/* Contact */
+.contact {
+  margin-top: 10px;
+  padding: 30px 22px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(21,30,48,.86);
+}
+
+.contact h2 {
+  font-size: clamp(24px, 4vw, 30px);
+  margin-bottom: 7px;
+}
+
+.contact p {
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.telegram-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 200px;
+  padding: 12px 18px;
+  border-radius: 11px;
+  background: var(--telegram);
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  transition: filter .2s, transform .2s;
+}
+
+.telegram-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.telegram-icon {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+}
+
+/* Footer */
+footer {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .container {
+    width: min(100% - 22px, 1080px);
+    padding-top: 22px;
+  }
+
+  .welcome {
+    border-radius: 18px;
+  }
+
+  .exam-card {
+    min-height: auto;
+  }
+
+  .quick-nav {
+    margin-bottom: 28px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+  <!-- Welcome -->
+  <section class="welcome" aria-labelledby="welcome-title">
+    <div class="welcome-tag">Medical Exam Practice</div>
+
+    <h1 id="welcome-title">
+      Welcome to <span>Tsega Tech</span>
+    </h1>
+
+    <p>
+      A focused revision space for medical students, with organized
+      pathology and biochemistry exam practice sets.
+    </p>
+  </section>
+
+  <!-- Quick navigation -->
+  <nav class="quick-nav" aria-label="Exam sections">
+    <a href="#pathology">Pathology</a>
+    <a href="#biochemistry">Biochemistry</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- Pathology -->
+  <section class="exam-section" id="pathology" aria-labelledby="pathology-heading">
+
+    <div class="section-heading">
+      <h2 id="pathology-heading">Pathology Exam Sets</h2>
+      <p>Choose an exam set to begin practicing.</p>
+    </div>
+
+    <div class="exam-list">
+
+      <!-- 2015 -->
+      <article class="exam-card">
+        <div class="exam-year">2015</div>
+        <h3>2015 Pathology</h3>
+
+        <div class="question-count">30 Questions</div>
+
+        <div class="contents-label">Contents</div>
+        <p class="contents">
+          General pathology, skin pathology, bone and joint disorders,
+          and related pathology topics.
+        </p>
+
+        <a class="button" href="/2015-images.html">
+          Start Exam Set
+        </a>
+      </article>
+
+      <!-- 2016 -->
+      <article class="exam-card">
+        <div class="exam-year">2016</div>
+        <h3>2016 Pathology</h3>
+
+        <div class="question-count">22 Questions</div>
+
+        <div class="contents-label">Contents</div>
+        <p class="contents">
+          Skin pathology, bone and joint disorders,
+          neuromuscular diseases, and peripheral nerve disorders.
+        </p>
+
+        <a class="button" href="/2016.html">
+          Start Exam Set
+        </a>
+      </article>
+
+      <!-- 2017 -->
+      <article class="exam-card">
+        <div class="exam-year">2017</div>
+        <h3>2017 Pathology</h3>
+
+        <div class="question-count">41 Questions</div>
+
+        <div class="contents-label">Contents</div>
+        <p class="contents">
+          Skin diseases, bone and joint disorders,
+          neuromuscular diseases, fractures, and bone
+          and soft-tissue tumors.
+        </p>
+
+        <a class="button" href="/2017.html">
+          Start Exam Set
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Biochemistry -->
+  <section class="exam-section biochemistry" id="biochemistry" aria-labelledby="biochemistry-heading">
+
+    <div class="section-heading">
+      <h2 id="biochemistry-heading">Biochemistry Exam Sets</h2>
+      <p>Practice the 2015–2018 biochemistry question sets.</p>
+    </div>
+
+    <div class="exam-list">
+
+      <!-- 2015 -->
+      <article class="exam-card">
+        <div class="exam-year">2015</div>
+        <h3>2015 Biochemistry</h3>
+
+        <div class="question-count">Exam Practice</div>
+
+        <div class="contents-label">Study features</div>
+        <p class="contents">
+          Study mode, exam mode, answer explanations, question flagging,
+          progress tracking, and review tools.
+        </p>
+
+        <a class="button" href="/Biochemistry2015.html">
+          Start Biochemistry
+        </a>
+      </article>
+
+      <!-- 2016 -->
+      <article class="exam-card">
+        <div class="exam-year">2016</div>
+        <h3>2016 Biochemistry</h3>
+
+        <div class="question-count">Exam Practice</div>
+
+        <div class="contents-label">Study features</div>
+        <p class="contents">
+          Practice questions with immediate study feedback or complete
+          the full set in exam mode before reviewing answers.
+        </p>
+
+        <a class="button" href="/Biochemistry2016.html">
+          Start Biochemistry
+        </a>
+      </article>
+
+      <!-- 2017 -->
+      <article class="exam-card">
+        <div class="exam-year">2017</div>
+        <h3>2017 Biochemistry</h3>
+
+        <div class="question-count">Exam Practice</div>
+
+        <div class="contents-label">Study features</div>
+        <p class="contents">
+          Detailed option explanations, progress tracking, flagged
+          questions, and a focused dark exam interface.
+        </p>
+
+        <a class="button" href="/Biochemistry2017.html">
+          Start Biochemistry
+        </a>
+      </article>
+
+      <!-- 2018 -->
+      <article class="exam-card">
+        <div class="exam-year">2018</div>
+        <h3>2018 Biochemistry</h3>
+
+        <div class="question-count">Exam Practice</div>
+
+        <div class="contents-label">Study features</div>
+        <p class="contents">
+          Use study mode for immediate feedback or exam mode to
+          simulate a timed online examination.
+        </p>
+
+        <a class="button" href="/Biochemistry2018.html">
+          Start Biochemistry
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+
+  <!-- Physiology -->
+  <section class="exam-section biochemistry" id="physiology" aria-labelledby="physiology-heading">
+
+    <div class="section-heading">
+      <h2 id="physiology-heading">Physiology Exam Sets</h2>
+      <p>Practice the 2016–2018 physiology question sets.</p>
+    </div>
+
+    <div class="exam-list">
+
+      <!-- 2016 -->
+      <article class="exam-card">
+        <div class="exam-year">2016</div>
+        <h3>2016 Physiology</h3>
+
+        <div class="question-count">31 MCQs</div>
+
+        <div class="contents-label">Study features</div>
+        <p class="contents">
+          Musculoskeletal physiology MCQs with study mode,
+          exam mode, explanations, flagging and progress tracking.
+        </p>
+
+        <a class="button" href="/Physiology2016.html">
+          Start Physiology
+        </a>
+      </article>
+
+      <!-- 2017 -->
+      <article class="exam-card">
+        <div class="exam-year">2017</div>
+        <h3>2017 Physiology</h3>
+
+        <div class="question-count">10 MCQs</div>
+
+        <div class="contents-label">Study features</div>
+        <p class="contents">
+          Musculoskeletal physiology questions with immediate
+          feedback in study mode and hidden answers in exam mode.
+        </p>
+
+        <a class="button" href="/Physiology2017.html">
+          Start Physiology
+        </a>
+      </article>
+
+      <!-- 2018 -->
+      <article class="exam-card">
+        <div class="exam-year">2018</div>
+        <h3>2018 Physiology</h3>
+
+        <div class="question-count">12 MCQs</div>
+
+        <div class="contents-label">Study features</div>
+        <p class="contents">
+          Musculoskeletal physiology practice with detailed
+          explanations, question navigation, flagging and review.
+        </p>
+
+        <a class="button" href="/Physiology2018.html">
+          Start Physiology
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact" aria-labelledby="contact-heading">
+
+    <h2 id="contact-heading">Contact Me</h2>
+
+    <p>
+      Questions or suggestions? Connect with me on Telegram.
+    </p>
+
+    <a
+      class="telegram-button"
+      href="https://t.me/blsng10"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Contact Tsega Tech on Telegram at blsng10"
+    >
+      <svg
+        class="telegram-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          fill="currentColor"
+          d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"
+        />
+      </svg>
+      <span>@blsng10</span>
+    </a>
+
+  </section>
+
+  <footer>
+    Build for focused revision. Verify clinically.
+  </footer>
+
+</main>
+
+</body>
+</html>
