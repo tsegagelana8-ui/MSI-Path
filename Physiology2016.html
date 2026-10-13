@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>Physiology 2016</title>
+<style>
+:root{
+  --bg:#0c1220; --card:#151d2d; --text:#eef3ff; --muted:#a9b3c6; --line:#2a3549;
+  --primary:#2857d9; --primary2:#6d4cff; --good:#138a55; --bad:#c7354e;
+  --shadow:0 14px 38px rgba(19,31,55,.10); --radius:18px;
+}
+[data-theme="dark"]{
+  --bg:#0c1220; --card:#151d2d; --text:#eef3ff; --muted:#a9b3c6; --line:#2a3549;
+  --primary:#6d8cff; --primary2:#9a7cff; --good:#43c88b; --bad:#ff6d84;
+  --shadow:0 18px 48px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#080d18,#0c1220 55%,#10182a); color:var(--text);
+}
+[data-theme="dark"] body{background:var(--bg)}
+button{font:inherit}
+.app{max-width:1180px;margin:0 auto;padding:18px}
+.topbar{
+  position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);
+  backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:18px;
+  box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px
+}
+.brand{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
+.title{font-size:clamp(20px,4vw,30px);font-weight:850;letter-spacing:-.03em}
+.subtitle{color:var(--muted);font-size:13px;margin-top:3px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{
+  border:1px solid var(--line);background:var(--card);color:var(--text);padding:9px 12px;border-radius:12px;
+  cursor:pointer;font-weight:700;transition:.18s transform,.18s box-shadow,.18s background
+}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(40,87,217,.12)}
+.btn.primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border:0}
+.btn.danger{color:#fff;background:var(--bad);border:0}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.mode{
+  display:inline-flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)
+}
+.mode button{border:0;background:transparent;padding:9px 12px;color:var(--muted);font-weight:800;cursor:pointer}
+.mode button.active{background:var(--primary);color:#fff}
+.dashboard{display:grid;grid-template-columns:1fr 320px;gap:16px}
+@media(max-width:900px){.dashboard{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stats{padding:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 92%,var(--primary) 8%)}
+.stat b{display:block;font-size:20px}.stat span{font-size:11px;color:var(--muted);font-weight:700}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));width:0;transition:.3s}
+.question-card{padding:22px}
+.qhead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}
+.qnum{font-size:13px;color:var(--muted);font-weight:800}
+.flag{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:800}
+.flag.on{color:#fff;background:#e3a31a;border-color:#e3a31a}
+.question{font-size:clamp(18px,2.6vw,24px);font-weight:800;line-height:1.42;margin-bottom:18px}
+.options{display:grid;gap:11px}
+.option{
+  position:relative;display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;
+  padding:14px;border:1.5px solid var(--line);background:var(--card);color:var(--text);
+  border-radius:14px;cursor:pointer;transition:.18s ease;overflow:hidden
+}
+.option:hover{border-color:var(--primary);transform:translateY(-1px)}
+.option.selected{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent),0 0 24px color-mix(in srgb,var(--primary) 18%,transparent)}
+.option.correct{border-color:var(--good);background:color-mix(in srgb,var(--good) 10%,var(--card));box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 15%,transparent)}
+.option.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 9%,var(--card))}
+.letter{width:30px;height:30px;display:grid;place-items:center;flex:0 0 30px;border-radius:9px;background:var(--bg);font-weight:900}
+.option .txt{line-height:1.45}
+.feedback{margin-top:17px;padding:16px;border-radius:14px;border:1px solid var(--line);background:color-mix(in srgb,var(--primary) 5%,var(--card));display:none}
+.feedback.show{display:block}
+.feedback h3{margin:0 0 8px;font-size:16px}
+.answer-line{font-weight:900;margin-bottom:10px}
+.exp{padding:9px 0;border-top:1px dashed var(--line);line-height:1.5;font-size:14px}
+.exp b{display:inline-block;min-width:26px}
+.explain-good{color:var(--good)} .explain-bad{color:var(--bad)}
+.actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}
+.actions .left,.actions .right{display:flex;gap:8px;flex-wrap:wrap}
+.palette{padding:15px;position:sticky;top:92px}
+.palette h3{margin:0 0 10px;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.pill{
+  aspect-ratio:1;border:1px solid var(--line);background:var(--card);color:var(--text);
+  border-radius:9px;font-weight:800;cursor:pointer
+}
+.pill.current{outline:3px solid color-mix(in srgb,var(--primary) 25%,transparent);border-color:var(--primary)}
+.pill.answered{background:color-mix(in srgb,var(--primary) 12%,var(--card))}
+.pill.flagged{box-shadow:inset 0 -4px 0 #e3a31a}
+.pill.correct{background:color-mix(in srgb,var(--good) 18%,var(--card));border-color:var(--good)}
+.pill.wrong{background:color-mix(in srgb,var(--bad) 14%,var(--card));border-color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:11px;color:var(--muted)}
+.legend span{display:flex;gap:4px;align-items:center}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.timer{font-variant-numeric:tabular-nums;font-weight:900;color:var(--primary)}
+.timer.warn{color:#d17d00}.timer.danger{color:var(--bad)}
+.result{
+  margin:0 0 16px;padding:18px;border-radius:18px;background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;display:none
+}
+.result.show{display:block}
+.result h2{margin:0 0 5px}.result p{margin:4px 0;opacity:.92}
+.result .big{font-size:38px;font-weight:950}
+.notice{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,#e3a31a 10%,var(--card));border:1px solid color-mix(in srgb,#e3a31a 35%,var(--line));font-size:13px;color:var(--muted);margin-top:12px}
+.footer{padding:20px;text-align:center;color:var(--muted);font-size:12px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#111827;color:#fff;padding:11px 14px;border-radius:11px;font-weight:700;z-index:50;transition:.2s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+kbd{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px;font-size:11px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div>
+        <div class="title">Physiology 2016</div>
+        <div class="subtitle">31 questions • Study & online Exam modes</div>
+      </div>
+      <div class="controls">
+        <div class="mode" aria-label="Quiz mode">
+          <button id="studyMode">Study</button>
+          <button id="examMode">Exam</button>
+        </div>
+        <button class="btn" id="themeBtn" title="Toggle theme">◐ Theme</button>
+        <button class="btn" id="fullBtn" title="Fullscreen">⛶ Fullscreen</button>
+        <button class="btn" id="resetBtn">↻ Reset</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span>Progress</span><b id="progressText">0 / 31</b><div class="progress"><i id="progressBar"></i></div></div>
+      <div class="stat"><span>Score</span><b id="scoreText">—</b></div>
+      <div class="stat"><span>Flagged</span><b id="flagText">0</b></div>
+      <div class="stat"><span>Time</span><b class="timer" id="timer">—</b></div>
+    </div>
+  </header>
+
+  <section class="result" id="result">
+    <div class="big" id="resultScore">0%</div>
+    <h2 id="resultTitle">Exam submitted</h2>
+    <p id="resultDetails"></p>
+  </section>
+
+  <div class="dashboard">
+    <main class="card question-card">
+      <div class="qhead">
+        <div class="qnum" id="qnum"></div>
+        <button class="flag" id="flagBtn">⚑ Flag question</button>
+      </div>
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="notice" id="modeNotice"></div>
+      <div class="actions">
+        <div class="left">
+          <button class="btn" id="prevBtn">← Previous</button>
+          <button class="btn" id="nextBtn">Next →</button>
+        </div>
+        <div class="right">
+          <button class="btn" id="clearBtn">Clear answer</button>
+          <button class="btn" id="revealBtn">Show answer</button>
+          <button class="btn primary" id="submitBtn">Submit exam</button>
+        </div>
+      </div>
+    </main>
+
+    <aside class="card palette">
+      <h3>Question navigator</h3>
+      <div class="grid" id="palette"></div>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--primary)"></i>Answered</span>
+        <span><i class="dot" style="background:#e3a31a"></i>Flagged</span>
+        <span><i class="dot" style="background:var(--good)"></i>Correct</span>
+        <span><i class="dot" style="background:var(--bad)"></i>Wrong</span>
+      </div>
+      <div class="notice">Autosave is on. Your current answers, flags and mode are kept on this device.</div>
+    </aside>
+  </div>
+  <div class="footer">Keyboard: <kbd>←</kbd>/<kbd>→</kbd> navigate • <kbd>1–5</kbd> select an option • <kbd>F</kbd> flag</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const quiz = {
+  title: "Physiology 2016",
+  questions: [["7. Tropomyosin in skeletal muscle:",["Sliding on actin to produce shortening","Releasing Ca2+ after initiation of contraction","Binding to myosin during contraction","Acting as a “relaxing protein” at rest by covering up the sites where myosin binds to actin","Generating ATP, which it passes to the contractile mechanism"],3,"At rest, tropomyosin covers the myosin-binding sites on actin and helps keep the muscle relaxed until Ca2+-troponin regulation moves it.",["Tropomyosin does not generate the sliding movement.","Ca2+ release is mediated by excitation-contraction coupling and the sarcoplasmic reticulum.","Tropomyosin is associated with actin rather than functioning as the myosin-binding motor.","Correct: tropomyosin masks the myosin-binding sites on actin at rest.","Tropomyosin does not synthesize ATP."]],["8. The influx of which element to the axon terminal of a motor neuron causes the release of acetylcholine to the synaptic cleft?",["H+","K+","Na+","Ca++","Cl-"],3,"Voltage-gated Ca2+ channels open when the action potential reaches the motor nerve terminal. Ca2+ entry triggers acetylcholine vesicle exocytosis.",["H+ is not the trigger for transmitter release.","K+ movement is important for membrane repolarization but does not directly trigger ACh exocytosis.","Na+ influx generates the action potential but is not the immediate trigger for vesicle fusion.","Correct: Ca2+ influx triggers acetylcholine release.","Cl- is not the trigger for acetylcholine release."]],["9. Which of the following statements is not correct during skeletal muscle relaxation?",["Ca2+ is re-uptaken back into sarcoplasmic reticulum","Increased Ca2+ in the sarcoplasm","Head of myosin charged with ATP, and detached from actin","Tropomyosin covers the active sites of actin","All of the above are correct"],1,"Relaxation requires a decrease, not an increase, in sarcoplasmic Ca2+. Ca2+ is pumped back into the sarcoplasmic reticulum and tropomyosin again blocks actin's binding sites.",["Correct: SERCA actively pumps Ca2+ back into the sarcoplasmic reticulum.","This is the incorrect statement because sarcoplasmic Ca2+ falls during relaxation.","ATP binding to myosin decreases its affinity for actin and supports detachment.","As Ca2+ falls, tropomyosin again covers the actin binding sites.","Incorrect because option B is not correct."]],["10. The cross-bridges of the sarcomere in skeletal muscle are made up of:",["Actin","Myosin","Troponin","Tropomyosin","All are answers"],1,"A cross-bridge is a myosin head extending from the thick filament and interacting with actin.",["Actin contains the binding sites but is not itself the cross-bridge.","Correct: myosin heads form the cross-bridges.","Troponin regulates contraction but does not form cross-bridges.","Tropomyosin regulates actin sites but does not form cross-bridges.","Incorrect because the cross-bridge is specifically the myosin head."]],["11. Which of the following ions are necessary for the chemical events of muscle contraction?",["Sodium and potassium","Sodium and magnesium","Calcium mainly from the sarcoplasmic reticulum","Calcium mainly from ECF"],2,"In skeletal muscle, the Ca2+ that activates the contractile regulatory proteins is released mainly from the sarcoplasmic reticulum.",["Na+ and K+ are important for excitability but do not directly activate the contractile apparatus.","Na+ and Mg2+ are not the principal pair for triggering skeletal muscle contraction.","Correct: skeletal muscle obtains the immediate activating Ca2+ signal mainly from the sarcoplasmic reticulum.","Extracellular Ca2+ is not the main immediate source in normal skeletal muscle excitation-contraction coupling."]],["12. What is the location of troponin in the process of muscle contraction?",["Attached to myosin filament","Attached to tropomyosin","Attached to myosin cross bridge","Attached to T-tubule"],1,"Troponin is part of the thin-filament regulatory complex and is associated with tropomyosin on actin.",["Troponin is not part of the thick filament.","Correct: troponin is associated with tropomyosin on the thin filament.","Myosin cross-bridges are part of the thick filament and do not carry troponin.","T-tubules conduct the action potential but do not anchor troponin."]],["13. The generation of excitation-contraction coupling involves all the following events except:",["Generation of endplate potential","Release of calcium from troponin","Formation of cross-linkages between actin and myosin","Hydrolysis of ATP to ADP"],1,"The contraction sequence involves Ca2+ binding to troponin C, not release of Ca2+ from troponin. Ca2+ dissociation is associated with relaxation.",["Endplate-potential generation is an early neuromuscular event.","Correct: Ca2+ binds to troponin C during activation; its release from troponin is part of relaxation.","Cross-bridge formation is a key event after actin sites are exposed.","ATP hydrolysis powers the myosin cross-bridge cycle."]],["14. Select the correct statement about muscle contraction.",["Calcium ions combine with troponin to cause a conformational change in tropomyosin","Myosin and actin slide together because of the binding and contraction of actin filaments","Tropomyosin wraps around myosin and blocks the binding sites between actin and myosin","Both A and B"],3,"The intended answer is D: Ca2+ binding to troponin changes the regulatory position of tropomyosin, and actin and myosin slide relative to one another. Actin itself does not contract, but the statement is clearly intended to describe sliding.",["Correct in principle: Ca2+ binding to troponin changes the position of the regulatory complex and exposes actin sites.","The sliding-filament concept is correct, although the wording 'contraction of actin filaments' is imprecise; actin and myosin slide relative to each other.","Tropomyosin lies along actin and covers actin's myosin-binding sites at rest; it does not wrap around myosin.","Correct according to the intended wording of the source: A and B describe the two key ideas."]],["15. Calcium, during muscle contraction binds with:",["Tropomyosin","Troponin C","Troponin I","Troponin"],1,"Ca2+ binds troponin C, the calcium-sensitive subunit of the troponin complex.",["Ca2+ does not bind tropomyosin as the primary regulatory event.","Correct: troponin C binds Ca2+.","Troponin I is the inhibitory subunit and is not the principal Ca2+-binding site.","'Troponin' is incomplete; the specific Ca2+-binding subunit is troponin C."]],["16. Calcium ions are required for the normal activation of all muscle types. Which statement below most closely describes the role of calcium ions in the control of skeletal muscle contraction?",["The binding of calcium ions to regulatory proteins on the thin filaments removes the inhibition of actin-myosin interaction","The binding of calcium ions to the thick filament regulatory proteins activates the enzymatic activity of the myosin molecules","Calcium ions serve as an inhibitor of the interaction of thick and thin filaments","A high concentration of calcium ions in the myofilament space is required to maintain muscle in a contracted state"],0,"Ca2+ binds troponin C on the thin filament, moving tropomyosin away from actin's myosin-binding sites and removing inhibition of cross-bridge formation.",["Correct: Ca2+ binding to thin-filament regulatory proteins permits actin-myosin interaction.","Ca2+ does not bind thick-filament regulatory proteins to activate myosin ATPase.","Ca2+ promotes, rather than inhibits, actin-myosin interaction in skeletal muscle.","A sustained high Ca2+ concentration is not required to keep a muscle contracted; Ca2+ falls during relaxation."]],["17. The after-hyperpolarization phase of the action potential is caused by:",["An outward calcium current","An inward chloride current","An outward potassium-current","An outward sodium current"],2,"After-hyperpolarization occurs because K+ conductance remains elevated briefly after repolarization, allowing continued outward K+ current.",["An outward Ca2+ current is not the usual mechanism of after-hyperpolarization.","An inward Cl- current is not the classic mechanism.","Correct: continued outward K+ current makes the membrane more negative than resting potential.","An outward Na+ current is not the normal cause."]],["18. Which of the following statements about skeletal muscle tissue is NOT true?",["Skeletal muscle requires a large blood supply.","Skeletal muscle fibers have many mitochondria.","The arrangement of thick and thin filaments produces the striations in skeletal muscle tissue.","Skeletal muscle fibers contain gap junctions that help conduct action potentials from one fiber to another.","A skeletal muscle fiber has many nuclei"],3,"Skeletal muscle fibers are generally electrically independent and do not normally use gap junctions to conduct action potentials from one fiber to another.",["Skeletal muscle has substantial metabolic demands and therefore a significant blood supply.","Many skeletal muscle fibers contain numerous mitochondria, especially oxidative fibers.","The organized arrangement of thick and thin filaments produces the characteristic striations.","Correct: gap junctions are characteristic of cardiac and some smooth muscle cells, not ordinary skeletal muscle fibers.","Mature skeletal muscle fibers are multinucleated."]],["19. During skeletal muscle contraction as stated by Hanson and Huxley in the sliding filament hypothesis, in which the thin filament is sliding over the thick filament, the sarcomere length is shortened except [which remains] constant at:",["A band","Z disk","I band","H zone"],0,"The A band corresponds to the length of the thick filaments and remains essentially constant during contraction, while the sarcomere, I band and H zone change.",["Correct: the A band remains constant because thick-filament length does not change.","Z disks move toward each other as the sarcomere shortens.","The I band becomes shorter during contraction.","The H zone becomes shorter and can disappear."]],["20. Ca binds with calmodulin to initiate contraction except in:",["Skeletal muscle","Cardiac muscle","Smooth muscle","All"],0,"Calmodulin is the principal Ca2+-binding regulatory protein for smooth muscle contraction. Skeletal and cardiac muscle primarily use troponin C.",["Correct: skeletal muscle uses troponin C rather than calmodulin as the main Ca2+ sensor for contraction.","Cardiac muscle uses troponin C in the thin-filament regulatory system.","Smooth muscle Ca2+ binds calmodulin to activate myosin light-chain kinase.","'All' is incorrect because smooth muscle does use the Ca2+-calmodulin pathway."]],["21. The ion that links excitation with contraction of muscle is:",["Ca","Na","K","All"],0,"Ca2+ is the key ion that couples membrane excitation to activation of the contractile apparatus.",["Correct: intracellular Ca2+ initiates the regulatory events leading to contraction.","Na+ is important for action-potential generation but does not directly activate cross-bridge cycling.","K+ is important for membrane potential and repolarization.","Not all listed ions play the same direct excitation-contraction coupling role."]],["22. Excitation-contraction coupling in skeletal muscle involves all of the following events EXCEPT one. Which one is this EXCEPTION?",["ATP hydrolysis","Binding of Ca++ to calmodulin","Conformational change in dihydropyridine receptor","Depolarization of the transverse tubule (T tubule) membrane","Increased Na+ conductance of sarcolemma"],1,"Skeletal muscle excitation-contraction coupling uses Ca2+ binding to troponin C, not calmodulin, as the primary thin-filament regulatory mechanism.",["ATP hydrolysis is part of the cross-bridge cycle that follows activation.","Correct: skeletal muscle contraction is regulated by Ca2+-troponin C, whereas Ca2+-calmodulin is characteristic of smooth muscle.","T-tubule depolarization changes the conformation of the dihydropyridine receptor.","T-tubule depolarization follows the action potential generated by increased Na+ conductance of the sarcolemma.","Increased Na+ conductance is an early step in generating the muscle action potential."]],["23. Which of the following statements about smooth muscle contraction is most accurate?",["Ca++ independent","Does not require an action potential","Requires more energy compared to skeletal muscle","Shorter in duration compared to skeletal muscle"],1,"Smooth muscle can be activated by graded potentials, hormones, stretch and other signals and therefore does not necessarily require a conventional action potential for contraction.",["Smooth muscle contraction is Ca2+-dependent.","Correct: smooth muscle can contract without a conventional action potential in many circumstances.","Smooth muscle is generally more energy-efficient and uses less ATP for a comparable maintained force than skeletal muscle.","Smooth muscle contractions are typically slower and longer-lasting, not shorter."]],["24. Calmodulin is most closely related, both structurally and functionally, to which of the following proteins?",["G-actin","Myosin light chain","Tropomyosin","Troponin C"],3,"Calmodulin and troponin C are homologous EF-hand Ca2+-binding regulatory proteins that translate Ca2+ signals into changes in muscle activity.",["G-actin is a structural thin-filament protein, not a Ca2+-sensor homologous to calmodulin.","Myosin light chain is part of the thick filament; it is regulated by phosphorylation in smooth muscle but is not the closest structural counterpart.","Tropomyosin is a coiled-coil regulatory protein and does not function as the Ca2+ sensor.","Correct: troponin C is a Ca2+-binding regulatory protein closely related to calmodulin."]],["25. Tetanic contraction of a skeletal muscle fiber results from a cumulative increase in the intracellular concentration of which of the following?",["ATP","Ca++","K+","Na+","Troponin"],1,"Repeated stimulation can maintain elevated cytosolic Ca2+ because Ca2+ release continues while reuptake cannot fully return Ca2+ to baseline between stimuli, producing tetanic force.",["ATP supplies energy but its concentration does not progressively rise to produce tetanus.","Correct: cumulative cytosolic Ca2+ supports sustained cross-bridge activation during tetanus.","K+ changes with repeated activity but is not the principal intracellular signal causing tetanic contraction.","Na+ generates excitability but is not the cumulative intracellular signal responsible for tetanus.","Troponin is a protein and does not undergo a cumulative concentration increase."]],["26. A 17-year-old soccer player suffered a fracture to the left tibia. After her lower leg has been in a cast for 8 weeks, she is surprised to find that the left gastrocnemius muscle is significantly smaller in circumference than it was before the fracture. What is the most likely explanation?",["Decrease in the number of individual muscle fibers in the left gastrocnemius","Decrease in blood flow to the muscle caused by constriction from the cast","Temporary reduction in actin and myosin protein synthesis","Increase in glycolytic activity in the affected muscle","Progressive denervation"],2,"Disuse causes skeletal-muscle atrophy primarily through reduced protein synthesis and loss of myofibrillar proteins, decreasing fiber size.",["Typical disuse atrophy reduces fiber size rather than immediately eliminating large numbers of fibers.","A properly applied cast may alter circulation, but simple disuse atrophy is better explained by reduced muscle protein synthesis.","Correct: reduced synthesis of actin and myosin and other muscle proteins reduces fiber size.","Increased glycolysis does not explain the reduced muscle circumference.","There is no evidence here of nerve injury causing progressive denervation."]],["27. The chemical energy source that most directly supports muscle contraction is:",["Creatine phosphate","Glucose","ATP","Free fatty acids"],2,"ATP is the immediate energy source used by myosin ATPase during cross-bridge cycling.",["Creatine phosphate rapidly regenerates ATP but is not the direct energy molecule used by myosin.","Glucose is a metabolic fuel used to generate ATP.","Correct: myosin uses ATP directly for the cross-bridge cycle.","Fatty acids can generate ATP through oxidation but are not the immediate energy source at the myosin head."]],["28. The major immediate source of calcium for the initiation of skeletal muscle contraction is:",["Calcium entry through the sarcolemma during the passage of an action potential","A rapid release of calcium from its storage sites in the T tubules","A rapid release of calcium from the terminal cisternae of the sarcoplasmic reticulum","A release of calcium bound to cytoplasmic proteins in the region of the myofilaments"],2,"The action potential activates the dihydropyridine receptor/ryanodine receptor system, causing Ca2+ release from the terminal cisternae of the sarcoplasmic reticulum.",["Extracellular Ca2+ entry is not the major immediate Ca2+ source for skeletal muscle contraction.","T tubules conduct the action potential and contain voltage sensors; they are not the main Ca2+ storage site.","Correct: terminal cisternae of the sarcoplasmic reticulum release the Ca2+ that activates contraction.","This is not the main source of the activating Ca2+ signal."]],["29. The after-hyperpolarization phase of the action potential is caused by:",["An outward calcium current","An inward chloride current","An outward potassium current","An outward sodium current"],2,"After-hyperpolarization reflects continued K+ permeability after the membrane has repolarized, producing an outward K+ current.",["Outward Ca2+ current is not the usual mechanism.","Inward chloride current is not the classic mechanism.","Correct: continued outward K+ current drives the membrane below its resting level temporarily.","Outward Na+ current is not responsible for after-hyperpolarization."]],["30. Which of the following statements about different kinds of skeletal-muscle fibers is true?",["Slow-oxidative fibers have a greater abundance of glycogen than do fast-glycolytic fibers.","Fast-glycolytic fibers have a greater abundance of myoglobin than do slow-oxidative fibers.","Fast-glycolytic fibers can generate greater tension than can slow-oxidative fibers.","Fast-glycolytic fibers are fatigue resistant than slow oxidative fibers"],2,"Fast-glycolytic fibers generally generate greater force and tension but fatigue more quickly than slow-oxidative fibers.",["Fast-glycolytic fibers generally have greater glycogen stores; slow-oxidative fibers are more oxidative.","Slow-oxidative fibers have more myoglobin and mitochondria.","Correct: fast-glycolytic fibers can generate greater peak tension/force.","Fast-glycolytic fibers fatigue more readily, whereas slow-oxidative fibers are fatigue resistant."]],["31. Which characteristic or component is shared by skeletal muscle and smooth muscle?",["Thick and thin filaments arranged in sarcomeres","Troponin","Elevation of intracellular [Ca2+] for excitation-contraction coupling","Spontaneous depolarization of the membrane potential","High degree of electrical coupling between cells"],2,"Both skeletal and smooth muscle contractions depend on an elevation of intracellular Ca2+, although they use different regulatory proteins and structures.",["Smooth muscle has thick and thin filaments but they are not organized into sarcomeres.","Troponin is characteristic of skeletal and cardiac muscle, not smooth muscle.","Correct: increased intracellular Ca2+ is central to excitation-contraction coupling in both.","Spontaneous depolarization is characteristic of some smooth-muscle tissues, not skeletal muscle generally.","A high degree of electrical coupling is not a general property of skeletal muscle fibers."]],["32. [Matching] A net effect of balance between Ca2+ influx and K+ efflux.",["Polarization","Depolarization","Plateau phase","Repolarization","Hyperpolarization","Refractory period"],2,"A plateau reflects a balance between inward positive current, especially Ca2+ influx, and outward K+ current in tissues that display a plateau.",["Polarization describes the resting membrane state.","Depolarization is the movement toward a less negative membrane potential.","Correct: the source describes a balance between Ca2+ influx and K+ efflux, characteristic of a plateau phase.","Repolarization returns the membrane toward its resting potential.","Hyperpolarization makes the membrane more negative than resting potential.","The refractory period is a period of reduced or absent excitability, not a current-balance phase."]],["33. [Matching] The membrane potential becomes less negative than the resting potential due to the rapid opening of Na+ channels.",["Polarization","Depolarization","Plateau phase","Repolarization","Hyperpolarization","Refractory period"],1,"Rapid Na+ channel opening causes Na+ entry and drives the membrane potential toward a less negative value: depolarization.",["Polarization is the resting state with the normal negative interior.","Correct: Na+ entry produces depolarization.","A plateau is a sustained balance of inward and outward currents.","Repolarization moves the membrane back toward the resting potential.","Hyperpolarization makes the membrane more negative than resting potential.","The refractory period describes excitability rather than the specific voltage change."]],["34. [Matching] Membrane potential becomes more negative than the resting potential due to delay of gated K+ channels to be inactivated/closed.",["Polarization","Depolarization","Plateau phase","Repolarization","Hyperpolarization","Refractory period"],4,"Continued K+ conductance after repolarization can make the membrane temporarily more negative than its resting potential: hyperpolarization.",["Polarization is the normal resting electrical state.","Depolarization makes the membrane less negative.","A plateau is not the described delayed-K+ effect.","Repolarization is the return toward resting potential, not the overshoot below resting potential.","Correct: delayed closure of K+ channels causes hyperpolarization.","The refractory period concerns the ability to generate another action potential."]],["35. [Matching] The period of time at which the neuron cannot generate another nerve action potential during the interval between the opening of the Na+ activation gate and the opening of the inactivation gate.",["Polarization","Depolarization","Plateau phase","Repolarization","Hyperpolarization","Refractory period"],5,"The refractory period is the period during which another action potential cannot be generated, especially the absolute refractory period.",["Polarization describes the resting membrane state.","Depolarization is the rising phase of the action potential.","A plateau is not the defining feature of neuronal refractory behavior.","Repolarization is the falling phase of the action potential.","Hyperpolarization is the undershoot after repolarization.","Correct: the refractory period limits the ability to generate another action potential."]],["36. [Matching] A state in which membrane is polarized at rest with negative inside and positive outside.",["Polarization","Depolarization","Plateau phase","Repolarization","Hyperpolarization","Refractory period"],0,"At rest, the inside of the membrane is negative relative to the outside; this is the polarized resting state.",["Correct: polarization describes the normal resting voltage difference across the membrane.","Depolarization reduces the normal inside-negative difference.","A plateau is a sustained action-potential phase in some excitable tissues.","Repolarization is the return toward the resting state after depolarization.","Hyperpolarization is more negative than the resting level.","The refractory period concerns excitability, not the resting voltage itself."]],["37. [Matching] Membrane recovers (returns) to the resting potential due to the slower opening of K+ channels and the closing of Na+ channels.",["Polarization","Depolarization","Plateau phase","Repolarization","Hyperpolarization","Refractory period"],3,"Closing Na+ channels and continuing K+ efflux bring the membrane potential back toward its resting level: repolarization.",["Polarization is the resulting resting state, not the recovery phase itself.","Depolarization is the preceding less-negative phase.","A plateau is not the described recovery process.","Correct: repolarization returns the membrane toward the resting potential.","Hyperpolarization is the brief undershoot after repolarization.","The refractory period describes reduced excitability during and after the action potential."]]],
+  yearKey: "2016"
+};
+
+const LETTERS=["A","B","C","D","E"];
+const STORE="physiology_quiz_"+quiz.yearKey;
+const EXAM_MINUTES=25;
+
+let state={
+  mode:"study", index:0, answers:Array(quiz.questions.length).fill(null),
+  flags:Array(quiz.questions.length).fill(false), submitted:false,
+  startedAt:null, remaining:EXAM_MINUTES*60, theme:"dark"
+};
+
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(STORE,JSON.stringify(state))}
+function load(){
+  try{
+    const raw=localStorage.getItem(STORE);
+    if(raw){
+      const s=JSON.parse(raw);
+      if(s && Array.isArray(s.answers) && s.answers.length===quiz.questions.length) state={...state,...s};
+    }
+  }catch(e){}
+}
+function toast(msg){
+  const t=$("toast"); t.textContent=msg; t.classList.add("show");
+  clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.classList.remove("show"),1700);
+}
+function setTheme(){
+  document.documentElement.dataset.theme=state.theme==="dark"?"dark":"light";
+  $("themeBtn").textContent=state.theme==="dark"?"☀ Light":"◐ Theme";
+}
+function formatTime(sec){
+  sec=Math.max(0,Math.floor(sec)); const m=Math.floor(sec/60),s=sec%60;
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+function answeredCount(){return state.answers.filter(x=>x!==null).length}
+function flaggedCount(){return state.flags.filter(Boolean).length}
+function score(){
+  let n=0; state.answers.forEach((a,i)=>{if(a===quiz.questions[i][2])n++}); return n;
+}
+function renderStats(){
+  const a=answeredCount(), n=quiz.questions.length;
+  $("progressText").textContent=`${a} / ${n}`;
+  $("progressBar").style.width=(a/n*100)+"%";
+  $("flagText").textContent=flaggedCount();
+  $("scoreText").textContent=state.submitted?`${score()} / ${n}`:"—";
+  if(state.mode==="exam" && !state.submitted){
+    $("timer").textContent=formatTime(state.remaining);
+    $("timer").className="timer"+(state.remaining<=120?" danger":state.remaining<=300?" warn":"");
+  }else $("timer").textContent="—";
+}
+function renderPalette(){
+  const p=$("palette"); p.innerHTML="";
+  quiz.questions.forEach((q,i)=>{
+    const b=document.createElement("button"); b.className="pill";
+    if(i===state.index)b.classList.add("current");
+    if(state.answers[i]!==null)b.classList.add("answered");
+    if(state.flags[i])b.classList.add("flagged");
+    if(state.submitted){
+      if(state.answers[i]===q[2])b.classList.add("correct"); else b.classList.add("wrong");
+    }
+    b.textContent=i+1; b.onclick=()=>{state.index=i;save();render()};
+    p.appendChild(b);
+  });
+}
+function optionButton(text,i,q){
+  const b=document.createElement("button"); b.className="option";
+  if(state.answers[state.index]===i)b.classList.add("selected");
+  const letter=document.createElement("span"); letter.className="letter"; letter.textContent=LETTERS[i];
+  const txt=document.createElement("span"); txt.className="txt"; txt.textContent=text;
+  b.append(letter,txt);
+  if(state.submitted){
+    if(i===q[2])b.classList.add("correct");
+    if(state.answers[state.index]===i && i!==q[2])b.classList.add("wrong");
+  }else if(state.mode==="study" && state.answers[state.index]!==null){
+    if(i===q[2])b.classList.add("correct");
+    if(state.answers[state.index]===i && i!==q[2])b.classList.add("wrong");
+  }
+  b.onclick=()=>choose(i);
+  return b;
+}
+function renderFeedback(force=false){
+  const q=quiz.questions[state.index], selected=state.answers[state.index];
+  const visible=state.submitted || (state.mode==="study" && selected!==null) || force;
+  const box=$("feedback");
+  if(!visible){box.classList.remove("show");box.innerHTML="";return}
+  const ok=selected===q[2];
+  let h=`<h3>${state.submitted ? (ok?"✓ Correct":"✕ Review this question") : (ok?"✓ Correct":"✕ Not quite")}</h3>`;
+  h+=`<div class="answer-line">Correct answer: ${LETTERS[q[2]]}. ${htmlEscape(q[1][q[2]])}</div>`;
+  h+=`<div style="margin-bottom:8px;line-height:1.55">${htmlEscape(q[3])}</div>`;
+  q[4].forEach((e,i)=>{
+    h+=`<div class="exp"><b>${LETTERS[i]}.</b> ${htmlEscape(e)} ${i===q[2]?"<strong class='explain-good'>✓ Correct</strong>":""}</div>`;
+  });
+  box.innerHTML=h; box.classList.add("show");
+}
+function htmlEscape(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function render(){
+  const q=quiz.questions[state.index];
+  $("qnum").textContent=`Question ${state.index+1} of ${quiz.questions.length}`;
+  $("question").textContent=q[0];
+  $("options").innerHTML="";
+  q[1].forEach((o,i)=>$("options").appendChild(optionButton(o,i,q)));
+  $("flagBtn").classList.toggle("on",!!state.flags[state.index]);
+  $("flagBtn").textContent=state.flags[state.index]?"⚑ Flagged":"⚑ Flag question";
+  $("studyMode").classList.toggle("active",state.mode==="study");
+  $("examMode").classList.toggle("active",state.mode==="exam");
+  $("clearBtn").disabled=state.answers[state.index]===null || state.submitted;
+  $("revealBtn").disabled=state.mode==="exam" && !state.submitted;
+  $("submitBtn").style.display=state.mode==="exam" && !state.submitted?"inline-block":"none";
+  $("modeNotice").textContent=state.mode==="exam"
+    ? (state.submitted?"Exam submitted. Answers and explanations are now visible.":"Exam mode: answer keys and explanations stay hidden until submission. Timer and autosave are active.")
+    : "Study mode: tap an option to see the answer and full explanation immediately.";
+  renderFeedback();
+  renderStats(); renderPalette(); setTheme();
+}
+function choose(i){
+  if(state.submitted)return;
+  state.answers[state.index]=i; save(); render();
+}
+function clearAnswer(){
+  if(state.submitted)return; state.answers[state.index]=null; save(); render();
+}
+function reveal(){
+  if(state.mode==="exam" && !state.submitted)return;
+  renderFeedback(true);
+}
+function setMode(mode){
+  if(state.mode===mode)return;
+  if(state.mode==="exam" && !state.submitted){
+    if(!confirm("Switching modes will reset this attempt. Continue?"))return;
+    reset(false);
+  }
+  state.mode=mode; state.submitted=false;
+  state.startedAt=mode==="exam"?Date.now():null;
+  state.remaining=EXAM_MINUTES*60;
+  save(); render();
+  toast(mode==="exam"?"Exam started — timer running":"Study mode enabled");
+}
+function submitExam(){
+  if(state.submitted)return;
+  const unanswered=quiz.questions.length-answeredCount();
+  if(unanswered>0 && !confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`))return;
+  state.submitted=true; state.startedAt=null; save(); render();
+  const pct=Math.round(score()/quiz.questions.length*100);
+  $("result").classList.add("show");
+  $("resultScore").textContent=pct+"%";
+  $("resultTitle").textContent=pct>=80?"Excellent performance":pct>=60?"Good work":"Keep reviewing";
+  $("resultDetails").textContent=`${score()} correct out of ${quiz.questions.length}. ${flaggedCount()} flagged question(s).`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function reset(ask=true){
+  if(ask && !confirm("Reset this quiz and clear the saved attempt?"))return;
+  state={mode:"study",index:0,answers:Array(quiz.questions.length).fill(null),flags:Array(quiz.questions.length).fill(false),submitted:false,startedAt:null,remaining:EXAM_MINUTES*60,theme:state.theme||"dark"};
+  localStorage.removeItem(STORE); $("result").classList.remove("show"); save(); render(); toast("Quiz reset");
+}
+function tick(){
+  if(state.mode==="exam" && !state.submitted && state.startedAt){
+    const elapsed=Math.floor((Date.now()-state.startedAt)/1000);
+    state.remaining=Math.max(0,EXAM_MINUTES*60-elapsed); save(); renderStats();
+    if(state.remaining<=0){toast("Time is up — submitting exam");submitExam()}
+  }
+}
+$("prevBtn").onclick=()=>{if(state.index>0){state.index--;save();render()}};
+$("nextBtn").onclick=()=>{if(state.index<quiz.questions.length-1){state.index++;save();render()}};
+$("clearBtn").onclick=clearAnswer;
+$("revealBtn").onclick=reveal;
+$("submitBtn").onclick=submitExam;
+$("flagBtn").onclick=()=>{state.flags[state.index]=!state.flags[state.index];save();render()};
+$("studyMode").onclick=()=>setMode("study");
+$("examMode").onclick=()=>setMode("exam");
+$("resetBtn").onclick=()=>reset(true);
+$("themeBtn").onclick=()=>{state.theme=state.theme==="dark"?"light":"dark";save();setTheme()};
+$("fullBtn").onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+document.addEventListener("keydown",e=>{
+  if(["INPUT","TEXTAREA"].includes(document.activeElement.tagName))return;
+  if(e.key==="ArrowRight")$("nextBtn").click();
+  if(e.key==="ArrowLeft")$("prevBtn").click();
+  if(e.key.toLowerCase()==="f")$("flagBtn").click();
+  if(/^[1-5]$/.test(e.key)){const i=+e.key-1;if(i<quiz.questions[state.index][1].length)choose(i)}
+});
+load(); setTheme(); render(); setInterval(tick,1000);
+</script>
+</body>
+</html>
