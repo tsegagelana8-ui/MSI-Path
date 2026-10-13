@@ -739,6 +739,16 @@ footer {
   font-size: 13.5px;
 }
 
+.auth-success {
+  margin-bottom: 11px;
+  padding: 9px 12px;
+  border: 1px solid #065f46;
+  border-radius: 9px;
+  background: #0b2b23;
+  color: #6ee7b7;
+  font-size: 13.5px;
+}
+
 .auth-foot {
   margin-top: 18px;
   padding-top: 14px;
@@ -1107,386 +1117,416 @@ footer {
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ============================================================
-     FIREBASE SCRIPT
+     LOCAL ACCOUNT SCRIPT (no Firebase, no server)
      ============================================================ -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+<script>
+(function () {
+  'use strict';
 
-/* ============================================================
-   ⚠️ REPLACE THESE WITH YOUR REAL FIREBASE VALUES
-   Get them from: Firebase Console → ⚙️ Project settings →
-   Your apps → Web app → SDK setup and configuration → Config
-   ============================================================ */
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+  /* ---------- DOM HELPERS ---------- */
+  const $ = (id) => document.getElementById(id);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-/* ---------- DOM HELPERS ---------- */
-const $ = (id) => document.getElementById(id);
-
-function showScreen(which) {
-  ['authGate', 'app'].forEach((id) => { const el = $(id); if (el) el.hidden = true; });
-  if (which === 'app') {
-    $('app').hidden = false;
-    document.body.classList.remove('locked');
-  } else {
-    $('authGate').hidden = false;
-    document.body.classList.add('locked');
+  function showScreen(which) {
+    ['authGate', 'app'].forEach((id) => { const el = $(id); if (el) el.hidden = true; });
+    if (which === 'app') {
+      $('app').hidden = false;
+      document.body.classList.remove('locked');
+    } else {
+      $('authGate').hidden = false;
+      document.body.classList.add('locked');
+    }
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }
-  window.scrollTo({ top: 0, behavior: 'auto' });
-}
 
-/* ---------- TOAST ---------- */
-let toastTimer;
-function toast(msg) {
-  const el = $('toast');
-  if (!el) return;
-  el.textContent = msg;
-  el.classList.add('is-visible');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2500);
-}
+  /* ---------- TOAST ---------- */
+  let toastTimer;
+  function toast(msg) {
+    const el = $('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2500);
+  }
 
-/* ---------- ERROR BOXES ---------- */
-function setError(id, msg) {
-  const el = $(id);
-  if (!el) return;
-  el.textContent = msg;
-  el.hidden = false;
-}
-function clearBox(id) {
-  const el = $(id);
-  if (el) { el.hidden = true; el.textContent = ''; }
-}
+  /* ---------- ERROR BOXES ---------- */
+  function setError(id, msg) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    el.className = 'auth-error';
+  }
+  function setSuccess(id, msg) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    el.className = 'auth-success';
+  }
+  function clearBox(id) {
+    const el = $(id);
+    if (el) { el.hidden = true; el.textContent = ''; }
+  }
 
-/* ---------- EMAIL CHECK ---------- */
-const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  /* ---------- EMAIL CHECK ---------- */
+  const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
-/* ---------- AUTH TABS ---------- */
-function showAuthView(name) {
+  /* ---------- SIMPLE HASH (not real crypto, but hides plain text) ---------- */
+  function hashText(text) {
+    let h = 5381;
+    for (let i = 0; i < text.length; i += 1) {
+      h = ((h << 5) + h) ^ text.charCodeAt(i);
+    }
+    return (h >>> 0).toString(16);
+  }
+  const hashPassword = (email, password) =>
+    hashText(email.toLowerCase() + '|' + password + '|tsega-tech-salt');
+
+  /* ---------- STORAGE ---------- */
+  const USERS_KEY = 'tt_users';
+  const SESSION_KEY = 'tt_session';
+
+  function getUsers() {
+    try {
+      const raw = localStorage.getItem(USERS_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function saveUsers(list) {
+    try { localStorage.setItem(USERS_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+  function getSession() {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw);
+      if (!s || !s.email) return null;
+      // Expire after 30 days
+      if (Date.now() - (s.ts || 0) > 30 * 24 * 60 * 60 * 1000) {
+        localStorage.removeItem(SESSION_KEY);
+        return null;
+      }
+      return s;
+    } catch (e) {
+      return null;
+    }
+  }
+  function setSession(user) {
+    try {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        name: user.name,
+        email: user.email,
+        ts: Date.now()
+      }));
+    } catch (e) {}
+  }
+  function clearSession() {
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+  }
+
+  /* ---------- AUTH TABS ---------- */
+  function showAuthView(name) {
+    document.querySelectorAll('.auth-tab').forEach((tab) => {
+      const active = tab.dataset.view === name;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+    });
+    document.querySelectorAll('.auth-form').forEach((form) => {
+      form.hidden = form.dataset.view !== name;
+    });
+    clearBox('signinError');
+    clearBox('signupError');
+    const firstInput = document.querySelector('.auth-form[data-view="' + name + '"] input');
+    if (firstInput) setTimeout(() => firstInput.focus(), 60);
+  }
+
   document.querySelectorAll('.auth-tab').forEach((tab) => {
-    const active = tab.dataset.view === name;
-    tab.classList.toggle('is-active', active);
-    tab.setAttribute('aria-selected', String(active));
+    tab.addEventListener('click', () => showAuthView(tab.dataset.view));
   });
-  document.querySelectorAll('.auth-form').forEach((form) => {
-    form.hidden = form.dataset.view !== name;
-  });
-  clearBox('signinError');
-  clearBox('signupError');
-  const firstInput = document.querySelector('.auth-form[data-view="' + name + '"] input');
-  if (firstInput) setTimeout(() => firstInput.focus(), 60);
-}
 
-document.querySelectorAll('.auth-tab').forEach((tab) => {
-  tab.addEventListener('click', () => showAuthView(tab.dataset.view));
-});
+  /* ---------- SIGN UP ---------- */
+  $('signupForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearBox('signupError');
 
-/* ---------- SIGN UP ---------- */
-$('signupForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearBox('signupError');
+    const name = $('signupName').value.trim();
+    const email = $('signupEmail').value.trim().toLowerCase();
+    const password = $('signupPassword').value;
+    const confirm = $('signupConfirm').value;
 
-  const name = $('signupName').value.trim();
-  const email = $('signupEmail').value.trim().toLowerCase();
-  const password = $('signupPassword').value;
-  const confirm = $('signupConfirm').value;
+    if (name.length < 2) return setError('signupError', 'Please enter your full name.');
+    if (!isEmail(email)) return setError('signupError', 'Please enter a valid email address.');
+    if (password.length < 6) return setError('signupError', 'Password must be at least 6 characters.');
+    if (password !== confirm) return setError('signupError', 'The two passwords do not match.');
 
-  if (name.length < 2) return setError('signupError', 'Please enter your full name.');
-  if (!isEmail(email)) return setError('signupError', 'Please enter a valid email address.');
-  if (password.length < 6) return setError('signupError', 'Password must be at least 6 characters.');
-  if (password !== confirm) return setError('signupError', 'The two passwords do not match.');
+    const users = getUsers();
+    if (users.some((u) => u.email === email)) {
+      return setError('signupError', 'This email is already registered. Please sign in.');
+    }
 
-  const btn = e.target.querySelector('.auth-submit');
-  btn.disabled = true;
-  btn.textContent = 'Creating account…';
+    users.push({
+      name: name,
+      email: email,
+      password: hashPassword(email, password),
+      createdAt: Date.now()
+    });
+    saveUsers(users);
 
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
+    const account = { name: name, email: email };
+    setSession(account);
+    startApp(account);
     toast('Welcome, ' + name.split(' ')[0] + '!');
-    // onAuthStateChanged will reveal the app
-  } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Create account';
-    console.error('Signup error:', err);
+  });
 
-    if (err.code === 'auth/email-already-in-use') {
-      setError('signupError', 'This email is already registered. Please sign in.');
-    } else if (err.code === 'auth/invalid-email') {
-      setError('signupError', 'That email address is not valid.');
-    } else if (err.code === 'auth/weak-password') {
-      setError('signupError', 'Password is too weak. Use at least 6 characters.');
-    } else if (err.code === 'auth/network-request-failed') {
-      setError('signupError', 'Network error. Check your internet connection.');
-    } else {
-      setError('signupError', err.message || 'Something went wrong. Please try again.');
+  /* ---------- SIGN IN ---------- */
+  $('signinForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearBox('signinError');
+
+    const email = $('signinEmail').value.trim().toLowerCase();
+    const password = $('signinPassword').value;
+
+    if (!isEmail(email)) return setError('signinError', 'Please enter a valid email address.');
+    if (!password) return setError('signinError', 'Please enter your password.');
+
+    const hash = hashPassword(email, password);
+    const user = getUsers().find((u) => u.email === email && u.password === hash);
+
+    if (!user) {
+      return setError('signinError', 'Incorrect email or password.');
     }
-  }
-});
 
-/* ---------- SIGN IN ---------- */
-$('signinForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearBox('signinError');
+    $('signinForm').reset();
+    const account = { name: user.name, email: user.email };
+    setSession(account);
+    startApp(account);
+    toast('Welcome back, ' + user.name.split(' ')[0] + '!');
+  });
 
-  const email = $('signinEmail').value.trim().toLowerCase();
-  const password = $('signinPassword').value;
-
-  if (!isEmail(email)) return setError('signinError', 'Please enter a valid email address.');
-  if (!password) return setError('signinError', 'Please enter your password.');
-
-  const btn = e.target.querySelector('.auth-submit');
-  btn.disabled = true;
-  btn.textContent = 'Checking…';
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    // onAuthStateChanged handles the rest
-  } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Sign in';
-    console.error('Signin error:', err);
-
-    if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-      setError('signinError', 'Incorrect email or password.');
-    } else if (err.code === 'auth/network-request-failed') {
-      setError('signinError', 'Network error. Check your internet connection.');
-    } else {
-      setError('signinError', err.message || 'Could not sign in.');
-    }
-  }
-});
-
-/* ---------- LOG OUT ---------- */
-$('logoutBtn').addEventListener('click', async () => {
-  await signOut(auth);
-  toast('Signed out.');
-});
-
-/* ---------- AUTH STATE LISTENER ---------- */
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'Student');
-    renderUserChip(displayName);
-    updateWelcomeText(displayName);
-    showScreen('app');
-    initStars();
-    renderFavorites();
-  } else {
+  /* ---------- LOG OUT ---------- */
+  $('logoutBtn').addEventListener('click', () => {
+    clearSession();
     $('userChip').textContent = '';
     showScreen('auth');
     showAuthView('signin');
+    toast('Signed out.');
+  });
+
+  /* ---------- START THE APP ---------- */
+  function startApp(account) {
+    showScreen('app');
+    renderUserChip(account.name);
+    updateWelcomeText(account.name);
+    initStars();
+    renderFavorites();
   }
-});
 
-/* ---------- USER CHIP & WELCOME ---------- */
-function renderUserChip(name) {
-  const chip = $('userChip');
-  if (chip) {
-    chip.textContent = name || '';
-    chip.title = auth.currentUser ? auth.currentUser.email : '';
+  /* ---------- USER CHIP & WELCOME ---------- */
+  function renderUserChip(name) {
+    const chip = $('userChip');
+    if (chip) {
+      chip.textContent = name || '';
+      const s = getSession();
+      chip.title = s ? s.email : '';
+    }
   }
-}
 
-function updateWelcomeText(name) {
-  const el = $('welcomeText');
-  if (el && name) {
-    const first = name.split(/[\s@]/)[0];
-    el.textContent = 'Welcome back, ' + first + '. A focused revision space with organized pathology, biochemistry and physiology exam practice sets.';
+  function updateWelcomeText(name) {
+    const el = $('welcomeText');
+    if (el && name) {
+      const first = name.split(/\s+/)[0];
+      el.textContent = 'Welcome back, ' + first + '. A focused revision space with organized pathology, biochemistry and physiology exam practice sets.';
+    }
   }
-}
 
-/* ============================================================
-   FAVOURITES
-   ============================================================ */
-const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45-4.7-4.6 6.5-.95L12 2.6z"/></svg>';
+  /* ============================================================
+     FAVOURITES
+     ============================================================ */
+  const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45-4.7-4.6 6.5-.95L12 2.6z"/></svg>';
 
-function favKey() {
-  const uid = auth.currentUser ? auth.currentUser.uid : 'guest';
-  return 'tt_favs_' + uid;
-}
-function getFavs() {
-  try { return JSON.parse(localStorage.getItem(favKey()) || '[]'); }
-  catch { return []; }
-}
-function setFavs(list) {
-  localStorage.setItem(favKey(), JSON.stringify(list));
-}
+  function favKey() {
+    const s = getSession();
+    return 'tt_favs_' + (s ? s.email : 'guest');
+  }
+  function getFavs() {
+    try { return JSON.parse(localStorage.getItem(favKey()) || '[]'); }
+    catch (e) { return []; }
+  }
+  function setFavs(list) {
+    try { localStorage.setItem(favKey(), JSON.stringify(list)); } catch (e) {}
+  }
 
-let starsReady = false;
-function initStars() {
-  if (!starsReady) {
+  let starsReady = false;
+  function initStars() {
+    if (!starsReady) {
+      document.querySelectorAll('.exam-card').forEach((card) => {
+        const id = card.dataset.exam;
+        if (!id) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'star-btn';
+        btn.dataset.exam = id;
+        btn.innerHTML = STAR_SVG;
+        btn.addEventListener('click', () => toggleFav(id));
+        card.appendChild(btn);
+      });
+      starsReady = true;
+    }
+    syncStars();
+  }
+
+  function syncStars() {
+    const favs = getFavs();
+    document.querySelectorAll('.star-btn').forEach((btn) => {
+      const on = favs.includes(btn.dataset.exam);
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.title = on ? 'Remove from favourites' : 'Add to favourites';
+    });
+  }
+
+  function toggleFav(id) {
+    const favs = getFavs();
+    const idx = favs.indexOf(id);
+    if (idx === -1) { favs.push(id); toast('★ Added to favourites'); }
+    else { favs.splice(idx, 1); toast('Removed from favourites'); }
+    setFavs(favs);
+    syncStars();
+    renderFavorites();
+  }
+
+  function renderFavorites() {
+    const favs = getFavs();
+    const section = $('favorites');
+    const list = $('favList');
+    const countEl = $('favCountTop');
+    if (countEl) countEl.textContent = String(favs.length);
+
+    if (!favs.length) {
+      if (section) section.hidden = true;
+      if (list) list.innerHTML = '';
+      return;
+    }
+
+    if (section) section.hidden = false;
+    if (list) list.innerHTML = '';
+
+    favs.forEach((id) => {
+      const card = document.querySelector('.exam-card[data-exam="' + id + '"]');
+      if (!card) return;
+      const titleEl = card.querySelector('h3');
+      const yearEl = card.querySelector('.exam-year');
+      const linkEl = card.querySelector('a.button');
+      const title = titleEl ? titleEl.textContent.trim() : '';
+      const year = yearEl ? yearEl.textContent.trim() : '';
+      const href = linkEl ? linkEl.getAttribute('href') : '#';
+
+      const tile = document.createElement('div');
+      tile.className = 'fav-tile';
+
+      const yearSpan = document.createElement('span');
+      yearSpan.className = 'fav-year';
+      yearSpan.textContent = year;
+
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'fav-title';
+      titleSpan.textContent = title;
+      titleSpan.title = title;
+
+      const openLink = document.createElement('a');
+      openLink.className = 'fav-open';
+      openLink.href = href;
+      openLink.textContent = 'Open';
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'fav-remove';
+      removeBtn.textContent = '×';
+      removeBtn.setAttribute('aria-label', 'Remove from favourites');
+      removeBtn.addEventListener('click', () => toggleFav(id));
+
+      tile.appendChild(yearSpan);
+      tile.appendChild(titleSpan);
+      tile.appendChild(openLink);
+      tile.appendChild(removeBtn);
+      list.appendChild(tile);
+    });
+  }
+
+  $('favShortcut').addEventListener('click', () => {
+    if (!getFavs().length) {
+      toast('No favourites yet — tap the ☆ on any exam set.');
+      return;
+    }
+    $('favorites').hidden = false;
+    $('favorites').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  /* ============================================================
+     CHATGPT
+     ============================================================ */
+  function askChatGPT(prompt) {
+    const text = String(prompt || '').trim();
+    const url = text
+      ? 'https://chatgpt.com/?q=' + encodeURIComponent(text)
+      : 'https://chatgpt.com/';
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  $('aiForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = $('aiInput').value.trim();
+    if (!query) { $('aiInput').focus(); return; }
+    askChatGPT(query);
+    $('aiInput').value = '';
+  });
+
+  document.querySelectorAll('.ai-chip').forEach((chip) => {
+    chip.addEventListener('click', () => askChatGPT(chip.dataset.q));
+  });
+
+  function initCardAiButtons() {
     document.querySelectorAll('.exam-card').forEach((card) => {
-      const id = card.dataset.exam;
-      if (!id) return;
+      const titleEl = card.querySelector('h3');
+      const contentsEl = card.querySelector('.contents');
+      if (!titleEl) return;
+
+      const title = titleEl.textContent.trim();
+      const topics = contentsEl ? contentsEl.textContent.replace(/\s+/g, ' ').trim() : '';
+
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'star-btn';
-      btn.dataset.exam = id;
-      btn.innerHTML = STAR_SVG;
-      btn.addEventListener('click', () => toggleFav(id));
+      btn.className = 'ai-mini';
+      btn.textContent = '✦ Ask ChatGPT about this';
+
+      btn.addEventListener('click', () => {
+        askChatGPT(
+          'I am revising "' + title + '" for a medical exam. ' +
+          (topics ? 'Topics covered: ' + topics + ' ' : '') +
+          'Please explain the key concepts, highlight high-yield points, and give me 3 practice MCQs with answers.'
+        );
+      });
+
       card.appendChild(btn);
     });
-    starsReady = true;
-  }
-  syncStars();
-}
-
-function syncStars() {
-  const favs = getFavs();
-  document.querySelectorAll('.star-btn').forEach((btn) => {
-    const on = favs.includes(btn.dataset.exam);
-    btn.classList.toggle('is-on', on);
-    btn.setAttribute('aria-pressed', String(on));
-    btn.title = on ? 'Remove from favourites' : 'Add to favourites';
-  });
-}
-
-function toggleFav(id) {
-  const favs = getFavs();
-  const idx = favs.indexOf(id);
-  if (idx === -1) { favs.push(id); toast('★ Added to favourites'); }
-  else { favs.splice(idx, 1); toast('Removed from favourites'); }
-  setFavs(favs);
-  syncStars();
-  renderFavorites();
-}
-
-function renderFavorites() {
-  const favs = getFavs();
-  const section = $('favorites');
-  const list = $('favList');
-  const countEl = $('favCountTop');
-  if (countEl) countEl.textContent = String(favs.length);
-
-  if (!favs.length) {
-    if (section) section.hidden = true;
-    if (list) list.innerHTML = '';
-    return;
   }
 
-  if (section) section.hidden = false;
-  if (list) list.innerHTML = '';
+  /* ---------- BOOT ---------- */
+  initCardAiButtons();
 
-  favs.forEach((id) => {
-    const card = document.querySelector('.exam-card[data-exam="' + id + '"]');
-    if (!card) return;
-    const titleEl = card.querySelector('h3');
-    const yearEl = card.querySelector('.exam-year');
-    const linkEl = card.querySelector('a.button');
-    const title = titleEl ? titleEl.textContent.trim() : '';
-    const year = yearEl ? yearEl.textContent.trim() : '';
-    const href = linkEl ? linkEl.getAttribute('href') : '#';
-
-    const tile = document.createElement('div');
-    tile.className = 'fav-tile';
-
-    const yearSpan = document.createElement('span');
-    yearSpan.className = 'fav-year';
-    yearSpan.textContent = year;
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'fav-title';
-    titleSpan.textContent = title;
-    titleSpan.title = title;
-
-    const openLink = document.createElement('a');
-    openLink.className = 'fav-open';
-    openLink.href = href;
-    openLink.textContent = 'Open';
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'fav-remove';
-    removeBtn.textContent = '×';
-    removeBtn.setAttribute('aria-label', 'Remove from favourites');
-    removeBtn.addEventListener('click', () => toggleFav(id));
-
-    tile.appendChild(yearSpan);
-    tile.appendChild(titleSpan);
-    tile.appendChild(openLink);
-    tile.appendChild(removeBtn);
-    list.appendChild(tile);
-  });
-}
-
-$('favShortcut').addEventListener('click', () => {
-  if (!getFavs().length) {
-    toast('No favourites yet — tap the ☆ on any exam set.');
-    return;
+  const session = getSession();
+  if (session) {
+    startApp(session);
+  } else {
+    showScreen('auth');
+    showAuthView('signin');
   }
-  $('favorites').hidden = false;
-  $('favorites').scrollIntoView({ behavior: 'smooth', block: 'start' });
-});
 
-/* ============================================================
-   CHATGPT
-   ============================================================ */
-function askChatGPT(prompt) {
-  const text = String(prompt || '').trim();
-  const url = text
-    ? 'https://chatgpt.com/?q=' + encodeURIComponent(text)
-    : 'https://chatgpt.com/';
-  window.open(url, '_blank', 'noopener,noreferrer');
-}
-
-$('aiForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const query = $('aiInput').value.trim();
-  if (!query) { $('aiInput').focus(); return; }
-  askChatGPT(query);
-  $('aiInput').value = '';
-});
-
-document.querySelectorAll('.ai-chip').forEach((chip) => {
-  chip.addEventListener('click', () => askChatGPT(chip.dataset.q));
-});
-
-function initCardAiButtons() {
-  document.querySelectorAll('.exam-card').forEach((card) => {
-    const titleEl = card.querySelector('h3');
-    const contentsEl = card.querySelector('.contents');
-    if (!titleEl) return;
-
-    const title = titleEl.textContent.trim();
-    const topics = contentsEl ? contentsEl.textContent.replace(/\s+/g, ' ').trim() : '';
-
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'ai-mini';
-    btn.textContent = '✦ Ask ChatGPT about this';
-
-    btn.addEventListener('click', () => {
-      askChatGPT(
-        'I am revising "' + title + '" for a medical exam. ' +
-        (topics ? 'Topics covered: ' + topics + ' ' : '') +
-        'Please explain the key concepts, highlight high-yield points, and give me 3 practice MCQs with answers.'
-      );
-    });
-
-    card.appendChild(btn);
-  });
-}
-
-/* ---------- BOOT ---------- */
-initCardAiButtons();
-showScreen('auth');
-showAuthView('signin');
+})();
 </script>
 
 </body>
