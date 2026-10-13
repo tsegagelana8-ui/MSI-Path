@@ -739,16 +739,6 @@ footer {
   font-size: 13.5px;
 }
 
-.auth-success {
-  margin-bottom: 11px;
-  padding: 9px 12px;
-  border: 1px solid #065f46;
-  border-radius: 9px;
-  background: #0b2b23;
-  color: #6ee7b7;
-  font-size: 13.5px;
-}
-
 .auth-foot {
   margin-top: 18px;
   padding-top: 14px;
@@ -756,71 +746,6 @@ footer {
   color: #6b7c94;
   font-size: 12px;
   text-align: center;
-}
-
-/* ---------- PENDING SCREEN ---------- */
-.pending-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 110;
-  display: grid;
-  place-items: center;
-  padding: 22px;
-  background:
-    radial-gradient(circle at 15% 8%, rgba(56,189,248,.16), transparent 28rem),
-    #070c17;
-}
-
-.pending-card {
-  width: min(100%, 440px);
-  padding: 40px 30px;
-  text-align: center;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  background: linear-gradient(160deg, rgba(21,30,48,.99), rgba(13,22,38,.99));
-  box-shadow: 0 30px 70px rgba(0,0,0,.5);
-}
-
-.pending-card .icon { font-size: 48px; margin-bottom: 16px; }
-
-.pending-card h1 {
-  font-size: 26px;
-  margin-bottom: 10px;
-  color: var(--text);
-}
-
-.pending-card p {
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.7;
-  margin-bottom: 20px;
-}
-
-.pending-card p b { color: #7dd3fc; }
-
-.pending-card small {
-  display: block;
-  color: #6b7c94;
-  font-size: 13px;
-  margin-bottom: 24px;
-}
-
-.pending-card button {
-  padding: 10px 24px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-weight: bold;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.pending-card button:hover {
-  color: var(--text);
-  border-color: var(--accent);
-  background: var(--hover);
 }
 
 /* ---------- TOAST ---------- */
@@ -848,104 +773,6 @@ footer {
   transform: translate(-50%, 0);
 }
 
-/* ---------- ADMIN MODAL ---------- */
-.admin-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 300;
-  background: rgba(0,0,0,.85);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.admin-panel {
-  width: min(100%, 700px);
-  max-height: 85vh;
-  overflow-y: auto;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 28px;
-  color: var(--text);
-}
-
-.admin-panel h2 {
-  font-size: 24px;
-  margin-bottom: 6px;
-}
-
-.admin-panel > p {
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 22px;
-}
-
-.admin-list { display: grid; gap: 12px; }
-
-.admin-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: #0d1626;
-}
-
-.admin-row .info { flex: 1; min-width: 0; }
-
-.admin-row .info strong {
-  display: block;
-  font-size: 15px;
-  margin-bottom: 3px;
-}
-
-.admin-row .info span {
-  color: var(--muted);
-  font-size: 13px;
-  word-break: break-all;
-}
-
-.admin-row button {
-  padding: 8px 16px;
-  border: 0;
-  border-radius: 8px;
-  font: inherit;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: filter .2s;
-}
-
-.admin-row button:hover { filter: brightness(1.1); }
-
-.btn-approve { background: var(--success); color: #05231a; }
-.btn-reject { background: #f87171; color: #450a0a; }
-
-.admin-close {
-  margin-top: 20px;
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  font: inherit;
-  font-weight: bold;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.admin-close:hover {
-  color: var(--text);
-  border-color: var(--accent);
-  background: var(--hover);
-}
-
 /* ---------- MOBILE ---------- */
 @media (max-width: 560px) {
   .topbar-inner { width: min(100% - 22px, 1080px); padding: 8px 0; }
@@ -962,28 +789,11 @@ footer {
   .ai-form button { width: 100%; }
   .auth-card { padding: 24px 18px 20px; }
   .fav-tile { flex-wrap: wrap; }
-  .admin-row { flex-wrap: wrap; }
 }
 </style>
 </head>
 
 <body class="locked">
-
-<!-- ============================================================
-     PENDING APPROVAL SCREEN
-     ============================================================ -->
-<div id="pendingScreen" class="pending-screen" hidden>
-  <div class="pending-card">
-    <div class="icon">⏳</div>
-    <h1>Pending Approval</h1>
-    <p>
-      Your account (<b id="pendingEmail"></b>) has been created successfully.
-      Please wait for the admin to approve your access.
-    </p>
-    <small>You will be able to access the exam sets once approved.</small>
-    <button type="button" id="logoutPending">Sign out</button>
-  </div>
-</div>
 
 <!-- ============================================================
      AUTH GATE
@@ -1043,17 +853,17 @@ footer {
 
       <p class="auth-error" id="signupError" hidden></p>
 
-      <button type="submit" class="auth-submit">Create account &amp; request access</button>
+      <button type="submit" class="auth-submit">Create account</button>
     </form>
 
     <p class="auth-foot">
-      Accounts are manually approved by the admin. You'll get access once approved.
+      Create an account to access all exam sets instantly.
     </p>
   </div>
 </div>
 
 <!-- ============================================================
-     APP (hidden until approved)
+     APP
      ============================================================ -->
 <div id="app" hidden>
 
@@ -1062,7 +872,6 @@ footer {
       <a class="brand-link" href="#top">Tsega<span>Tech</span></a>
 
       <div class="topbar-actions">
-        <button type="button" class="ghost-btn" id="adminBtn" hidden>🛡 Admin</button>
         <button type="button" class="ghost-btn" id="favShortcut">
           ★ Favourites <b id="favCountTop">0</b>
         </button>
@@ -1309,22 +1118,11 @@ import {
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  collection,
-  query,
-  where,
-  getDocs,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /* ============================================================
-   ⚠️ REPLACE WITH YOUR OWN FIREBASE CONFIG
-   Firebase Console → ⚙️ Project settings → Your apps → Web app
+   ⚠️ REPLACE THESE WITH YOUR REAL FIREBASE VALUES
+   Get them from: Firebase Console → ⚙️ Project settings →
+   Your apps → Web app → SDK setup and configuration → Config
    ============================================================ */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
@@ -1337,19 +1135,19 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 
 /* ---------- DOM HELPERS ---------- */
 const $ = (id) => document.getElementById(id);
-const showEl = (id) => { const el = $(id); if (el) el.hidden = false; };
-const hideEl = (id) => { const el = $(id); if (el) el.hidden = true; };
 
 function showScreen(which) {
-  ['authGate', 'pendingScreen', 'app'].forEach(hideEl);
-  if (which === 'app') showEl('app');
-  else if (which === 'pending') showEl('pendingScreen');
-  else showEl('authGate');
-  document.body.classList.toggle('locked', which !== 'app');
+  ['authGate', 'app'].forEach((id) => { const el = $(id); if (el) el.hidden = true; });
+  if (which === 'app') {
+    $('app').hidden = false;
+    document.body.classList.remove('locked');
+  } else {
+    $('authGate').hidden = false;
+    document.body.classList.add('locked');
+  }
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
@@ -1370,7 +1168,6 @@ function setError(id, msg) {
   if (!el) return;
   el.textContent = msg;
   el.hidden = false;
-  el.className = 'auth-error';
 }
 function clearBox(id) {
   const el = $(id);
@@ -1420,21 +1217,12 @@ $('signupForm').addEventListener('submit', async (e) => {
   btn.textContent = 'Creating account…';
 
   try {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-
-    await setDoc(doc(db, 'users', cred.user.uid), {
-      name: name,
-      email: email,
-      status: 'pending',
-      isAdmin: false,
-      createdAt: serverTimestamp()
-    });
-
-    toast('Account created! Waiting for admin approval.');
-
+    await createUserWithEmailAndPassword(auth, email, password);
+    toast('Welcome, ' + name.split(' ')[0] + '!');
+    // onAuthStateChanged will reveal the app
   } catch (err) {
     btn.disabled = false;
-    btn.textContent = 'Create account & request access';
+    btn.textContent = 'Create account';
     console.error('Signup error:', err);
 
     if (err.code === 'auth/email-already-in-use') {
@@ -1490,50 +1278,19 @@ $('logoutBtn').addEventListener('click', async () => {
   toast('Signed out.');
 });
 
-$('logoutPending').addEventListener('click', async () => {
-  await signOut(auth);
-  toast('Signed out.');
-});
-
 /* ---------- AUTH STATE LISTENER ---------- */
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const displayName = user.displayName || (user.email ? user.email.split('@')[0] : 'Student');
+    renderUserChip(displayName);
+    updateWelcomeText(displayName);
+    showScreen('app');
+    initStars();
+    renderFavorites();
+  } else {
     $('userChip').textContent = '';
-    $('adminBtn').hidden = true;
     showScreen('auth');
     showAuthView('signin');
-    return;
-  }
-
-  try {
-    const snap = await getDoc(doc(db, 'users', user.uid));
-
-    if (!snap.exists()) {
-      showScreen('pending');
-      $('pendingEmail').textContent = user.email || '';
-      return;
-    }
-
-    const data = snap.data();
-
-    if (data.status === 'approved') {
-      showScreen('app');
-      renderUserChip(data.name || user.email);
-      $('adminBtn').hidden = !data.isAdmin;
-      initStars();
-      renderFavorites();
-      updateWelcomeText(data.name);
-    } else if (data.status === 'rejected') {
-      await signOut(auth);
-      setError('signinError', 'Your account request was rejected. Please contact the admin on Telegram.');
-    } else {
-      showScreen('pending');
-      $('pendingEmail').textContent = user.email || '';
-    }
-  } catch (err) {
-    console.error('Firestore read error:', err);
-    showScreen('pending');
-    $('pendingEmail').textContent = user.email || '';
   }
 });
 
@@ -1549,7 +1306,7 @@ function renderUserChip(name) {
 function updateWelcomeText(name) {
   const el = $('welcomeText');
   if (el && name) {
-    const first = name.trim().split(/\s+/)[0];
+    const first = name.split(/[\s@]/)[0];
     el.textContent = 'Welcome back, ' + first + '. A focused revision space with organized pathology, biochemistry and physiology exam practice sets.';
   }
 }
@@ -1724,85 +1481,6 @@ function initCardAiButtons() {
 
     card.appendChild(btn);
   });
-}
-
-/* ============================================================
-   ADMIN DASHBOARD
-   ============================================================ */
-$('adminBtn').addEventListener('click', openAdminPanel);
-
-async function openAdminPanel() {
-  const modal = document.createElement('div');
-  modal.className = 'admin-modal';
-  modal.innerHTML =
-    '<div class="admin-panel">' +
-      '<h2>🛡 Admin Dashboard</h2>' +
-      '<p>Approve or reject student access requests.</p>' +
-      '<div class="admin-list" id="adminList">Loading…</div>' +
-      '<button type="button" class="admin-close" id="adminClose">Close</button>' +
-    '</div>';
-
-  document.body.appendChild(modal);
-
-  modal.querySelector('#adminClose').addEventListener('click', () => modal.remove());
-
-  const listEl = modal.querySelector('#adminList');
-
-  try {
-    const q = query(collection(db, 'users'), where('status', '==', 'pending'));
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
-      listEl.innerHTML = '<p style="color:#34d399;">✅ No pending requests.</p>';
-      return;
-    }
-
-    listEl.innerHTML = '';
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const uid = docSnap.id;
-
-      const row = document.createElement('div');
-      row.className = 'admin-row';
-      row.innerHTML =
-        '<div class="info">' +
-          '<strong></strong>' +
-          '<span></span>' +
-        '</div>' +
-        '<button type="button" class="btn-approve">Approve</button>' +
-        '<button type="button" class="btn-reject">Reject</button>';
-
-      row.querySelector('strong').textContent = data.name || 'Unknown';
-      row.querySelector('span').textContent = data.email || '';
-
-      row.querySelector('.btn-approve').addEventListener('click', async () => {
-        try {
-          await updateDoc(doc(db, 'users', uid), { status: 'approved' });
-          toast('Student approved ✅');
-          row.remove();
-        } catch (err) {
-          console.error(err);
-          toast('Could not approve. Check your admin rights.');
-        }
-      });
-
-      row.querySelector('.btn-reject').addEventListener('click', async () => {
-        try {
-          await updateDoc(doc(db, 'users', uid), { status: 'rejected' });
-          toast('Student rejected ❌');
-          row.remove();
-        } catch (err) {
-          console.error(err);
-          toast('Could not reject. Check your admin rights.');
-        }
-      });
-
-      listEl.appendChild(row);
-    });
-  } catch (err) {
-    console.error('Admin load error:', err);
-    listEl.innerHTML = '<p style="color:#fca5a5;">Error loading requests: ' + err.message + '</p>';
-  }
 }
 
 /* ---------- BOOT ---------- */
