@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b1120">
-<meta name="description" content="Tsega Tech medical exam practice website for pathology and biochemistry revision.">
+<meta name="description" content="Tsega Tech medical exam practice website for pathology, biochemistry and physiology revision.">
 <title>Tsega Tech | Medical Exam Practice</title>
 
 <style>
@@ -19,6 +19,7 @@
   --border: #29364c;
   --telegram: #229ed9;
   --success: #34d399;
+  --gold: #fbbf24;
 }
 
 * {
@@ -26,6 +27,8 @@
   margin: 0;
   padding: 0;
 }
+
+[hidden] { display: none !important; }
 
 html {
   scroll-behavior: smooth;
@@ -42,13 +45,109 @@ body {
   line-height: 1.6;
 }
 
+body.locked { overflow: hidden; }
+
 .container {
   width: min(100% - 32px, 1080px);
   margin: 0 auto;
   padding: 42px 0 30px;
 }
 
-/* Hero */
+section[id] { scroll-margin-top: 84px; }
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(11,17,32,.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-inner {
+  width: min(100% - 32px, 1080px);
+  margin: 0 auto;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand-link {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
+.brand-link span { color: var(--accent); }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 210px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(21,30,48,.9);
+  color: var(--muted);
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-chip::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+.ghost-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.ghost-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+.ghost-btn b { color: var(--gold); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
 .welcome {
   position: relative;
   overflow: hidden;
@@ -94,9 +193,7 @@ body {
   margin-bottom: 16px;
 }
 
-.welcome h1 span {
-  color: var(--accent);
-}
+.welcome h1 span { color: var(--accent); }
 
 .welcome p {
   position: relative;
@@ -106,15 +203,12 @@ body {
   font-size: clamp(15px, 2.5vw, 18px);
 }
 
-.brand {
-  color: #e0f2fe;
-  font-weight: bold;
-}
+.brand { color: #e0f2fe; font-weight: bold; }
 
-/* Sections */
-.exam-section {
-  margin-bottom: 46px;
-}
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.exam-section { margin-bottom: 46px; }
 
 .section-heading {
   text-align: center;
@@ -131,7 +225,9 @@ body {
   font-size: 14px;
 }
 
-/* Cards */
+/* ============================================================
+   EXAM CARDS
+   ============================================================ */
 .exam-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
@@ -139,6 +235,7 @@ body {
 }
 
 .exam-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -156,9 +253,7 @@ body {
   box-shadow: 0 14px 35px rgba(0,0,0,.22);
 }
 
-.biochemistry .exam-card:hover {
-  border-color: var(--accent-2);
-}
+.biochemistry .exam-card:hover { border-color: var(--accent-2); }
 
 .exam-year {
   color: var(--accent);
@@ -169,13 +264,12 @@ body {
   margin-bottom: 7px;
 }
 
-.biochemistry .exam-year {
-  color: #a5b4fc;
-}
+.biochemistry .exam-year { color: #a5b4fc; }
 
 .exam-card h3 {
   font-size: 23px;
   margin-bottom: 14px;
+  padding-right: 44px;
 }
 
 .question-count {
@@ -207,6 +301,42 @@ body {
   margin-bottom: 22px;
 }
 
+/* Star (favourite) button */
+.star-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(13,22,38,.85);
+  color: #64748b;
+  cursor: pointer;
+  transition: transform .2s, color .2s, border-color .2s, background .2s;
+}
+
+.star-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+.star-btn:hover {
+  color: var(--gold);
+  border-color: rgba(251,191,36,.6);
+  transform: scale(1.08);
+}
+
+.star-btn.is-on {
+  color: var(--gold);
+  border-color: rgba(251,191,36,.65);
+  background: rgba(251,191,36,.14);
+}
+
 /* Buttons */
 .button {
   display: inline-flex;
@@ -236,12 +366,208 @@ body {
   color: #11152f;
 }
 
-a:focus-visible {
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
   outline: 3px solid #facc15;
   outline-offset: 3px;
 }
 
-/* Quick navigation */
+/* Mini "ask ChatGPT" button inside each card */
+.ai-mini {
+  margin-top: 10px;
+  padding: 9px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.ai-mini:hover {
+  color: #6ee7b7;
+  border-color: var(--success);
+  background: rgba(52,211,153,.07);
+}
+
+/* ============================================================
+   FAVOURITES SECTION
+   ============================================================ */
+.favorites { margin-bottom: 42px; }
+
+.fav-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+  gap: 12px;
+}
+
+.fav-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(251,191,36,.28);
+  border-radius: 14px;
+  background: rgba(251,191,36,.06);
+}
+
+.fav-year {
+  flex: 0 0 auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(251,191,36,.16);
+  color: #fcd34d;
+  font-size: 11.5px;
+  font-weight: bold;
+}
+
+.fav-title {
+  flex: 1 1 auto;
+  font-size: 14px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fav-open {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(56,189,248,.15);
+  color: #7dd3fc;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: bold;
+  transition: .2s;
+}
+
+.fav-open:hover { background: rgba(56,189,248,.3); }
+
+.fav-remove {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.fav-remove:hover {
+  color: #fca5a5;
+  background: rgba(248,113,113,.14);
+}
+
+/* ============================================================
+   CHATGPT SECTION
+   ============================================================ */
+.ai-section {
+  margin-bottom: 42px;
+  padding: 28px 22px;
+  border: 1px solid rgba(52,211,153,.28);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(52,211,153,.09), transparent 22rem),
+    rgba(15,26,42,.85);
+  text-align: center;
+}
+
+.ai-section h2 {
+  font-size: clamp(22px, 3.6vw, 28px);
+  margin-bottom: 6px;
+}
+
+.ai-section > p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.ai-form {
+  display: flex;
+  gap: 10px;
+  max-width: 660px;
+  margin: 0 auto 14px;
+}
+
+.ai-form input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 15px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #0d1626;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.ai-form input::placeholder { color: #5b6b83; }
+
+.ai-form input:focus {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(52,211,153,.15);
+}
+
+.ai-form button {
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #34d399, #10b981);
+  color: #05231a;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: filter .2s, transform .2s;
+}
+
+.ai-form button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.ai-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ai-chip {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(21,30,48,.8);
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.ai-chip:hover {
+  color: var(--text);
+  border-color: var(--success);
+  background: var(--hover);
+}
+
+/* ============================================================
+   QUICK NAV
+   ============================================================ */
 .quick-nav {
   display: flex;
   flex-wrap: wrap;
@@ -268,7 +594,9 @@ a:focus-visible {
   background: var(--hover);
 }
 
-/* Contact */
+/* ============================================================
+   CONTACT
+   ============================================================ */
 .contact {
   margin-top: 10px;
   padding: 30px 22px;
@@ -314,7 +642,9 @@ a:focus-visible {
   flex: 0 0 23px;
 }
 
-/* Footer */
+/* ============================================================
+   FOOTER
+   ============================================================ */
 footer {
   margin-top: 26px;
   padding-top: 18px;
@@ -324,310 +654,1385 @@ footer {
   font-size: 13px;
 }
 
-/* Mobile */
+/* ============================================================
+   AUTH GATE
+   ============================================================ */
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(56,189,248,.16), transparent 28rem),
+    radial-gradient(circle at 85% 85%, rgba(129,140,248,.14), transparent 26rem),
+    #070c17;
+}
+
+.auth-card {
+  width: min(100%, 440px);
+  padding: 30px 26px 24px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(21,30,48,.99), rgba(13,22,38,.99));
+  box-shadow: 0 30px 70px rgba(0,0,0,.5);
+}
+
+.auth-brand { text-align: center; }
+
+.auth-brand h1 {
+  font-size: 30px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.auth-brand h1 span { color: var(--accent); }
+
+.auth-brand p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  margin: 22px 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: #0e1728;
+}
+
+.auth-tab {
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.auth-tab.is-active {
+  background: var(--accent);
+  color: #082032;
+}
+
+.auth-form { display: block; }
+
+.field { display: block; margin-bottom: 13px; }
+
+.field > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.field input {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0d1626;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.field input::placeholder { color: #5b6b83; }
+
+.field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(56,189,248,.15);
+}
+
+.code-input {
+  text-align: center;
+  letter-spacing: 11px;
+  text-indent: 11px;
+  font-size: 24px !important;
+  font-weight: bold;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--accent), #60a5fa);
+  color: #06202f;
+  font: inherit;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: filter .2s, transform .2s, opacity .2s;
+}
+
+.auth-submit:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.auth-submit:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.link-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-btn:hover { color: var(--accent); }
+
+.auth-error {
+  margin-bottom: 11px;
+  padding: 9px 12px;
+  border: 1px solid #7f1d1d;
+  border-radius: 9px;
+  background: #2b1216;
+  color: #fca5a5;
+  font-size: 13.5px;
+}
+
+.auth-success {
+  margin-bottom: 11px;
+  padding: 9px 12px;
+  border: 1px solid #065f46;
+  border-radius: 9px;
+  background: #0b2b23;
+  color: #6ee7b7;
+  font-size: 13.5px;
+}
+
+.auth-note {
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.auth-note b { color: var(--text); }
+
+.demo-code {
+  margin-bottom: 14px;
+  padding: 10px;
+  border: 1px dashed #0369a1;
+  border-radius: 10px;
+  background: #082f49;
+  color: #7dd3fc;
+  font-size: 12.5px;
+  text-align: center;
+}
+
+.demo-code b {
+  display: block;
+  margin-top: 3px;
+  font-size: 21px;
+  letter-spacing: 6px;
+  text-indent: 6px;
+  color: #e0f2fe;
+}
+
+.auth-foot {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: #6b7c94;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  z-index: 200;
+  transform: translate(-50%, 20px);
+  padding: 11px 20px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #16233a;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 12px 30px rgba(0,0,0,.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+@media (max-width: 560px) {
+  .topbar-inner {
+    width: min(100% - 22px, 1080px);
+    padding: 8px 0;
+  }
+
+  .user-chip { max-width: 120px; font-size: 11.5px; }
+
+  .ghost-btn { padding: 6px 11px; font-size: 11.5px; }
+}
+
 @media (max-width: 480px) {
   .container {
     width: min(100% - 22px, 1080px);
     padding-top: 22px;
   }
 
-  .welcome {
-    border-radius: 18px;
-  }
+  .welcome { border-radius: 18px; }
 
-  .exam-card {
-    min-height: auto;
-  }
+  .exam-card { min-height: auto; }
 
-  .quick-nav {
-    margin-bottom: 28px;
-  }
+  .quick-nav { margin-bottom: 28px; }
+
+  .ai-form { flex-direction: column; }
+
+  .ai-form button { width: 100%; }
+
+  .auth-card { padding: 24px 18px 20px; }
+
+  .fav-tile { flex-wrap: wrap; }
 }
 </style>
 </head>
 
-<body>
+<body class="locked">
 
-<main class="container">
+<!-- ============================================================
+     AUTH GATE (shown until the user signs in)
+     ============================================================ -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-card">
 
-  <!-- Welcome -->
-  <section class="welcome" aria-labelledby="welcome-title">
-    <div class="welcome-tag">Medical Exam Practice</div>
-
-    <h1 id="welcome-title">
-      Welcome to <span>Tsega Tech</span>
-    </h1>
-
-    <p>
-      A focused revision space for medical students, with organized
-      pathology and biochemistry exam practice sets.
-    </p>
-  </section>
-
-  <!-- Quick navigation -->
-  <nav class="quick-nav" aria-label="Exam sections">
-    <a href="#pathology">Pathology</a>
-    <a href="#biochemistry">Biochemistry</a>
-    <a href="#contact">Contact</a>
-  </nav>
-
-  <!-- Pathology -->
-  <section class="exam-section" id="pathology" aria-labelledby="pathology-heading">
-
-    <div class="section-heading">
-      <h2 id="pathology-heading">Pathology Exam Sets</h2>
-      <p>Choose an exam set to begin practicing.</p>
+    <div class="auth-brand">
+      <div class="welcome-tag">Medical Exam Practice</div>
+      <h1>Tsega <span>Tech</span></h1>
+      <p>Sign in to unlock the exam sets.</p>
     </div>
 
-    <div class="exam-list">
-
-      <!-- 2015 -->
-      <article class="exam-card">
-        <div class="exam-year">2015</div>
-        <h3>2015 Pathology</h3>
-
-        <div class="question-count">30 Questions</div>
-
-        <div class="contents-label">Contents</div>
-        <p class="contents">
-          General pathology, skin pathology, bone and joint disorders,
-          and related pathology topics.
-        </p>
-
-        <a class="button" href="/2015-images.html">
-          Start Exam Set
-        </a>
-      </article>
-
-      <!-- 2016 -->
-      <article class="exam-card">
-        <div class="exam-year">2016</div>
-        <h3>2016 Pathology</h3>
-
-        <div class="question-count">22 Questions</div>
-
-        <div class="contents-label">Contents</div>
-        <p class="contents">
-          Skin pathology, bone and joint disorders,
-          neuromuscular diseases, and peripheral nerve disorders.
-        </p>
-
-        <a class="button" href="/2016.html">
-          Start Exam Set
-        </a>
-      </article>
-
-      <!-- 2017 -->
-      <article class="exam-card">
-        <div class="exam-year">2017</div>
-        <h3>2017 Pathology</h3>
-
-        <div class="question-count">41 Questions</div>
-
-        <div class="contents-label">Contents</div>
-        <p class="contents">
-          Skin diseases, bone and joint disorders,
-          neuromuscular diseases, fractures, and bone
-          and soft-tissue tumors.
-        </p>
-
-        <a class="button" href="/2017.html">
-          Start Exam Set
-        </a>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- Biochemistry -->
-  <section class="exam-section biochemistry" id="biochemistry" aria-labelledby="biochemistry-heading">
-
-    <div class="section-heading">
-      <h2 id="biochemistry-heading">Biochemistry Exam Sets</h2>
-      <p>Practice the 2015–2018 biochemistry question sets.</p>
+    <!-- Tabs -->
+    <div class="auth-tabs" id="authTabs" role="tablist" aria-label="Authentication">
+      <button type="button" class="auth-tab is-active" data-view="signin" role="tab" aria-selected="true">Sign in</button>
+      <button type="button" class="auth-tab" data-view="signup" role="tab" aria-selected="false">Create account</button>
     </div>
 
-    <div class="exam-list">
+    <!-- ---------- SIGN IN ---------- -->
+    <form class="auth-form" id="signinForm" data-view="signin" novalidate>
+      <label class="field">
+        <span>Email</span>
+        <input type="email" id="signinEmail" autocomplete="email" placeholder="you@example.com" required>
+      </label>
 
-      <!-- 2015 -->
-      <article class="exam-card">
-        <div class="exam-year">2015</div>
-        <h3>2015 Biochemistry</h3>
+      <label class="field">
+        <span>Password</span>
+        <input type="password" id="signinPassword" autocomplete="current-password" placeholder="••••••••" required>
+      </label>
 
-        <div class="question-count">Exam Practice</div>
+      <p class="auth-error" id="signinError" hidden></p>
 
-        <div class="contents-label">Study features</div>
-        <p class="contents">
-          Study mode, exam mode, answer explanations, question flagging,
-          progress tracking, and review tools.
+      <button type="submit" class="auth-submit">Sign in</button>
+      <button type="button" class="link-btn" id="forgotBtn">Forgot your password?</button>
+    </form>
+
+    <!-- ---------- SIGN UP ---------- -->
+    <form class="auth-form" id="signupForm" data-view="signup" hidden novalidate>
+      <label class="field">
+        <span>Full name</span>
+        <input type="text" id="signupName" autocomplete="name" placeholder="Abebe Kebede" required>
+      </label>
+
+      <label class="field">
+        <span>Email</span>
+        <input type="email" id="signupEmail" autocomplete="email" placeholder="you@example.com" required>
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input type="password" id="signupPassword" autocomplete="new-password" placeholder="At least 6 characters" required>
+      </label>
+
+      <label class="field">
+        <span>Confirm password</span>
+        <input type="password" id="signupConfirm" autocomplete="new-password" placeholder="Repeat password" required>
+      </label>
+
+      <p class="auth-error" id="signupError" hidden></p>
+
+      <button type="submit" class="auth-submit">Create account &amp; verify email</button>
+    </form>
+
+    <!-- ---------- EMAIL VERIFICATION ---------- -->
+    <form class="auth-form" id="verifyForm" data-view="verify" hidden novalidate>
+      <p class="auth-note">
+        We sent a 6-digit confirmation code to<br><b id="verifyEmail">you@example.com</b>
+      </p>
+
+      <!-- Demo mode box. Remove this block once a real email service is connected. -->
+      <div class="demo-code" id="demoCodeBox">
+        Demo mode – no email service connected yet. Your code is:
+        <b id="demoCode">------</b>
+      </div>
+
+      <label class="field">
+        <span>Confirmation code</span>
+        <input type="text" id="verifyCode" class="code-input" inputmode="numeric"
+               maxlength="6" placeholder="000000" autocomplete="one-time-code" required>
+      </label>
+
+      <p class="auth-error" id="verifyError" hidden></p>
+
+      <button type="submit" class="auth-submit">Verify &amp; continue</button>
+      <button type="button" class="link-btn" data-back="signin">← Back to sign in</button>
+    </form>
+
+    <!-- ---------- PASSWORD RESET ---------- -->
+    <form class="auth-form" id="resetForm" data-view="reset" hidden novalidate>
+      <!-- Step 1 -->
+      <div id="resetStep1">
+        <p class="auth-note">Enter your email and we'll send a reset code.</p>
+
+        <label class="field">
+          <span>Email</span>
+          <input type="email" id="resetEmail" autocomplete="email" placeholder="you@example.com" required>
+        </label>
+
+        <p class="auth-error" id="resetError1" hidden></p>
+
+        <button type="submit" class="auth-submit">Send reset code</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="resetStep2" hidden>
+        <p class="auth-note">
+          Reset code sent to<br><b id="resetEmailLabel">you@example.com</b>
         </p>
 
-        <a class="button" href="/Biochemistry2015.html">
-          Start Biochemistry
-        </a>
-      </article>
+        <div class="demo-code" id="resetDemoBox">
+          Demo mode – your reset code is:
+          <b id="resetDemoCode">------</b>
+        </div>
 
-      <!-- 2016 -->
-      <article class="exam-card">
-        <div class="exam-year">2016</div>
-        <h3>2016 Biochemistry</h3>
+        <label class="field">
+          <span>Reset code</span>
+          <input type="text" id="resetCode" class="code-input" inputmode="numeric"
+                 maxlength="6" placeholder="000000" autocomplete="one-time-code" required>
+        </label>
 
-        <div class="question-count">Exam Practice</div>
+        <label class="field">
+          <span>New password</span>
+          <input type="password" id="resetNewPassword" autocomplete="new-password"
+                 placeholder="At least 6 characters" required>
+        </label>
 
-        <div class="contents-label">Study features</div>
-        <p class="contents">
-          Practice questions with immediate study feedback or complete
-          the full set in exam mode before reviewing answers.
-        </p>
+        <p class="auth-error" id="resetError2" hidden></p>
 
-        <a class="button" href="/Biochemistry2016.html">
-          Start Biochemistry
-        </a>
-      </article>
+        <button type="submit" class="auth-submit">Update password</button>
+      </div>
 
-      <!-- 2017 -->
-      <article class="exam-card">
-        <div class="exam-year">2017</div>
-        <h3>2017 Biochemistry</h3>
+      <button type="button" class="link-btn" data-back="signin">← Back to sign in</button>
+    </form>
 
-        <div class="question-count">Exam Practice</div>
-
-        <div class="contents-label">Study features</div>
-        <p class="contents">
-          Detailed option explanations, progress tracking, flagged
-          questions, and a focused dark exam interface.
-        </p>
-
-        <a class="button" href="/Biochemistry2017.html">
-          Start Biochemistry
-        </a>
-      </article>
-
-      <!-- 2018 -->
-      <article class="exam-card">
-        <div class="exam-year">2018</div>
-        <h3>2018 Biochemistry</h3>
-
-        <div class="question-count">Exam Practice</div>
-
-        <div class="contents-label">Study features</div>
-        <p class="contents">
-          Use study mode for immediate feedback or exam mode to
-          simulate a timed online examination.
-        </p>
-
-        <a class="button" href="/Biochemistry2018.html">
-          Start Biochemistry
-        </a>
-      </article>
-
-    </div>
-  </section>
-
-
-  <!-- Physiology -->
-  <section class="exam-section biochemistry" id="physiology" aria-labelledby="physiology-heading">
-
-    <div class="section-heading">
-      <h2 id="physiology-heading">Physiology Exam Sets</h2>
-      <p>Practice the 2016–2018 physiology question sets.</p>
-    </div>
-
-    <div class="exam-list">
-
-      <!-- 2016 -->
-      <article class="exam-card">
-        <div class="exam-year">2016</div>
-        <h3>2016 Physiology</h3>
-
-        <div class="question-count">31 MCQs</div>
-
-        <div class="contents-label">Study features</div>
-        <p class="contents">
-          Musculoskeletal physiology MCQs with study mode,
-          exam mode, explanations, flagging and progress tracking.
-        </p>
-
-        <a class="button" href="/Physiology2016.html">
-          Start Physiology
-        </a>
-      </article>
-
-      <!-- 2017 -->
-      <article class="exam-card">
-        <div class="exam-year">2017</div>
-        <h3>2017 Physiology</h3>
-
-        <div class="question-count">10 MCQs</div>
-
-        <div class="contents-label">Study features</div>
-        <p class="contents">
-          Musculoskeletal physiology questions with immediate
-          feedback in study mode and hidden answers in exam mode.
-        </p>
-
-        <a class="button" href="/Physiology2017.html">
-          Start Physiology
-        </a>
-      </article>
-
-      <!-- 2018 -->
-      <article class="exam-card">
-        <div class="exam-year">2018</div>
-        <h3>2018 Physiology</h3>
-
-        <div class="question-count">12 MCQs</div>
-
-        <div class="contents-label">Study features</div>
-        <p class="contents">
-          Musculoskeletal physiology practice with detailed
-          explanations, question navigation, flagging and review.
-        </p>
-
-        <a class="button" href="/Physiology2018.html">
-          Start Physiology
-        </a>
-      </article>
-
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section class="contact" id="contact" aria-labelledby="contact-heading">
-
-    <h2 id="contact-heading">Contact Me</h2>
-
-    <p>
-      Questions or suggestions? Connect with me on Telegram.
+    <p class="auth-foot">
+      Your account, favourites and progress are stored privately on this device.
     </p>
 
-    <a
-      class="telegram-button"
-      href="https://t.me/blsng10"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Contact Tsega Tech on Telegram at blsng10"
-    >
-      <svg
-        class="telegram-icon"
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <path
-          fill="currentColor"
-          d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"
-        />
-      </svg>
-      <span>@blsng10</span>
-    </a>
+  </div>
+</div>
 
-  </section>
+<!-- ============================================================
+     APP (hidden until signed in)
+     ============================================================ -->
+<div id="app" hidden>
 
-  <footer>
-    Build for focused revision. Verify clinically.
-  </footer>
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand-link" href="#top">Tsega<span>Tech</span></a>
 
-</main>
+      <div class="topbar-actions">
+        <button type="button" class="ghost-btn" id="favShortcut">
+          ★ Favourites <b id="favCountTop">0</b>
+        </button>
+        <span class="user-chip" id="userChip"></span>
+        <button type="button" class="ghost-btn" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="top">
+
+    <!-- Welcome -->
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div class="welcome-tag">Medical Exam Practice</div>
+
+      <h1 id="welcome-title">
+        Welcome to <span>Tsega Tech</span>
+      </h1>
+
+      <p id="welcomeText">
+        A focused revision space for medical students, with organized
+        pathology, biochemistry and physiology exam practice sets.
+      </p>
+    </section>
+
+    <!-- ChatGPT helper -->
+    <section class="ai-section" aria-labelledby="ai-heading">
+      <h2 id="ai-heading">✦ Ask ChatGPT</h2>
+      <p>Stuck on a concept? Search it or ask a full question — ChatGPT opens in a new tab.</p>
+
+      <form class="ai-form" id="aiForm">
+        <input type="text" id="aiInput"
+               placeholder="e.g. Explain the Frank–Starling mechanism simply"
+               aria-label="Ask ChatGPT a question">
+        <button type="submit">Ask ChatGPT</button>
+      </form>
+
+      <div class="ai-chips">
+        <button type="button" class="ai-chip" data-q="Explain the difference between necrosis and apoptosis with examples.">Necrosis vs apoptosis</button>
+        <button type="button" class="ai-chip" data-q="Explain the sliding filament theory of muscle contraction step by step.">Sliding filament theory</button>
+        <button type="button" class="ai-chip" data-q="Summarise the rate-limiting enzymes of glycolysis, gluconeogenesis and the TCA cycle.">Rate-limiting enzymes</button>
+        <button type="button" class="ai-chip" data-q="Give me 10 high-yield MCQ practice questions on bone and joint pathology with answers.">Bone &amp; joint MCQs</button>
+        <button type="button" class="ai-chip" data-q="Explain the excitation-contraction coupling in skeletal muscle.">Excitation–contraction coupling</button>
+      </div>
+    </section>
+
+    <!-- Quick navigation -->
+    <nav class="quick-nav" aria-label="Exam sections">
+      <a href="#favorites">★ Favourites</a>
+      <a href="#pathology">Pathology</a>
+      <a href="#biochemistry">Biochemistry</a>
+      <a href="#physiology">Physiology</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- ================= FAVOURITES ================= -->
+    <section class="exam-section favorites" id="favorites" aria-labelledby="favorites-heading" hidden>
+      <div class="section-heading">
+        <h2 id="favorites-heading">★ My Favourite Exam Sets</h2>
+        <p>Your starred sets, saved on this device.</p>
+      </div>
+      <div class="fav-list" id="favList"></div>
+    </section>
+
+    <!-- ================= PATHOLOGY ================= -->
+    <section class="exam-section" id="pathology" aria-labelledby="pathology-heading">
+
+      <div class="section-heading">
+        <h2 id="pathology-heading">Pathology Exam Sets</h2>
+        <p>Choose an exam set to begin practicing.</p>
+      </div>
+
+      <div class="exam-list">
+
+        <!-- 2015 -->
+        <article class="exam-card" data-exam="path-2015">
+          <div class="exam-year">2015</div>
+          <h3>2015 Pathology</h3>
+
+          <div class="question-count">30 Questions</div>
+
+          <div class="contents-label">Contents</div>
+          <p class="contents">
+            General pathology, skin pathology, bone and joint disorders,
+            and related pathology topics.
+          </p>
+
+          <a class="button" href="/2015-images.html">Start Exam Set</a>
+        </article>
+
+        <!-- 2016 -->
+        <article class="exam-card" data-exam="path-2016">
+          <div class="exam-year">2016</div>
+          <h3>2016 Pathology</h3>
+
+          <div class="question-count">22 Questions</div>
+
+          <div class="contents-label">Contents</div>
+          <p class="contents">
+            Skin pathology, bone and joint disorders,
+            neuromuscular diseases, and peripheral nerve disorders.
+          </p>
+
+          <a class="button" href="/2016.html">Start Exam Set</a>
+        </article>
+
+        <!-- 2017 -->
+        <article class="exam-card" data-exam="path-2017">
+          <div class="exam-year">2017</div>
+          <h3>2017 Pathology</h3>
+
+          <div class="question-count">41 Questions</div>
+
+          <div class="contents-label">Contents</div>
+          <p class="contents">
+            Skin diseases, bone and joint disorders,
+            neuromuscular diseases, fractures, and bone
+            and soft-tissue tumors.
+          </p>
+
+          <a class="button" href="/2017.html">Start Exam Set</a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================= BIOCHEMISTRY ================= -->
+    <section class="exam-section biochemistry" id="biochemistry" aria-labelledby="biochemistry-heading">
+
+      <div class="section-heading">
+        <h2 id="biochemistry-heading">Biochemistry Exam Sets</h2>
+        <p>Practice the 2015–2018 biochemistry question sets.</p>
+      </div>
+
+      <div class="exam-list">
+
+        <!-- 2015 -->
+        <article class="exam-card" data-exam="bio-2015">
+          <div class="exam-year">2015</div>
+          <h3>2015 Biochemistry</h3>
+
+          <div class="question-count">Exam Practice</div>
+
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Study mode, exam mode, answer explanations, question flagging,
+            progress tracking, and review tools.
+          </p>
+
+          <a class="button" href="/Biochemistry2015.html">Start Biochemistry</a>
+        </article>
+
+        <!-- 2016 -->
+        <article class="exam-card" data-exam="bio-2016">
+          <div class="exam-year">2016</div>
+          <h3>2016 Biochemistry</h3>
+
+          <div class="question-count">Exam Practice</div>
+
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Practice questions with immediate study feedback or complete
+            the full set in exam mode before reviewing answers.
+          </p>
+
+          <a class="button" href="/Biochemistry2016.html">Start Biochemistry</a>
+        </article>
+
+        <!-- 2017 -->
+        <article class="exam-card" data-exam="bio-2017">
+          <div class="exam-year">2017</div>
+          <h3>2017 Biochemistry</h3>
+
+          <div class="question-count">Exam Practice</div>
+
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Detailed option explanations, progress tracking, flagged
+            questions, and a focused dark exam interface.
+          </p>
+
+          <a class="button" href="/Biochemistry2017.html">Start Biochemistry</a>
+        </article>
+
+        <!-- 2018 -->
+        <article class="exam-card" data-exam="bio-2018">
+          <div class="exam-year">2018</div>
+          <h3>2018 Biochemistry</h3>
+
+          <div class="question-count">Exam Practice</div>
+
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Use study mode for immediate feedback or exam mode to
+            simulate a timed online examination.
+          </p>
+
+          <a class="button" href="/Biochemistry2018.html">Start Biochemistry</a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================= PHYSIOLOGY ================= -->
+    <section class="exam-section biochemistry" id="physiology" aria-labelledby="physiology-heading">
+
+      <div class="section-heading">
+        <h2 id="physiology-heading">Physiology Exam Sets</h2>
+        <p>Practice the 2016–2018 physiology question sets.</p>
+      </div>
+
+      <div class="exam-list">
+
+        <!-- 2016 -->
+        <article class="exam-card" data-exam="phys-2016">
+          <div class="exam-year">2016</div>
+          <h3>2016 Physiology</h3>
+
+          <div class="question-count">31 MCQs</div>
+
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Musculoskeletal physiology MCQs with study mode,
+            exam mode, explanations, flagging and progress tracking.
+          </p>
+
+          <a class="button" href="/Physiology2016.html">Start Physiology</a>
+        </article>
+
+        <!-- 2017 -->
+        <article class="exam-card" data-exam="phys-2017">
+          <div class="exam-year">2017</div>
+          <h3>2017 Physiology</h3>
+
+          <div class="question-count">10 MCQs</div>
+
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Musculoskeletal physiology questions with immediate
+            feedback in study mode and hidden answers in exam mode.
+          </p>
+
+          <a class="button" href="/Physiology2017.html">Start Physiology</a>
+        </article>
+
+        <!-- 2018 -->
+        <article class="exam-card" data-exam="phys-2018">
+          <div class="exam-year">2018</div>
+          <h3>2018 Physiology</h3>
+
+          <div class="question-count">12 MCQs</div>
+
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Musculoskeletal physiology practice with detailed
+            explanations, question navigation, flagging and review.
+          </p>
+
+          <a class="button" href="/Physiology2018.html">Start Physiology</a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="contact" id="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading">Contact Me</h2>
+
+      <p>Questions or suggestions? Connect with me on Telegram.</p>
+
+      <a class="telegram-button"
+         href="https://t.me/blsng10"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Contact Tsega Tech on Telegram at blsng10">
+        <svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor"
+            d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"/>
+        </svg>
+        <span>@blsng10</span>
+      </a>
+    </section>
+
+    <footer>
+      Build for focused revision. Verify clinically.
+    </footer>
+
+  </main>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     0. TINY HELPERS
+     ============================================================ */
+  const $ = (id) => document.getElementById(id);
+
+  const LS = {
+    get(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw === null ? fallback : JSON.parse(raw);
+      } catch (err) {
+        return fallback;
+      }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) {}
+    },
+    remove(key) {
+      try { localStorage.removeItem(key); } catch (err) {}
+    }
+  };
+
+  /* SHA-256 when available (https / localhost), simple fallback otherwise. */
+  async function hashText(text) {
+    try {
+      if (window.crypto && window.crypto.subtle && window.TextEncoder) {
+        const bytes = new TextEncoder().encode(text);
+        const digest = await window.crypto.subtle.digest('SHA-256', bytes);
+        return Array.from(new Uint8Array(digest))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+      }
+    } catch (err) { /* fall through to the simple hash */ }
+
+    let h = 5381;
+    for (let i = 0; i < text.length; i += 1) {
+      h = ((h << 5) + h) ^ text.charCodeAt(i);
+    }
+    return (h >>> 0).toString(16);
+  }
+
+  const hashPassword = (email, password) =>
+    hashText(email.toLowerCase() + '|' + password + '|tsega-tech-salt');
+
+  const isEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+
+  const makeCode = () => String(Math.floor(100000 + Math.random() * 900000));
+
+  /* ---------- Toast ---------- */
+  let toastTimer = null;
+  function toast(message) {
+    const el = $('toast');
+    el.textContent = message;
+    el.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2300);
+  }
+
+  /* ---------- Inline error / success boxes ---------- */
+  function setError(id, message) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = message;
+    el.hidden = false;
+    el.classList.remove('auth-success');
+    el.classList.add('auth-error');
+  }
+  function setSuccess(id, message) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = message;
+    el.hidden = false;
+    el.classList.remove('auth-error');
+    el.classList.add('auth-success');
+  }
+  function clearBox(id) {
+    const el = $(id);
+    if (el) { el.hidden = true; el.textContent = ''; }
+  }
+  function clearAllAuthMessages() {
+    ['signinError', 'signupError', 'verifyError', 'resetError1', 'resetError2']
+      .forEach(clearBox);
+  }
+
+  /* ============================================================
+     1. ACCOUNT STORAGE
+     ============================================================ */
+  const USERS_KEY = 'tt_users';
+  const SESSION_KEY = 'tt_session';
+  const SESSION_DAYS = 30;
+
+  const getUsers = () => {
+    const list = LS.get(USERS_KEY, []);
+    return Array.isArray(list) ? list : [];
+  };
+  const saveUsers = (list) => LS.set(USERS_KEY, list);
+
+  function getSession() {
+    const session = LS.get(SESSION_KEY, null);
+    if (!session || !session.email) return null;
+    const age = Date.now() - (session.ts || 0);
+    if (age > SESSION_DAYS * 24 * 60 * 60 * 1000) {
+      LS.remove(SESSION_KEY);
+      return null;
+    }
+    return session;
+  }
+
+  /* ============================================================
+     2. APP STATE
+     ============================================================ */
+  let currentUser = null;   // { name, email }
+  let pendingSignup = null; // { name, email, passwordHash, code }
+  let pendingReset = null;  // { email, code }
+  let resetStep = 1;
+
+  /* ============================================================
+     3. AUTH VIEW SWITCHING
+     ============================================================ */
+  const authTabs = $('authTabs');
+
+  function showAuthView(name) {
+    const tabViews = ['signin', 'signup'];
+
+    document.querySelectorAll('.auth-tab').forEach((tab) => {
+      const active = tab.dataset.view === name;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+    });
+
+    document.querySelectorAll('.auth-form').forEach((form) => {
+      form.hidden = form.dataset.view !== name;
+    });
+
+    authTabs.hidden = !tabViews.includes(name);
+
+    clearAllAuthMessages();
+
+    if (name === 'reset') {
+      resetStep = 1;
+      $('resetStep1').hidden = false;
+      $('resetStep2').hidden = true;
+      $('resetForm').reset();
+    }
+
+    const firstInput = document.querySelector(
+      '.auth-form[data-view="' + name + '"] input:not([type="hidden"])'
+    );
+    if (firstInput) setTimeout(() => firstInput.focus(), 60);
+  }
+
+  document.querySelectorAll('.auth-tab').forEach((tab) => {
+    tab.addEventListener('click', () => showAuthView(tab.dataset.view));
+  });
+
+  document.querySelectorAll('[data-back]').forEach((btn) => {
+    btn.addEventListener('click', () => showAuthView(btn.dataset.back));
+  });
+
+  $('forgotBtn').addEventListener('click', () => showAuthView('reset'));
+
+  /* ============================================================
+     4. SIGN UP  →  EMAIL VERIFICATION  →  SIGN IN
+     ============================================================ */
+  $('signupForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearBox('signupError');
+
+    const name = $('signupName').value.trim();
+    const email = $('signupEmail').value.trim().toLowerCase();
+    const password = $('signupPassword').value;
+    const confirm = $('signupConfirm').value;
+
+    if (name.length < 2) {
+      return setError('signupError', 'Please enter your full name.');
+    }
+    if (!isEmail(email)) {
+      return setError('signupError', 'Please enter a valid email address.');
+    }
+    if (password.length < 6) {
+      return setError('signupError', 'Password must be at least 6 characters.');
+    }
+    if (password !== confirm) {
+      return setError('signupError', 'The two passwords do not match.');
+    }
+    if (getUsers().some((user) => user.email === email)) {
+      return setError('signupError', 'An account with this email already exists. Please sign in.');
+    }
+
+    const submitBtn = event.target.querySelector('.auth-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending code…';
+
+    pendingSignup = {
+      name: name,
+      email: email,
+      passwordHash: await hashPassword(email, password),
+      code: makeCode()
+    };
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Create account & verify email';
+
+    openVerifyView(pendingSignup.email, pendingSignup.code);
+  });
+
+  function openVerifyView(email, code) {
+    $('verifyEmail').textContent = email;
+    $('demoCode').textContent = code;
+    $('verifyCode').value = '';
+    showAuthView('verify');
+    setTimeout(() => $('verifyCode').focus(), 80);
+  }
+
+  $('verifyForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    clearBox('verifyError');
+
+    if (!pendingSignup) {
+      return showAuthView('signin');
+    }
+
+    const entered = $('verifyCode').value.trim();
+
+    if (entered.length !== 6) {
+      return setError('verifyError', 'Please enter the full 6-digit code.');
+    }
+    if (entered !== pendingSignup.code) {
+      return setError('verifyError', 'That code is not correct. Please check your email and try again.');
+    }
+
+    const users = getUsers();
+    if (!users.some((user) => user.email === pendingSignup.email)) {
+      users.push({
+        name: pendingSignup.name,
+        email: pendingSignup.email,
+        password: pendingSignup.passwordHash,
+        createdAt: Date.now()
+      });
+      saveUsers(users);
+    }
+
+    const account = { name: pendingSignup.name, email: pendingSignup.email };
+    pendingSignup = null;
+
+    startSession(account);
+    toast('Email verified — welcome, ' + account.name.split(' ')[0] + '!');
+  });
+
+  /* ============================================================
+     5. SIGN IN
+     ============================================================ */
+  $('signinForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearBox('signinError');
+
+    const email = $('signinEmail').value.trim().toLowerCase();
+    const password = $('signinPassword').value;
+
+    if (!isEmail(email)) {
+      return setError('signinError', 'Please enter a valid email address.');
+    }
+    if (!password) {
+      return setError('signinError', 'Please enter your password.');
+    }
+
+    const submitBtn = event.target.querySelector('.auth-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Checking…';
+
+    const hash = await hashPassword(email, password);
+    const user = getUsers().find(
+      (item) => item.email === email && item.password === hash
+    );
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Sign in';
+
+    if (!user) {
+      return setError('signinError', 'Incorrect email or password. New here? Create an account.');
+    }
+
+    $('signinForm').reset();
+    startSession({ name: user.name, email: user.email });
+    toast('Welcome back, ' + user.name.split(' ')[0] + '!');
+  });
+
+  /* ============================================================
+     6. PASSWORD RESET
+     ============================================================ */
+  $('resetForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    /* ---- Step 1: request code ---- */
+    if (resetStep === 1) {
+      clearBox('resetError1');
+
+      const email = $('resetEmail').value.trim().toLowerCase();
+
+      if (!isEmail(email)) {
+        return setError('resetError1', 'Please enter a valid email address.');
+      }
+      if (!getUsers().some((user) => user.email === email)) {
+        return setError('resetError1', 'No account found with that email address.');
+      }
+
+      pendingReset = { email: email, code: makeCode() };
+
+      $('resetEmailLabel').textContent = email;
+      $('resetDemoCode').textContent = pendingReset.code;
+      $('resetCode').value = '';
+      $('resetNewPassword').value = '';
+
+      $('resetStep1').hidden = true;
+      $('resetStep2').hidden = false;
+      resetStep = 2;
+      setTimeout(() => $('resetCode').focus(), 80);
+      return;
+    }
+
+    /* ---- Step 2: verify code + set new password ---- */
+    clearBox('resetError2');
+
+    if (!pendingReset) {
+      return showAuthView('signin');
+    }
+
+    const enteredCode = $('resetCode').value.trim();
+    const newPassword = $('resetNewPassword').value;
+
+    if (enteredCode !== pendingReset.code) {
+      return setError('resetError2', 'That reset code is not correct.');
+    }
+    if (newPassword.length < 6) {
+      return setError('resetError2', 'New password must be at least 6 characters.');
+    }
+
+    const users = getUsers();
+    const index = users.findIndex((user) => user.email === pendingReset.email);
+
+    if (index === -1) {
+      return setError('resetError2', 'Account not found. Please sign up again.');
+    }
+
+    users[index].password = await hashPassword(pendingReset.email, newPassword);
+    saveUsers(users);
+
+    const account = { name: users[index].name, email: users[index].email };
+    pendingReset = null;
+
+    showAuthView('signin');
+    $('signinForm').reset();
+    setSuccess('signinError', 'Password updated. You can sign in now with your new password.');
+  });
+
+  /* ============================================================
+     7. SESSION CONTROL
+     ============================================================ */
+  function startSession(account) {
+    currentUser = { name: account.name, email: account.email };
+    LS.set(SESSION_KEY, {
+      name: currentUser.name,
+      email: currentUser.email,
+      ts: Date.now()
+    });
+
+    $('authGate').hidden = true;
+    $('app').hidden = false;
+    document.body.classList.remove('locked');
+
+    renderUserChip();
+    initStars();
+    renderFavorites();
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  function endSession() {
+    LS.remove(SESSION_KEY);
+    currentUser = null;
+
+    $('app').hidden = true;
+    $('authGate').hidden = false;
+    document.body.classList.add('locked');
+
+    $('signinForm').reset();
+    $('signupForm').reset();
+    showAuthView('signin');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  $('logoutBtn').addEventListener('click', () => {
+    endSession();
+    toast('Signed out.');
+  });
+
+  function renderUserChip() {
+    const chip = $('userChip');
+    if (!currentUser) { chip.textContent = ''; return; }
+    const label = currentUser.name && currentUser.name.trim()
+      ? currentUser.name.trim()
+      : currentUser.email;
+    chip.textContent = label;
+    chip.title = currentUser.email;
+  }
+
+  /* ============================================================
+     8. FAVOURITES
+     ============================================================ */
+  const favKey = () => 'tt_favs_' + (currentUser ? currentUser.email : 'guest');
+
+  function getFavs() {
+    const list = LS.get(favKey(), []);
+    return Array.isArray(list) ? list : [];
+  }
+  function setFavs(list) {
+    LS.set(favKey(), list);
+  }
+
+  const STAR_SVG =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+    '<path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45-4.7-4.6 6.5-.95L12 2.6z"/>' +
+    '</svg>';
+
+  let starsReady = false;
+
+  function initStars() {
+    if (!starsReady) {
+      document.querySelectorAll('.exam-card').forEach((card) => {
+        const id = card.dataset.exam;
+        if (!id) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'star-btn';
+        btn.dataset.exam = id;
+        btn.innerHTML = STAR_SVG;
+        btn.addEventListener('click', () => toggleFav(id));
+        card.appendChild(btn);
+      });
+      starsReady = true;
+    }
+    syncStars();
+  }
+
+  function syncStars() {
+    const favs = getFavs();
+    document.querySelectorAll('.star-btn').forEach((btn) => {
+      const on = favs.includes(btn.dataset.exam);
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.setAttribute('aria-label', on ? 'Remove from favourites' : 'Add to favourites');
+      btn.title = on ? 'Remove from favourites' : 'Add to favourites';
+    });
+  }
+
+  function toggleFav(id) {
+    const favs = getFavs();
+    const index = favs.indexOf(id);
+
+    if (index === -1) {
+      favs.push(id);
+      toast('★ Added to favourites');
+    } else {
+      favs.splice(index, 1);
+      toast('Removed from favourites');
+    }
+
+    setFavs(favs);
+    syncStars();
+    renderFavorites();
+  }
+
+  function renderFavorites() {
+    const favs = getFavs();
+    const section = $('favorites');
+    const list = $('favList');
+
+    $('favCountTop').textContent = String(favs.length);
+
+    if (!favs.length) {
+      section.hidden = true;
+      list.innerHTML = '';
+      return;
+    }
+
+    section.hidden = false;
+    list.innerHTML = '';
+
+    favs.forEach((id) => {
+      const card = document.querySelector('.exam-card[data-exam="' + id + '"]');
+      if (!card) return;
+
+      const title = card.querySelector('h3').textContent.trim();
+      const year = card.querySelector('.exam-year').textContent.trim();
+      const link = card.querySelector('a.button');
+      const href = link ? link.getAttribute('href') : '#';
+
+      const tile = document.createElement('div');
+      tile.className = 'fav-tile';
+
+      const yearEl = document.createElement('span');
+      yearEl.className = 'fav-year';
+      yearEl.textContent = year;
+
+      const titleEl = document.createElement('span');
+      titleEl.className = 'fav-title';
+      titleEl.textContent = title;
+      titleEl.title = title;
+
+      const openEl = document.createElement('a');
+      openEl.className = 'fav-open';
+      openEl.href = href;
+      openEl.textContent = 'Open';
+
+      const removeEl = document.createElement('button');
+      removeEl.type = 'button';
+      removeEl.className = 'fav-remove';
+      removeEl.textContent = '×';
+      removeEl.setAttribute('aria-label', 'Remove ' + title + ' from favourites');
+      removeEl.addEventListener('click', () => toggleFav(id));
+
+      tile.appendChild(yearEl);
+      tile.appendChild(titleEl);
+      tile.appendChild(openEl);
+      tile.appendChild(removeEl);
+      list.appendChild(tile);
+    });
+  }
+
+  $('favShortcut').addEventListener('click', () => {
+    if (!getFavs().length) {
+      toast('No favourites yet — tap the ☆ on any exam set.');
+      return;
+    }
+    $('favorites').hidden = false;
+    $('favorites').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  /* ============================================================
+     9. CHATGPT INTEGRATION
+     ============================================================ */
+  function askChatGPT(prompt) {
+    const text = String(prompt || '').trim();
+    const url = text
+      ? 'https://chatgpt.com/?q=' + encodeURIComponent(text)
+      : 'https://chatgpt.com/';
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  $('aiForm').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const query = $('aiInput').value.trim();
+    if (!query) {
+      $('aiInput').focus();
+      return;
+    }
+    askChatGPT(query);
+    $('aiInput').value = '';
+  });
+
+  document.querySelectorAll('.ai-chip').forEach((chip) => {
+    chip.addEventListener('click', () => askChatGPT(chip.dataset.q));
+  });
+
+  /* Small "Ask ChatGPT about this" button on every exam card */
+  function initCardAiButtons() {
+    document.querySelectorAll('.exam-card').forEach((card) => {
+      const titleEl = card.querySelector('h3');
+      const contentsEl = card.querySelector('.contents');
+      if (!titleEl) return;
+
+      const title = titleEl.textContent.trim();
+      const topics = contentsEl
+        ? contentsEl.textContent.replace(/\s+/g, ' ').trim()
+        : '';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ai-mini';
+      btn.textContent = '✦ Ask ChatGPT about this';
+
+      btn.addEventListener('click', () => {
+        askChatGPT(
+          'I am revising "' + title + '" for a medical exam. ' +
+          (topics ? 'Topics covered: ' + topics + ' ' : '') +
+          'Please explain the key concepts, highlight high-yield points, and give me 3 practice MCQs with answers.'
+        );
+      });
+
+      card.appendChild(btn);
+    });
+  }
+
+  /* ============================================================
+     10. BOOT
+     ============================================================ */
+  function boot() {
+    initCardAiButtons();
+
+    const session = getSession();
+
+    if (session) {
+      startSession({ name: session.name, email: session.email });
+    } else {
+      $('authGate').hidden = false;
+      $('app').hidden = true;
+      document.body.classList.add('locked');
+      showAuthView('signin');
+    }
+
+    /* Optional: personalise the welcome line */
+    if (currentUser && currentUser.name) {
+      const first = currentUser.name.trim().split(/\s+/)[0];
+      const welcome = $('welcomeText');
+      if (welcome) {
+        welcome.textContent =
+          'Welcome back, ' + first + '. A focused revision space with organized ' +
+          'pathology, biochemistry and physiology exam practice sets.';
+      }
+    }
+  }
+
+  boot();
+
+  /* ============================================================
+     OPTIONAL: REAL EMAIL VERIFICATION
+     ------------------------------------------------------------
+     This page is static (GitHub Pages), so the code above keeps
+     accounts on the device and shows the code on screen.
+
+     To send a REAL email confirmation, connect a free service
+     such as Firebase Authentication (email link / passwordless)
+     or Supabase Auth, then replace the code inside:
+
+         openVerifyView()
+         $('verifyForm') submit handler
+
+     with calls like:
+
+         import { getAuth, sendSignInLinkToEmail }
+           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+         const auth = getAuth(app);
+         await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+
+     and remove the ".demo-code" boxes from the HTML.
+
+     Reminder: a purely client-side gate is a convenience, not
+     real security. Anyone can read the page source.
+     ============================================================ */
+
+})();
+</script>
 
 </body>
-</html>
+  </html>
