@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0b1120">
+<meta name="theme-color" content="#171027">
 <meta name="description" content="Tsega Tech medical exam practice website for pathology, biochemistry and physiology revision.">
 <title>Tsega Tech | Medical Exam Practice</title>
 
 <style>
 :root {
-  --bg: #0b1120;
-  --card: #151e30;
-  --hover: #1b2940;
+  --bg: #120d1f;
+  --card: #211832;
+  --hover: #302247;
   --text: #f1f5f9;
-  --muted: #a5b4c8;
-  --accent: #38bdf8;
-  --accent-2: #818cf8;
-  --border: #29364c;
+  --muted: #c0b5d4;
+  --accent: #b794f6;
+  --accent-2: #a78bfa;
+  --border: #49365f;
   --telegram: #229ed9;
   --success: #34d399;
   --gold: #fbbf24;
@@ -33,8 +33,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 10% 0%, rgba(56,189,248,.12), transparent 30rem),
-    radial-gradient(circle at 90% 20%, rgba(129,140,248,.09), transparent 28rem),
+    radial-gradient(circle at 10% 0%, rgba(183,148,246,.14), transparent 30rem),
+    radial-gradient(circle at 90% 20%, rgba(192,132,252,.11), transparent 28rem),
     var(--bg);
   line-height: 1.6;
 }
@@ -54,7 +54,7 @@ section[id] { scroll-margin-top: 84px; }
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(11,17,32,.88);
+  background: rgba(18,13,31,.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -97,7 +97,7 @@ section[id] { scroll-margin-top: 84px; }
   padding: 6px 12px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(21,30,48,.9);
+  background: rgba(33,24,50,.92);
   color: var(--muted);
   font-size: 12.5px;
   overflow: hidden;
@@ -172,7 +172,7 @@ section[id] { scroll-margin-top: 84px; }
   margin-bottom: 42px;
   border: 1px solid var(--border);
   border-radius: 26px;
-  background: linear-gradient(135deg, rgba(21,30,48,.98), rgba(12,37,59,.94));
+  background: linear-gradient(135deg, rgba(33,24,50,.98), rgba(43,27,67,.96));
   box-shadow: 0 20px 60px rgba(0,0,0,.25);
 }
 
@@ -182,7 +182,7 @@ section[id] { scroll-margin-top: 84px; }
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: rgba(56,189,248,.08);
+  background: rgba(183,148,246,.12);
   top: -90px;
   right: -70px;
 }
@@ -192,10 +192,10 @@ section[id] { scroll-margin-top: 84px; }
   display: inline-block;
   padding: 6px 13px;
   margin-bottom: 17px;
-  border: 1px solid #075985;
+  border: 1px solid #6d28d9;
   border-radius: 999px;
-  background: #082f49;
-  color: #7dd3fc;
+  background: #2e1a4b;
+  color: #d8b4fe;
   font-size: 12px;
   font-weight: bold;
   letter-spacing: 1.2px;
@@ -287,15 +287,15 @@ section[id] { scroll-margin-top: 84px; }
   padding: 7px 12px;
   margin-bottom: 16px;
   border-radius: 8px;
-  background: #0c253b;
-  color: #7dd3fc;
+  background: #2b1d43;
+  color: #d8b4fe;
   font-size: 14px;
   font-weight: bold;
 }
 
 .biochemistry .question-count {
-  background: #202044;
-  color: #c7d2fe;
+  background: #30204a;
+  color: #e9d5ff;
 }
 
 .contents-label {
@@ -323,7 +323,7 @@ section[id] { scroll-margin-top: 84px; }
   place-items: center;
   border: 1px solid var(--border);
   border-radius: 50%;
-  background: rgba(13,22,38,.85);
+  background: rgba(30,20,45,.9);
   color: #64748b;
   cursor: pointer;
   transition: transform .2s, color .2s, border-color .2s, background .2s;
@@ -436,15 +436,15 @@ input:focus-visible {
   flex: 0 0 auto;
   padding: 6px 12px;
   border-radius: 8px;
-  background: rgba(56,189,248,.15);
-  color: #7dd3fc;
+  background: rgba(183,148,246,.18);
+  color: #d8b4fe;
   text-decoration: none;
   font-size: 12.5px;
   font-weight: bold;
   transition: .2s;
 }
 
-.fav-open:hover { background: rgba(56,189,248,.3); }
+.fav-open:hover { background: rgba(183,148,246,.3); }
 
 .fav-remove {
   flex: 0 0 auto;
@@ -474,7 +474,7 @@ input:focus-visible {
   border-radius: 20px;
   background:
     radial-gradient(circle at 50% 0%, rgba(52,211,153,.09), transparent 22rem),
-    rgba(15,26,42,.85);
+    rgba(27,19,42,.92);
   text-align: center;
 }
 
@@ -502,7 +502,7 @@ input:focus-visible {
   padding: 12px 15px;
   border: 1px solid var(--border);
   border-radius: 11px;
-  background: #0d1626;
+  background: #191226;
   color: var(--text);
   font: inherit;
   font-size: 15px;
@@ -547,7 +547,7 @@ input:focus-visible {
   padding: 7px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(21,30,48,.8);
+  background: rgba(33,24,50,.85);
   color: var(--muted);
   font: inherit;
   font-size: 12.5px;
@@ -561,7 +561,41 @@ input:focus-visible {
   background: var(--hover);
 }
 
-/* ---------- QUICK NAV ---------- */
+/* ---------- EMBEDDED CHATGPT PANEL ---------- */
+.chatgpt-frame-wrap {
+  margin: 22px auto 0;
+  width: 100%;
+  max-width: 1000px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #191226;
+  text-align: left;
+}
+.chatgpt-frame-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+#chatgptFrame {
+  display: block;
+  width: 100%;
+  height: min(75vh, 760px);
+  min-height: 460px;
+  border: 0;
+  background: #fff;
+}
+.chatgpt-fallback {
+  padding: 12px 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.chatgpt-fallback a { color: var(--accent); }
+\n/* ---------- QUICK NAV ---------- */
 .quick-nav {
   display: flex;
   flex-wrap: wrap;
@@ -575,7 +609,7 @@ input:focus-visible {
   border: 1px solid var(--border);
   border-radius: 999px;
   color: var(--muted);
-  background: rgba(21,30,48,.72);
+  background: rgba(33,24,50,.78);
   text-decoration: none;
   font-size: 13px;
   font-weight: bold;
@@ -595,7 +629,7 @@ input:focus-visible {
   text-align: center;
   border: 1px solid var(--border);
   border-radius: 20px;
-  background: rgba(21,30,48,.86);
+  background: rgba(33,24,50,.9);
 }
 
 .contact h2 {
@@ -678,7 +712,7 @@ footer {
   margin: 22px 0 18px;
   border: 1px solid var(--border);
   border-radius: 13px;
-  background: #0e1728;
+  background: #1b1329;
 }
 
 .auth-tab {
@@ -718,7 +752,7 @@ footer {
   padding: 12px 13px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #0d1626;
+  background: #191226;
   color: var(--text);
   font: inherit;
   font-size: 15px;
@@ -730,7 +764,7 @@ footer {
 
 .field input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(56,189,248,.15);
+  box-shadow: 0 0 0 3px rgba(183,148,246,.18);
 }
 
 .auth-submit {
@@ -829,7 +863,7 @@ footer {
   padding: 26px 24px 22px;
   border: 1px solid var(--border);
   border-radius: 18px;
-  background: linear-gradient(160deg, #131c2e, #0d1626);
+  background: linear-gradient(160deg, #131c2e, #191226);
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
   text-align: center;
 }
@@ -932,7 +966,7 @@ footer {
   padding: 26px 24px 22px;
   border: 1px solid var(--border);
   border-radius: 20px;
-  background: linear-gradient(160deg, #131c2e, #0d1626);
+  background: linear-gradient(160deg, #131c2e, #191226);
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
 }
 
@@ -981,7 +1015,7 @@ footer {
   padding: 14px 16px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(13,22,38,.65);
+  background: rgba(25,18,38,.75);
 }
 
 .admin-stat .num {
@@ -1005,7 +1039,7 @@ footer {
   margin-bottom: 16px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #0d1626;
+  background: #191226;
   color: var(--text);
   font: inherit;
   font-size: 14px;
@@ -1017,7 +1051,7 @@ footer {
 
 .admin-search:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(56,189,248,.15);
+  box-shadow: 0 0 0 3px rgba(183,148,246,.18);
 }
 
 .admin-lock-banner {
@@ -1049,13 +1083,13 @@ footer {
   padding: 12px 14px;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: rgba(13,22,38,.6);
+  background: rgba(25,18,38,.7);
   transition: background .15s, border-color .15s;
 }
 
 .admin-row:hover {
-  background: rgba(27,41,64,.85);
-  border-color: #33415a;
+  background: rgba(48,34,71,.88);
+  border-color: #59416f;
 }
 
 .admin-row .col {
@@ -1066,7 +1100,7 @@ footer {
 }
 
 .admin-row .col.name { font-weight: bold; color: var(--text); }
-.admin-row .col.email { color: #7dd3fc; }
+.admin-row .col.email { color: #d8b4fe; }
 .admin-row .col.date { color: var(--muted); font-size: 12.5px; }
 .admin-row .col.dismiss-wrap { text-align: right; }
 
@@ -1111,7 +1145,7 @@ footer {
   padding: 24px 16px;
   border: 1px dashed var(--border);
   border-radius: 12px;
-  background: rgba(13,22,38,.5);
+  background: rgba(25,18,38,.6);
   text-align: center;
   color: var(--muted);
   font-size: 14px;
@@ -1301,17 +1335,14 @@ footer {
 
     <section class="welcome" aria-labelledby="welcome-title">
       <div class="welcome-tag">Medical Exam Practice</div>
-      <h1 id="welcome-title">Welcome to <span>Tsega Tech</span></h1>
-      <p id="welcomeText">
-        A focused revision space for medical students, with organized
-        pathology, biochemistry and physiology exam practice sets.
-      </p>
+      <h1 id="welcome-title">Well-come to <span>Medical exam Practice page</span></h1>
+      <p id="welcomeText">This page is linked to <a href="https://tsegatech.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">tsegatech.com</a>.</p>
     </section>
 
     <!-- ChatGPT -->
     <section class="ai-section" aria-labelledby="ai-heading">
       <h2 id="ai-heading">✦ Ask ChatGPT</h2>
-      <p>Stuck on a concept? Search it or ask a full question — ChatGPT opens in a new tab.</p>
+      <p>Ask a question or choose a topic to open it here.</p>
 
       <form class="ai-form" id="aiForm">
         <input type="text" id="aiInput"
@@ -1326,6 +1357,21 @@ footer {
         <button type="button" class="ai-chip" data-q="Summarise the rate-limiting enzymes of glycolysis, gluconeogenesis and the TCA cycle.">Rate-limiting enzymes</button>
         <button type="button" class="ai-chip" data-q="Give me 10 high-yield MCQ practice questions on bone and joint pathology with answers.">Bone &amp; joint MCQs</button>
         <button type="button" class="ai-chip" data-q="Explain the excitation-contraction coupling in skeletal muscle.">Excitation–contraction coupling</button>
+      </div>
+
+      <div class="chatgpt-frame-wrap" id="chatgptFrameWrap" hidden>
+        <div class="chatgpt-frame-heading">
+          <strong id="chatgptFrameTitle">ChatGPT</strong>
+          <button type="button" class="ghost-btn" id="chatgptCloseBtn">Close</button>
+        </div>
+        <iframe id="chatgptFrame" title="ChatGPT panel" src="about:blank"
+                loading="lazy" referrerpolicy="no-referrer"
+                allow="clipboard-read; clipboard-write"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads"></iframe>
+        <p class="chatgpt-fallback" id="chatgptFallback" hidden>
+          If ChatGPT does not load here, its website does not allow embedding in this panel.
+          <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Open ChatGPT directly</a>.
+        </p>
       </div>
     </section>
 
@@ -1854,9 +1900,8 @@ footer {
 
   function updateWelcomeText(name) {
     const el = $('welcomeText');
-    if (el && name) {
-      const first = name.split(/\s+/)[0];
-      el.textContent = 'Welcome back, ' + first + '. A focused revision space with organized pathology, biochemistry and physiology exam practice sets.';
+    if (el) {
+      el.innerHTML = 'This page is linked to <a href="https://tsegatech.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">tsegatech.com</a>.';
     }
   }
 
@@ -1995,11 +2040,25 @@ footer {
      ============================================================ */
   function askChatGPT(prompt) {
     const text = String(prompt || '').trim();
+    const frameWrap = $('chatgptFrameWrap');
+    const frame = $('chatgptFrame');
+    const title = $('chatgptFrameTitle');
+    const fallback = $('chatgptFallback');
     const url = text
       ? 'https://chatgpt.com/?q=' + encodeURIComponent(text)
       : 'https://chatgpt.com/';
-    window.open(url, '_blank', 'noopener,noreferrer');
+
+    title.textContent = text ? 'ChatGPT — ' + text.slice(0, 90) : 'ChatGPT';
+    fallback.hidden = false;
+    frameWrap.hidden = false;
+    frame.src = url;
+    frameWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  $('chatgptCloseBtn').addEventListener('click', () => {
+    $('chatgptFrame').src = 'about:blank';
+    $('chatgptFrameWrap').hidden = true;
+  });
 
   $('aiForm').addEventListener('submit', (e) => {
     e.preventDefault();
