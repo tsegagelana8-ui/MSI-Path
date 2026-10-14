@@ -650,13 +650,98 @@ input:focus-visible {
   font-weight: bold;
 }
 
-footer {
-  margin-top: 26px;
-  padding-top: 18px;
+/* ---------- PREMIUM FOOTER / COPYRIGHT ---------- */
+.site-footer {
+  margin-top: 44px;
+  padding: 26px 0 10px;
   border-top: 1px solid var(--border);
-  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
   text-align: center;
-  font-size: 13px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: .4px;
+  color: var(--text);
+}
+
+.footer-brand .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.footer-brand span { color: var(--accent); }
+
+.copyright-panel {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 14px;
+  padding: 12px 24px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(21,30,48,.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: var(--muted);
+  font-size: 13.5px;
+  letter-spacing: .3px;
+  transition: border-color .25s, background .25s;
+}
+
+.copyright-panel:hover {
+  border-color: rgba(56,189,248,.4);
+  background: rgba(27,41,64,.85);
+}
+
+.copyright-panel .copy-symbol {
+  font-size: 16px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.copyright-panel .copy-name {
+  color: var(--text);
+  font-weight: bold;
+  letter-spacing: .6px;
+}
+
+.copyright-panel .copy-name em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.copyright-panel .copy-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+}
+
+.copyright-panel .copy-year {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(56,189,248,.12);
+  color: #7dd3fc;
+  font-weight: bold;
+  font-size: 12.5px;
+  letter-spacing: .8px;
+}
+
+.footer-note {
+  color: #6b7c94;
+  font-size: 12px;
+  letter-spacing: .4px;
 }
 
 /* ---------- AUTH GATE ---------- */
@@ -1248,6 +1333,10 @@ footer {
   }
   .admin-row .col { white-space: normal; word-break: break-word; }
   .admin-row .col.dismiss-wrap { text-align: left; margin-top: 6px; }
+
+  .copyright-panel { padding: 10px 16px; gap: 6px 10px; font-size: 12.5px; }
+  .copyright-panel .copy-sep { display: none; }
+  .footer-brand { font-size: 16px; }
 }
 </style>
 </head>
@@ -1495,7 +1584,27 @@ footer {
       <p>This page is made by <span>Tsega</span> to help medical students practice for free.</p>
     </section>
 
-    <footer>Build for focused revision. Verify clinically.</footer>
+    <!-- ============================================================
+         PREMIUM COPYRIGHT PANEL
+         ============================================================ -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-brand">
+        <span class="dot"></span>
+        Tsega<span>Tech</span>
+      </div>
+
+      <div class="copyright-panel" aria-label="Copyright information">
+        <span class="copy-symbol" aria-hidden="true">©</span>
+        <span class="copy-name"><em>Tsega</em>Tech</span>
+        <span class="copy-sep" aria-hidden="true"></span>
+        <span class="copy-year">2026</span>
+        <span class="copy-sep" aria-hidden="true"></span>
+        <span>All rights reserved.</span>
+      </div>
+
+      <p class="footer-note">Build for focused revision. Verify clinically.</p>
+    </footer>
+
   </main>
 </div>
 
