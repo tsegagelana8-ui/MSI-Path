@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#171027">
+<meta name="description" content="Tsega Tech medical exam practice website for pathology, biochemistry and physiology revision.">
+<title>Tsega Tech | Medical Exam Practice</title>
+
+<style>
+:root {
+  --bg: #120d1f;
+  --card: #211832;
+  --hover: #302247;
+  --text: #f1f5f9;
+  --muted: #c0b5d4;
+  --accent: #b794f6;
+  --accent-2: #a78bfa;
+  --border: #49365f;
+  --telegram: #229ed9;
+  --success: #34d399;
+  --gold: #fbbf24;
+  --danger: #f87171;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(183,148,246,.14), transparent 30rem),
+    radial-gradient(circle at 90% 20%, rgba(192,132,252,.11), transparent 28rem),
+    var(--bg);
+  line-height: 1.6;
+}
+
+body.locked { overflow: hidden; }
+
+.container {
+  width: min(100% - 32px, 1080px);
+  margin: 0 auto;
+  padding: 42px 0 30px;
+}
+
+section[id] { scroll-margin-top: 84px; }
+
+/* ---------- TOP BAR ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(18,13,31,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-inner {
+  width: min(100% - 32px, 1080px);
+  margin: 0 auto;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand-link {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: bold;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
+.brand-link span { color: var(--accent); }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 200px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(33,24,50,.92);
+  color: var(--muted);
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-chip::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+.user-chip.is-admin::before {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+
+.ghost-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.ghost-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+.ghost-btn b { color: var(--gold); }
+
+/* Hidden admin button — only visible to the site owner */
+.admin-access-btn {
+  padding: 7px 14px;
+  border: 1px solid rgba(251,191,36,.45);
+  border-radius: 999px;
+  background: rgba(251,191,36,.12);
+  color: var(--gold);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.admin-access-btn:hover {
+  background: rgba(251,191,36,.22);
+  color: #fff;
+  border-color: var(--gold);
+}
+
+/* ---------- HERO ---------- */
+.welcome {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: clamp(30px, 6vw, 58px) 22px;
+  margin-bottom: 42px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: linear-gradient(135deg, rgba(33,24,50,.98), rgba(43,27,67,.96));
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.welcome::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(183,148,246,.12);
+  top: -90px;
+  right: -70px;
+}
+
+.welcome-tag {
+  position: relative;
+  display: inline-block;
+  padding: 6px 13px;
+  margin-bottom: 17px;
+  border: 1px solid #6d28d9;
+  border-radius: 999px;
+  background: #2e1a4b;
+  color: #d8b4fe;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+
+.welcome h1 {
+  position: relative;
+  font-size: clamp(30px, 6vw, 48px);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.welcome h1 span { color: var(--accent); }
+
+.welcome p {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: clamp(15px, 2.5vw, 18px);
+}
+
+/* ---------- SECTIONS ---------- */
+.exam-section { margin-bottom: 46px; }
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.section-heading h2 {
+  font-size: clamp(25px, 4vw, 32px);
+  margin-bottom: 5px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ---------- EXAM CARDS ---------- */
+.exam-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+  gap: 20px;
+}
+
+.exam-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-height: 290px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+}
+
+.exam-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  background: var(--hover);
+  box-shadow: 0 14px 35px rgba(0,0,0,.22);
+}
+
+.biochemistry .exam-card:hover { border-color: var(--accent-2); }
+
+.exam-year {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.biochemistry .exam-year { color: #a5b4fc; }
+
+.exam-card h3 {
+  font-size: 23px;
+  margin-bottom: 14px;
+  padding-right: 44px;
+}
+
+.question-count {
+  align-self: flex-start;
+  padding: 7px 12px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  background: #2b1d43;
+  color: #d8b4fe;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.biochemistry .question-count {
+  background: #30204a;
+  color: #e9d5ff;
+}
+
+.contents-label {
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.contents {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+/* Star button */
+.star-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(30,20,45,.9);
+  color: #64748b;
+  cursor: pointer;
+  transition: transform .2s, color .2s, border-color .2s, background .2s;
+}
+
+.star-btn svg { width: 19px; height: 19px; fill: currentColor; }
+
+.star-btn:hover {
+  color: var(--gold);
+  border-color: rgba(251,191,36,.6);
+  transform: scale(1.08);
+}
+
+.star-btn.is-on {
+  color: var(--gold);
+  border-color: rgba(251,191,36,.65);
+  background: rgba(251,191,36,.14);
+}
+
+/* Buttons */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #082032;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  transition: filter .2s, transform .2s;
+}
+
+.button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.biochemistry .button { background: var(--accent-2); color: #11152f; }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #facc15;
+  outline-offset: 3px;
+}
+
+/* Mini ChatGPT button inside cards */
+.ai-mini {
+  margin-top: 10px;
+  padding: 9px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.ai-mini:hover {
+  color: #6ee7b7;
+  border-color: var(--success);
+  background: rgba(52,211,153,.07);
+}
+
+/* ---------- FAVOURITES ---------- */
+.favorites { margin-bottom: 42px; }
+
+.fav-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+  gap: 12px;
+}
+
+.fav-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(251,191,36,.28);
+  border-radius: 14px;
+  background: rgba(251,191,36,.06);
+}
+
+.fav-year {
+  flex: 0 0 auto;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(251,191,36,.16);
+  color: #fcd34d;
+  font-size: 11.5px;
+  font-weight: bold;
+}
+
+.fav-title {
+  flex: 1 1 auto;
+  font-size: 14px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fav-open {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(183,148,246,.18);
+  color: #d8b4fe;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: bold;
+  transition: .2s;
+}
+
+.fav-open:hover { background: rgba(183,148,246,.3); }
+
+.fav-remove {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.fav-remove:hover {
+  color: #fca5a5;
+  background: rgba(248,113,113,.14);
+}
+
+/* ---------- CHATGPT SECTION ---------- */
+.ai-section {
+  margin-bottom: 42px;
+  padding: 28px 22px;
+  border: 1px solid rgba(52,211,153,.28);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(52,211,153,.09), transparent 22rem),
+    rgba(27,19,42,.92);
+  text-align: center;
+}
+
+.ai-section h2 {
+  font-size: clamp(22px, 3.6vw, 28px);
+  margin-bottom: 6px;
+}
+
+.ai-section > p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.ai-form {
+  display: flex;
+  gap: 10px;
+  max-width: 660px;
+  margin: 0 auto 14px;
+}
+
+.ai-form input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 15px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #191226;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.ai-form input::placeholder { color: #5b6b83; }
+
+.ai-form input:focus {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(52,211,153,.15);
+}
+
+.ai-form button {
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #34d399, #10b981);
+  color: #05231a;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: filter .2s, transform .2s;
+}
+
+.ai-form button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.ai-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ai-chip {
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(33,24,50,.85);
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.ai-chip:hover {
+  color: var(--text);
+  border-color: var(--success);
+  background: var(--hover);
+}
+
+/* ---------- EMBEDDED CHATGPT PANEL ---------- */
+.chatgpt-frame-wrap {
+  margin: 22px auto 0;
+  width: 100%;
+  max-width: 1000px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #191226;
+  text-align: left;
+}
+.chatgpt-frame-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+#chatgptFrame {
+  display: block;
+  width: 100%;
+  height: min(75vh, 760px);
+  min-height: 460px;
+  border: 0;
+  background: #fff;
+}
+.chatgpt-fallback {
+  padding: 12px 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.chatgpt-fallback a { color: var(--accent); }
+\n/* ---------- QUICK NAV ---------- */
+.quick-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 38px;
+}
+
+.quick-nav a {
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(33,24,50,.78);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: bold;
+  transition: .2s;
+}
+
+.quick-nav a:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+/* ---------- CONTACT ---------- */
+.contact {
+  margin-top: 10px;
+  padding: 30px 22px;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(33,24,50,.9);
+}
+
+.contact h2 {
+  font-size: clamp(24px, 4vw, 30px);
+  margin-bottom: 7px;
+}
+
+.contact p { color: var(--muted); margin-bottom: 18px; }
+
+.telegram-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 200px;
+  padding: 12px 18px;
+  border-radius: 11px;
+  background: var(--telegram);
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  transition: filter .2s, transform .2s;
+}
+
+.telegram-button:hover { filter: brightness(1.08); transform: translateY(-2px); }
+
+.telegram-icon { width: 23px; height: 23px; flex: 0 0 23px; }
+
+/* ---------- FOOTER ---------- */
+footer {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+
+/* ---------- AUTH GATE ---------- */
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 22px;
+  overflow-y: auto;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(56,189,248,.16), transparent 28rem),
+    radial-gradient(circle at 85% 85%, rgba(129,140,248,.14), transparent 26rem),
+    #070c17;
+}
+
+.auth-card {
+  width: min(100%, 440px);
+  padding: 30px 26px 24px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(21,30,48,.99), rgba(13,22,38,.99));
+  box-shadow: 0 30px 70px rgba(0,0,0,.5);
+}
+
+.auth-brand { text-align: center; }
+
+.auth-brand h1 {
+  font-size: 30px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.auth-brand h1 span { color: var(--accent); }
+
+.auth-brand p { color: var(--muted); font-size: 14px; }
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  margin: 22px 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: #1b1329;
+}
+
+.auth-tab {
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.auth-tab.is-active {
+  background: var(--accent);
+  color: #082032;
+}
+
+.auth-form { display: block; }
+
+.field { display: block; margin-bottom: 13px; }
+
+.field > span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.field input {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #191226;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.field input::placeholder { color: #5b6b83; }
+
+.field input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(183,148,246,.18);
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 6px;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--accent), #60a5fa);
+  color: #06202f;
+  font: inherit;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: filter .2s, transform .2s, opacity .2s;
+}
+
+.auth-submit:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.auth-submit:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-error {
+  margin-bottom: 11px;
+  padding: 9px 12px;
+  border: 1px solid #7f1d1d;
+  border-radius: 9px;
+  background: #2b1216;
+  color: #fca5a5;
+  font-size: 13.5px;
+}
+
+.auth-success {
+  margin-bottom: 11px;
+  padding: 9px 12px;
+  border: 1px solid #065f46;
+  border-radius: 9px;
+  background: #0b2b23;
+  color: #6ee7b7;
+  font-size: 13.5px;
+}
+
+.auth-foot {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: #6b7c94;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ---------- TOAST ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  z-index: 600;
+  transform: translate(-50%, 20px);
+  padding: 11px 20px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #16233a;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 12px 30px rgba(0,0,0,.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------- MODAL (password prompt + confirm) ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 550;
+  background: rgba(5,10,20,.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal-card {
+  width: min(100%, 400px);
+  padding: 26px 24px 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(160deg, #131c2e, #191226);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  text-align: center;
+}
+
+.modal-icon {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.modal-card h3 {
+  font-size: 20px;
+  margin-bottom: 8px;
+  letter-spacing: .3px;
+}
+
+.modal-card p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.modal-card .field { text-align: left; }
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.modal-actions button {
+  flex: 1 1 0;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+}
+
+.modal-actions button:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+.modal-actions button.primary {
+  border: 0;
+  background: linear-gradient(135deg, var(--accent), #60a5fa);
+  color: #06202f;
+}
+
+.modal-actions button.primary:hover {
+  filter: brightness(1.08);
+}
+
+.modal-actions button.danger {
+  border: 0;
+  background: linear-gradient(135deg, #f87171, #ef4444);
+  color: #450a0a;
+}
+
+.modal-actions button.danger:hover {
+  filter: brightness(1.08);
+}
+
+.modal-error {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid #7f1d1d;
+  border-radius: 9px;
+  background: #2b1216;
+  color: #fca5a5;
+  font-size: 13px;
+}
+
+/* ---------- ADMIN OVERLAY ---------- */
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(5,10,20,.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.admin-panel {
+  width: min(100%, 900px);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 26px 24px 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(160deg, #131c2e, #191226);
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-header h2 {
+  font-size: 22px;
+  letter-spacing: .3px;
+}
+
+.admin-header h2 span { color: var(--accent); }
+
+.admin-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(52,211,153,.15);
+  color: var(--success);
+  border: 1px solid rgba(52,211,153,.4);
+  font-size: 11.5px;
+  font-weight: bold;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+.admin-subtitle {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-bottom: 20px;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.admin-stat {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(25,18,38,.75);
+}
+
+.admin-stat .num {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+.admin-stat .lbl {
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  margin-top: 4px;
+}
+
+.admin-search {
+  width: 100%;
+  padding: 11px 14px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #191226;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s;
+}
+
+.admin-search::placeholder { color: #5b6b83; }
+
+.admin-search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(183,148,246,.18);
+}
+
+.admin-lock-banner {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid rgba(248,113,113,.45);
+  border-radius: 12px;
+  background: rgba(248,113,113,.1);
+  color: #fca5a5;
+  font-size: 13.5px;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.admin-lock-banner strong { color: #fff; display: block; margin-bottom: 3px; }
+
+.admin-table {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1.8fr 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(25,18,38,.7);
+  transition: background .15s, border-color .15s;
+}
+
+.admin-row:hover {
+  background: rgba(48,34,71,.88);
+  border-color: #59416f;
+}
+
+.admin-row .col {
+  font-size: 13.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-row .col.name { font-weight: bold; color: var(--text); }
+.admin-row .col.email { color: #d8b4fe; }
+.admin-row .col.date { color: var(--muted); font-size: 12.5px; }
+.admin-row .col.dismiss-wrap { text-align: right; }
+
+.admin-row.is-me {
+  border-color: rgba(251,191,36,.5);
+  background: rgba(251,191,36,.07);
+}
+
+.admin-row.is-me .col.name::after {
+  content: " (you)";
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.dismiss-btn {
+  padding: 6px 12px;
+  border: 1px solid rgba(248,113,113,.4);
+  border-radius: 8px;
+  background: rgba(248,113,113,.1);
+  color: #fca5a5;
+  font: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.dismiss-btn:hover {
+  background: rgba(248,113,113,.25);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.dismiss-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+.admin-empty {
+  padding: 24px 16px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: rgba(25,18,38,.6);
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.admin-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.admin-footer .left {
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.admin-footer .right { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.admin-btn {
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.admin-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+.admin-btn.danger {
+  border-color: rgba(248,113,113,.4);
+  color: #fca5a5;
+}
+
+.admin-btn.danger:hover {
+  background: rgba(248,113,113,.15);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.admin-btn.gold {
+  border-color: rgba(251,191,36,.5);
+  color: var(--gold);
+}
+
+.admin-btn.gold:hover {
+  background: rgba(251,191,36,.15);
+  color: #fff;
+  border-color: var(--gold);
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 560px) {
+  .topbar-inner { width: min(100% - 22px, 1080px); padding: 8px 0; }
+  .user-chip { max-width: 120px; font-size: 11.5px; }
+  .ghost-btn,
+  .admin-access-btn { padding: 6px 10px; font-size: 11px; }
+}
+
+@media (max-width: 480px) {
+  .container { width: min(100% - 22px, 1080px); padding-top: 22px; }
+  .welcome { border-radius: 18px; }
+  .exam-card { min-height: auto; }
+  .quick-nav { margin-bottom: 28px; }
+  .ai-form { flex-direction: column; }
+  .ai-form button { width: 100%; }
+  .auth-card { padding: 24px 18px 20px; }
+  .fav-tile { flex-wrap: wrap; }
+
+  .admin-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 14px 14px;
+  }
+  .admin-row .col { white-space: normal; word-break: break-word; }
+  .admin-row .col.dismiss-wrap { text-align: left; margin-top: 6px; }
+}
+</style>
+</head>
+
+<body class="locked">
+
+<!-- ============================================================
+     AUTH GATE
+     ============================================================ -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-card">
+
+    <div class="auth-brand">
+      <div class="welcome-tag" style="margin-bottom:14px;">Medical Exam Practice</div>
+      <h1>Tsega <span>Tech</span></h1>
+      <p>Sign in to access the exam sets.</p>
+    </div>
+
+    <div class="auth-tabs" id="authTabs" role="tablist">
+      <button type="button" class="auth-tab is-active" data-view="signin" role="tab" aria-selected="true">Sign in</button>
+      <button type="button" class="auth-tab" data-view="signup" role="tab" aria-selected="false">Create account</button>
+    </div>
+
+    <!-- SIGN IN -->
+    <form class="auth-form" id="signinForm" data-view="signin" novalidate>
+      <label class="field">
+        <span>Email</span>
+        <input type="email" id="signinEmail" autocomplete="email" placeholder="you@example.com" required>
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input type="password" id="signinPassword" autocomplete="current-password" placeholder="••••••••" required>
+      </label>
+
+      <p class="auth-error" id="signinError" hidden></p>
+
+      <button type="submit" class="auth-submit">Sign in</button>
+    </form>
+
+    <!-- SIGN UP -->
+    <form class="auth-form" id="signupForm" data-view="signup" hidden novalidate>
+      <label class="field">
+        <span>Full name</span>
+        <input type="text" id="signupName" autocomplete="name" placeholder="Abebe Kebede" required>
+      </label>
+
+      <label class="field">
+        <span>Email</span>
+        <input type="email" id="signupEmail" autocomplete="email" placeholder="you@example.com" required>
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input type="password" id="signupPassword" autocomplete="new-password" placeholder="At least 6 characters" required>
+      </label>
+
+      <label class="field">
+        <span>Confirm password</span>
+        <input type="password" id="signupConfirm" autocomplete="new-password" placeholder="Repeat password" required>
+      </label>
+
+      <p class="auth-error" id="signupError" hidden></p>
+
+      <button type="submit" class="auth-submit">Create account</button>
+    </form>
+
+    <p class="auth-foot">
+      Create an account to access all exam sets instantly.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP
+     ============================================================ -->
+<div id="app" hidden>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand-link" href="#top">Tsega<span>Tech</span></a>
+
+      <div class="topbar-actions">
+        <!-- ADMIN BUTTON: only shown to the site owner -->
+        <button type="button" class="admin-access-btn" id="adminAccessBtn" hidden>🛡 Admin Panel</button>
+
+        <button type="button" class="ghost-btn" id="favShortcut">
+          ★ Favourites <b id="favCountTop">0</b>
+        </button>
+        <span class="user-chip" id="userChip"></span>
+        <button type="button" class="ghost-btn" id="logoutBtn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="top">
+
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div class="welcome-tag">Medical Exam Practice</div>
+      <h1 id="welcome-title">Well-come to <span>Medical exam Practice page</span></h1>
+      <p id="welcomeText">This page is linked to <a href="https://tsegatech.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">tsegatech.com</a>.</p>
+    </section>
+
+    <!-- ChatGPT -->
+    <section class="ai-section" aria-labelledby="ai-heading">
+      <h2 id="ai-heading">✦ Ask ChatGPT</h2>
+      <p>Ask a question or choose a topic to open it here.</p>
+
+      <form class="ai-form" id="aiForm">
+        <input type="text" id="aiInput"
+               placeholder="e.g. Explain the Frank–Starling mechanism simply"
+               aria-label="Ask ChatGPT a question">
+        <button type="submit">Ask ChatGPT</button>
+      </form>
+
+      <div class="ai-chips">
+        <button type="button" class="ai-chip" data-q="Explain the difference between necrosis and apoptosis with examples.">Necrosis vs apoptosis</button>
+        <button type="button" class="ai-chip" data-q="Explain the sliding filament theory of muscle contraction step by step.">Sliding filament theory</button>
+        <button type="button" class="ai-chip" data-q="Summarise the rate-limiting enzymes of glycolysis, gluconeogenesis and the TCA cycle.">Rate-limiting enzymes</button>
+        <button type="button" class="ai-chip" data-q="Give me 10 high-yield MCQ practice questions on bone and joint pathology with answers.">Bone &amp; joint MCQs</button>
+        <button type="button" class="ai-chip" data-q="Explain the excitation-contraction coupling in skeletal muscle.">Excitation–contraction coupling</button>
+      </div>
+
+      <div class="chatgpt-frame-wrap" id="chatgptFrameWrap" hidden>
+        <div class="chatgpt-frame-heading">
+          <strong id="chatgptFrameTitle">ChatGPT</strong>
+          <button type="button" class="ghost-btn" id="chatgptCloseBtn">Close</button>
+        </div>
+        <iframe id="chatgptFrame" title="ChatGPT panel" src="about:blank"
+                loading="lazy" referrerpolicy="no-referrer"
+                allow="clipboard-read; clipboard-write"
+                sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-downloads"></iframe>
+        <p class="chatgpt-fallback" id="chatgptFallback" hidden>
+          If ChatGPT does not load here, its website does not allow embedding in this panel.
+          <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Open ChatGPT directly</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Quick nav -->
+    <nav class="quick-nav" aria-label="Exam sections">
+      <a href="#favorites">★ Favourites</a>
+      <a href="#pathology">Pathology</a>
+      <a href="#biochemistry">Biochemistry</a>
+      <a href="#physiology">Physiology</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- FAVOURITES -->
+    <section class="exam-section favorites" id="favorites" aria-labelledby="favorites-heading" hidden>
+      <div class="section-heading">
+        <h2 id="favorites-heading">★ My Favourite Exam Sets</h2>
+        <p>Your starred sets, saved on this device.</p>
+      </div>
+      <div class="fav-list" id="favList"></div>
+    </section>
+
+    <!-- PATHOLOGY -->
+    <section class="exam-section" id="pathology" aria-labelledby="pathology-heading">
+      <div class="section-heading">
+        <h2 id="pathology-heading">Pathology Exam Sets</h2>
+        <p>Choose an exam set to begin practicing.</p>
+      </div>
+
+      <div class="exam-list">
+        <article class="exam-card" data-exam="path-2015">
+          <div class="exam-year">2015</div>
+          <h3>2015 Pathology</h3>
+          <div class="question-count">30 Questions</div>
+          <div class="contents-label">Contents</div>
+          <p class="contents">
+            General pathology, skin pathology, bone and joint disorders,
+            and related pathology topics.
+          </p>
+          <a class="button" href="/2015-images.html">Start Exam Set</a>
+        </article>
+
+        <article class="exam-card" data-exam="path-2016">
+          <div class="exam-year">2016</div>
+          <h3>2016 Pathology</h3>
+          <div class="question-count">22 Questions</div>
+          <div class="contents-label">Contents</div>
+          <p class="contents">
+            Skin pathology, bone and joint disorders,
+            neuromuscular diseases, and peripheral nerve disorders.
+          </p>
+          <a class="button" href="/2016.html">Start Exam Set</a>
+        </article>
+
+        <article class="exam-card" data-exam="path-2017">
+          <div class="exam-year">2017</div>
+          <h3>2017 Pathology</h3>
+          <div class="question-count">41 Questions</div>
+          <div class="contents-label">Contents</div>
+          <p class="contents">
+            Skin diseases, bone and joint disorders,
+            neuromuscular diseases, fractures, and bone
+            and soft-tissue tumors.
+          </p>
+          <a class="button" href="/2017.html">Start Exam Set</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- BIOCHEMISTRY -->
+    <section class="exam-section biochemistry" id="biochemistry" aria-labelledby="biochemistry-heading">
+      <div class="section-heading">
+        <h2 id="biochemistry-heading">Biochemistry Exam Sets</h2>
+        <p>Practice the 2015–2018 biochemistry question sets.</p>
+      </div>
+
+      <div class="exam-list">
+        <article class="exam-card" data-exam="bio-2015">
+          <div class="exam-year">2015</div>
+          <h3>2015 Biochemistry</h3>
+          <div class="question-count">Exam Practice</div>
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Study mode, exam mode, answer explanations, question flagging,
+            progress tracking, and review tools.
+          </p>
+          <a class="button" href="/Biochemistry2015.html">Start Biochemistry</a>
+        </article>
+
+        <article class="exam-card" data-exam="bio-2016">
+          <div class="exam-year">2016</div>
+          <h3>2016 Biochemistry</h3>
+          <div class="question-count">Exam Practice</div>
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Practice questions with immediate study feedback or complete
+            the full set in exam mode before reviewing answers.
+          </p>
+          <a class="button" href="/Biochemistry2016.html">Start Biochemistry</a>
+        </article>
+
+        <article class="exam-card" data-exam="bio-2017">
+          <div class="exam-year">2017</div>
+          <h3>2017 Biochemistry</h3>
+          <div class="question-count">Exam Practice</div>
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Detailed option explanations, progress tracking, flagged
+            questions, and a focused dark exam interface.
+          </p>
+          <a class="button" href="/Biochemistry2017.html">Start Biochemistry</a>
+        </article>
+
+        <article class="exam-card" data-exam="bio-2018">
+          <div class="exam-year">2018</div>
+          <h3>2018 Biochemistry</h3>
+          <div class="question-count">Exam Practice</div>
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Use study mode for immediate feedback or exam mode to
+            simulate a timed online examination.
+          </p>
+          <a class="button" href="/Biochemistry2018.html">Start Biochemistry</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- PHYSIOLOGY -->
+    <section class="exam-section biochemistry" id="physiology" aria-labelledby="physiology-heading">
+      <div class="section-heading">
+        <h2 id="physiology-heading">Physiology Exam Sets</h2>
+        <p>Practice the 2016–2018 physiology question sets.</p>
+      </div>
+
+      <div class="exam-list">
+        <article class="exam-card" data-exam="phys-2016">
+          <div class="exam-year">2016</div>
+          <h3>2016 Physiology</h3>
+          <div class="question-count">31 MCQs</div>
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Musculoskeletal physiology MCQs with study mode,
+            exam mode, explanations, flagging and progress tracking.
+          </p>
+          <a class="button" href="/Physiology2016.html">Start Physiology</a>
+        </article>
+
+        <article class="exam-card" data-exam="phys-2017">
+          <div class="exam-year">2017</div>
+          <h3>2017 Physiology</h3>
+          <div class="question-count">10 MCQs</div>
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Musculoskeletal physiology questions with immediate
+            feedback in study mode and hidden answers in exam mode.
+          </p>
+          <a class="button" href="/Physiology2017.html">Start Physiology</a>
+        </article>
+
+        <article class="exam-card" data-exam="phys-2018">
+          <div class="exam-year">2018</div>
+          <h3>2018 Physiology</h3>
+          <div class="question-count">12 MCQs</div>
+          <div class="contents-label">Study features</div>
+          <p class="contents">
+            Musculoskeletal physiology practice with detailed
+            explanations, question navigation, flagging and review.
+          </p>
+          <a class="button" href="/Physiology2018.html">Start Physiology</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading">Contact Me</h2>
+      <p>Questions or suggestions? Connect with me on Telegram.</p>
+
+      <a class="telegram-button"
+         href="https://t.me/blsng10"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="Contact Tsega Tech on Telegram at blsng10">
+        <svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor"
+            d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"/>
+        </svg>
+        <span>@blsng10</span>
+      </a>
+    </section>
+
+    <footer>Build for focused revision. Verify clinically.</footer>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ============================================================
+     ADMIN OVERLAY
+     ============================================================ -->
+<div class="admin-overlay" id="adminOverlay" hidden>
+  <div class="admin-panel">
+
+    <div class="admin-header">
+      <h2>🛡 Admin <span>Control Room</span></h2>
+      <span class="admin-badge" id="adminBadge">Owner Access</span>
+    </div>
+
+    <p class="admin-subtitle">
+      Private dashboard — visible only to the site owner's signed-in account.
+    </p>
+
+    <div class="admin-stats">
+      <div class="admin-stat">
+        <div class="num" id="statTotal">0</div>
+        <div class="lbl">Total Users</div>
+      </div>
+      <div class="admin-stat">
+        <div class="num" id="statToday">0</div>
+        <div class="lbl">Joined Today</div>
+      </div>
+      <div class="admin-stat">
+        <div class="num" id="statWeek">0</div>
+        <div class="lbl">This Week</div>
+      </div>
+      <div class="admin-stat">
+        <div class="num" id="statWithFavs">0</div>
+        <div class="lbl">Used Favourites</div>
+      </div>
+    </div>
+
+    <!-- Lock banner (visible only when site is locked) -->
+    <div class="admin-lock-banner" id="lockBanner" hidden>
+      <span style="font-size:20px;">🔒</span>
+      <div>
+        <strong>Site access is currently LOCKED for everyone except you.</strong>
+        Students cannot sign in. Click "Unlock All" below to restore access.
+      </div>
+    </div>
+
+    <input type="text" class="admin-search" id="adminSearch"
+           placeholder="🔍  Search by name or email…" autocomplete="off">
+
+    <div class="admin-table" id="adminTable"></div>
+
+    <div class="admin-footer">
+      <div class="left" id="adminFooterInfo"></div>
+      <div class="right">
+        <button type="button" class="admin-btn" id="adminRefresh">↻ Refresh</button>
+        <button type="button" class="admin-btn gold" id="adminToggleLock">🔒 Lock All</button>
+        <button type="button" class="admin-btn danger" id="adminDismissAll">Dismiss All</button>
+        <button type="button" class="admin-btn" id="adminClose">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================
+     LOCAL ACCOUNT + ADMIN SCRIPT
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     ⚙️ OWNER CONFIGURATION
+     ------------------------------------------------------------
+     Change these two values if you ever need to.
+     ============================================================ */
+  const OWNER_EMAIL = 'tsegagelana8@gmail.com';   // ← your sign-in email
+  const ADMIN_PASSWORD = 'Tse06@ge';              // ← admin panel password
+
+  /* ============================================================
+     DOM HELPERS
+     ============================================================ */
+  const $ = (id) => document.getElementById(id);
+
+  function showScreen(which) {
+    ['authGate', 'app'].forEach((id) => { const el = $(id); if (el) el.hidden = true; });
+    if (which === 'app') {
+      $('app').hidden = false;
+      document.body.classList.remove('locked');
+    } else {
+      $('authGate').hidden = false;
+      document.body.classList.add('locked');
+    }
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  /* ---------- TOAST ---------- */
+  let toastTimer;
+  function toast(msg) {
+    const el = $('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2500);
+  }
+
+  /* ---------- ERROR BOXES ---------- */
+  function setError(id, msg) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = msg;
+    el.hidden = false;
+    el.className = 'auth-error';
+  }
+  function clearBox(id) {
+    const el = $(id);
+    if (el) { el.hidden = true; el.textContent = ''; }
+  }
+
+  /* ---------- EMAIL CHECK ---------- */
+  const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+  /* ---------- SIMPLE HASH ---------- */
+  function hashText(text) {
+    let h = 5381;
+    for (let i = 0; i < text.length; i += 1) {
+      h = ((h << 5) + h) ^ text.charCodeAt(i);
+    }
+    return (h >>> 0).toString(16);
+  }
+  const hashPassword = (email, password) =>
+    hashText(email.toLowerCase() + '|' + password + '|tsega-tech-salt');
+
+  /* ============================================================
+     STORAGE
+     ============================================================ */
+  const USERS_KEY = 'tt_users';
+  const SESSION_KEY = 'tt_session';
+  const LOCK_KEY = 'tt_site_locked';
+
+  function getUsers() {
+    try {
+      const raw = localStorage.getItem(USERS_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function saveUsers(list) {
+    try { localStorage.setItem(USERS_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+
+  function getSession() {
+    try {
+      const raw = localStorage.getItem(SESSION_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw);
+      if (!s || !s.email) return null;
+      if (Date.now() - (s.ts || 0) > 30 * 24 * 60 * 60 * 1000) {
+        localStorage.removeItem(SESSION_KEY);
+        return null;
+      }
+      return s;
+    } catch (e) {
+      return null;
+    }
+  }
+  function setSession(user) {
+    try {
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        name: user.name,
+        email: user.email,
+        ts: Date.now()
+      }));
+    } catch (e) {}
+  }
+  function clearSession() {
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+  }
+
+  /* ---------- SITE LOCK ---------- */
+  function isSiteLocked() {
+    try { return localStorage.getItem(LOCK_KEY) === '1'; }
+    catch (e) { return false; }
+  }
+  function setSiteLocked(v) {
+    try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
+  }
+
+  /* ---------- FAVOURITES ---------- */
+  function favKey(email) {
+    return 'tt_favs_' + (email || 'guest');
+  }
+  function getFavsFor(email) {
+    try { return JSON.parse(localStorage.getItem(favKey(email)) || '[]'); }
+    catch (e) { return []; }
+  }
+
+  /* ---------- OWNER CHECK ---------- */
+  function isOwnerEmail(email) {
+    return String(email || '').toLowerCase() === OWNER_EMAIL.toLowerCase();
+  }
+
+  /* ============================================================
+     AUTH TABS
+     ============================================================ */
+  function showAuthView(name) {
+    document.querySelectorAll('.auth-tab').forEach((tab) => {
+      const active = tab.dataset.view === name;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+    });
+    document.querySelectorAll('.auth-form').forEach((form) => {
+      form.hidden = form.dataset.view !== name;
+    });
+    clearBox('signinError');
+    clearBox('signupError');
+    const firstInput = document.querySelector('.auth-form[data-view="' + name + '"] input');
+    if (firstInput) setTimeout(() => firstInput.focus(), 60);
+  }
+
+  document.querySelectorAll('.auth-tab').forEach((tab) => {
+    tab.addEventListener('click', () => showAuthView(tab.dataset.view));
+  });
+
+  /* ============================================================
+     SIGN UP
+     ============================================================ */
+  $('signupForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearBox('signupError');
+
+    const name = $('signupName').value.trim();
+    const email = $('signupEmail').value.trim().toLowerCase();
+    const password = $('signupPassword').value;
+    const confirm = $('signupConfirm').value;
+
+    if (name.length < 2) return setError('signupError', 'Please enter your full name.');
+    if (!isEmail(email)) return setError('signupError', 'Please enter a valid email address.');
+    if (password.length < 6) return setError('signupError', 'Password must be at least 6 characters.');
+    if (password !== confirm) return setError('signupError', 'The two passwords do not match.');
+
+    /* 🔒 If the site is locked, block all NEW sign-ups except the owner */
+    if (isSiteLocked() && !isOwnerEmail(email)) {
+      return setError('signupError', 'Access is temporarily closed. Please contact the admin on Telegram.');
+    }
+
+    const users = getUsers();
+    if (users.some((u) => u.email === email)) {
+      return setError('signupError', 'This email is already registered. Please sign in.');
+    }
+
+    users.push({
+      name: name,
+      email: email,
+      password: hashPassword(email, password),
+      createdAt: Date.now()
+    });
+    saveUsers(users);
+
+    const account = { name: name, email: email };
+    setSession(account);
+    startApp(account);
+    toast('Welcome, ' + name.split(' ')[0] + '!');
+  });
+
+  /* ============================================================
+     SIGN IN
+     ============================================================ */
+  $('signinForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    clearBox('signinError');
+
+    const email = $('signinEmail').value.trim().toLowerCase();
+    const password = $('signinPassword').value;
+
+    if (!isEmail(email)) return setError('signinError', 'Please enter a valid email address.');
+    if (!password) return setError('signinError', 'Please enter your password.');
+
+    const hash = hashPassword(email, password);
+    const user = getUsers().find((u) => u.email === email && u.password === hash);
+
+    if (!user) {
+      return setError('signinError', 'Incorrect email or password.');
+    }
+
+    /* 🔒 If the site is locked, block all non-owner sign-ins */
+    if (isSiteLocked() && !isOwnerEmail(email)) {
+      return setError('signinError', 'Access is temporarily closed. Please contact the admin on Telegram.');
+    }
+
+    $('signinForm').reset();
+    const account = { name: user.name, email: user.email };
+    setSession(account);
+    startApp(account);
+    toast('Welcome back, ' + user.name.split(' ')[0] + '!');
+  });
+
+  /* ============================================================
+     LOG OUT
+     ============================================================ */
+  $('logoutBtn').addEventListener('click', () => {
+    clearSession();
+    $('userChip').textContent = '';
+    $('adminAccessBtn').hidden = true;
+    showScreen('auth');
+    showAuthView('signin');
+    toast('Signed out.');
+  });
+
+  /* ============================================================
+     START THE APP
+     ============================================================ */
+  function startApp(account) {
+    showScreen('app');
+    renderUserChip(account.name, account.email);
+    updateWelcomeText(account.name);
+    initStars();
+    renderFavorites();
+    updateAdminButtonVisibility(account.email);
+  }
+
+  function renderUserChip(name, email) {
+    const chip = $('userChip');
+    if (chip) {
+      chip.textContent = name || '';
+      chip.title = email || '';
+      chip.classList.toggle('is-admin', isOwnerEmail(email));
+    }
+  }
+
+  function updateWelcomeText(name) {
+    const el = $('welcomeText');
+    if (el) {
+      el.innerHTML = 'This page is linked to <a href="https://tsegatech.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">tsegatech.com</a>.';
+    }
+  }
+
+  /* Show admin button only for the owner's signed-in account */
+  function updateAdminButtonVisibility(email) {
+    const btn = $('adminAccessBtn');
+    if (!btn) return;
+    btn.hidden = !isOwnerEmail(email);
+  }
+
+  /* ============================================================
+     FAVOURITES
+     ============================================================ */
+  const STAR_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.45 6.2 20.5l1.1-6.45-4.7-4.6 6.5-.95L12 2.6z"/></svg>';
+
+  function getCurrentFavKey() {
+    const s = getSession();
+    return favKey(s ? s.email : null);
+  }
+  function getFavs() {
+    try { return JSON.parse(localStorage.getItem(getCurrentFavKey()) || '[]'); }
+    catch (e) { return []; }
+  }
+  function setFavs(list) {
+    try { localStorage.setItem(getCurrentFavKey(), JSON.stringify(list)); } catch (e) {}
+  }
+
+  let starsReady = false;
+  function initStars() {
+    if (!starsReady) {
+      document.querySelectorAll('.exam-card').forEach((card) => {
+        const id = card.dataset.exam;
+        if (!id) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'star-btn';
+        btn.dataset.exam = id;
+        btn.innerHTML = STAR_SVG;
+        btn.addEventListener('click', () => toggleFav(id));
+        card.appendChild(btn);
+      });
+      starsReady = true;
+    }
+    syncStars();
+  }
+
+  function syncStars() {
+    const favs = getFavs();
+    document.querySelectorAll('.star-btn').forEach((btn) => {
+      const on = favs.includes(btn.dataset.exam);
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.title = on ? 'Remove from favourites' : 'Add to favourites';
+    });
+  }
+
+  function toggleFav(id) {
+    const favs = getFavs();
+    const idx = favs.indexOf(id);
+    if (idx === -1) { favs.push(id); toast('★ Added to favourites'); }
+    else { favs.splice(idx, 1); toast('Removed from favourites'); }
+    setFavs(favs);
+    syncStars();
+    renderFavorites();
+  }
+
+  function renderFavorites() {
+    const favs = getFavs();
+    const section = $('favorites');
+    const list = $('favList');
+    const countEl = $('favCountTop');
+    if (countEl) countEl.textContent = String(favs.length);
+
+    if (!favs.length) {
+      if (section) section.hidden = true;
+      if (list) list.innerHTML = '';
+      return;
+    }
+
+    if (section) section.hidden = false;
+    if (list) list.innerHTML = '';
+
+    favs.forEach((id) => {
+      const card = document.querySelector('.exam-card[data-exam="' + id + '"]');
+      if (!card) return;
+      const titleEl = card.querySelector('h3');
+      const yearEl = card.querySelector('.exam-year');
+      const linkEl = card.querySelector('a.button');
+      const title = titleEl ? titleEl.textContent.trim() : '';
+      const year = yearEl ? yearEl.textContent.trim() : '';
+      const href = linkEl ? linkEl.getAttribute('href') : '#';
+
+      const tile = document.createElement('div');
+      tile.className = 'fav-tile';
+
+      const yearSpan = document.createElement('span');
+      yearSpan.className = 'fav-year';
+      yearSpan.textContent = year;
+
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'fav-title';
+      titleSpan.textContent = title;
+      titleSpan.title = title;
+
+      const openLink = document.createElement('a');
+      openLink.className = 'fav-open';
+      openLink.href = href;
+      openLink.textContent = 'Open';
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'fav-remove';
+      removeBtn.textContent = '×';
+      removeBtn.setAttribute('aria-label', 'Remove from favourites');
+      removeBtn.addEventListener('click', () => toggleFav(id));
+
+      tile.appendChild(yearSpan);
+      tile.appendChild(titleSpan);
+      tile.appendChild(openLink);
+      tile.appendChild(removeBtn);
+      list.appendChild(tile);
+    });
+  }
+
+  $('favShortcut').addEventListener('click', () => {
+    if (!getFavs().length) {
+      toast('No favourites yet — tap the ☆ on any exam set.');
+      return;
+    }
+    $('favorites').hidden = false;
+    $('favorites').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  /* ============================================================
+     CHATGPT
+     ============================================================ */
+  function askChatGPT(prompt) {
+    const text = String(prompt || '').trim();
+    const frameWrap = $('chatgptFrameWrap');
+    const frame = $('chatgptFrame');
+    const title = $('chatgptFrameTitle');
+    const fallback = $('chatgptFallback');
+    const url = text
+      ? 'https://chatgpt.com/?q=' + encodeURIComponent(text)
+      : 'https://chatgpt.com/';
+
+    title.textContent = text ? 'ChatGPT — ' + text.slice(0, 90) : 'ChatGPT';
+    fallback.hidden = false;
+    frameWrap.hidden = false;
+    frame.src = url;
+    frameWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  $('chatgptCloseBtn').addEventListener('click', () => {
+    $('chatgptFrame').src = 'about:blank';
+    $('chatgptFrameWrap').hidden = true;
+  });
+
+  $('aiForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = $('aiInput').value.trim();
+    if (!query) { $('aiInput').focus(); return; }
+    askChatGPT(query);
+    $('aiInput').value = '';
+  });
+
+  document.querySelectorAll('.ai-chip').forEach((chip) => {
+    chip.addEventListener('click', () => askChatGPT(chip.dataset.q));
+  });
+
+  function initCardAiButtons() {
+    document.querySelectorAll('.exam-card').forEach((card) => {
+      const titleEl = card.querySelector('h3');
+      const contentsEl = card.querySelector('.contents');
+      if (!titleEl) return;
+
+      const title = titleEl.textContent.trim();
+      const topics = contentsEl ? contentsEl.textContent.replace(/\s+/g, ' ').trim() : '';
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ai-mini';
+      btn.textContent = '✦ Ask ChatGPT about this';
+
+      btn.addEventListener('click', () => {
+        askChatGPT(
+          'I am revising "' + title + '" for a medical exam. ' +
+          (topics ? 'Topics covered: ' + topics + ' ' : '') +
+          'Please explain the key concepts, highlight high-yield points, and give me 3 practice MCQs with answers.'
+        );
+      });
+
+      card.appendChild(btn);
+    });
+  }
+
+  /* ============================================================
+     🛡 ADMIN SYSTEM
+     ============================================================ */
+
+  const adminOverlay = $('adminOverlay');
+  let adminOpen = false;
+
+  /* ---------- Generic modal helper ---------- */
+  function openModal(opts) {
+    /* opts: { icon, title, message, fields: [{id, label, type, placeholder}], confirmText, confirmClass, onConfirm } */
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+
+    const card = document.createElement('div');
+    card.className = 'modal-card';
+
+    if (opts.icon) {
+      const i = document.createElement('div');
+      i.className = 'modal-icon';
+      i.textContent = opts.icon;
+      card.appendChild(i);
+    }
+
+    const h = document.createElement('h3');
+    h.textContent = opts.title || '';
+    card.appendChild(h);
+
+    if (opts.message) {
+      const p = document.createElement('p');
+      p.textContent = opts.message;
+      card.appendChild(p);
+    }
+
+    const errorEl = document.createElement('p');
+    errorEl.className = 'modal-error';
+    errorEl.hidden = true;
+    card.appendChild(errorEl);
+
+    const fields = {};
+    if (opts.fields) {
+      opts.fields.forEach((f) => {
+        const label = document.createElement('label');
+        label.className = 'field';
+        const span = document.createElement('span');
+        span.textContent = f.label;
+        const input = document.createElement('input');
+        input.type = f.type || 'text';
+        input.placeholder = f.placeholder || '';
+        input.autocomplete = 'off';
+        label.appendChild(span);
+        label.appendChild(input);
+        card.appendChild(label);
+        fields[f.id] = input;
+      });
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'modal-actions';
+
+    const cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.textContent = opts.cancelText || 'Cancel';
+    cancel.addEventListener('click', () => overlay.remove());
+
+    const confirm = document.createElement('button');
+    confirm.type = 'button';
+    confirm.textContent = opts.confirmText || 'Confirm';
+    if (opts.confirmClass) confirm.className = opts.confirmClass;
+    else confirm.className = 'primary';
+
+    confirm.addEventListener('click', () => {
+      const values = {};
+      let hasEmpty = false;
+      Object.keys(fields).forEach((k) => {
+        values[k] = fields[k].value;
+        if (opts.fields.some((f) => f.id === k && f.required !== false) && !values[k].trim()) {
+          hasEmpty = true;
+        }
+      });
+      if (hasEmpty) {
+        errorEl.textContent = 'Please fill in all fields.';
+        errorEl.hidden = false;
+        return;
+      }
+      const ok = opts.onConfirm ? opts.onConfirm(values, errorEl) : true;
+      if (ok !== false) overlay.remove();
+    });
+
+    actions.appendChild(cancel);
+    actions.appendChild(confirm);
+    card.appendChild(actions);
+
+    overlay.appendChild(card);
+    overlay.addEventListener('click', (ev) => { if (ev.target === overlay) overlay.remove(); });
+    document.addEventListener('keydown', function esc(ev) {
+      if (ev.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', esc); }
+    });
+
+    document.body.appendChild(overlay);
+
+    /* Focus first field */
+    const firstKey = Object.keys(fields)[0];
+    if (firstKey) setTimeout(() => fields[firstKey].focus(), 60);
+
+    /* Enter key submits */
+    Object.values(fields).forEach((input) => {
+      input.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter') { ev.preventDefault(); confirm.click(); }
+      });
+    });
+  }
+
+  /* ---------- Open admin (password protected) ---------- */
+  function requestAdminOpen() {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) {
+      toast('Admin panel is not available.');
+      return;
+    }
+    if (adminOpen) return;
+
+    openModal({
+      icon: '🔐',
+      title: 'Admin Password Required',
+      message: 'Enter the owner password to open the admin panel.',
+      fields: [
+        { id: 'pw', label: 'Password', type: 'password', placeholder: '••••••••' }
+      ],
+      confirmText: 'Unlock',
+      confirmClass: 'primary',
+      onConfirm: (values, errorEl) => {
+        if (values.pw !== ADMIN_PASSWORD) {
+          errorEl.textContent = 'Incorrect password.';
+          errorEl.hidden = false;
+          return false;
+        }
+        openAdmin();
+        return true;
+      }
+    });
+  }
+
+  function openAdmin() {
+    if (adminOpen) return;
+    adminOpen = true;
+    adminOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    renderAdmin();
+  }
+
+  function closeAdmin() {
+    adminOpen = false;
+    adminOverlay.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  /* ---------- Admin button click ---------- */
+  $('adminAccessBtn').addEventListener('click', requestAdminOpen);
+
+  /* ---------- Refresh / close buttons ---------- */
+  $('adminRefresh').addEventListener('click', () => {
+    renderAdmin();
+    toast('Refreshed.');
+  });
+  $('adminClose').addEventListener('click', closeAdmin);
+
+  /* ---------- Escape key closes admin ---------- */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && adminOpen) closeAdmin();
+  });
+
+  /* ---------- Search filter ---------- */
+  $('adminSearch').addEventListener('input', () => renderAdmin());
+
+  /* ---------- Dismiss all ---------- */
+  $('adminDismissAll').addEventListener('click', () => {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+
+    const users = getUsers();
+    const others = users.filter((u) => !isOwnerEmail(u.email));
+
+    if (!others.length) return toast('No other users to dismiss.');
+
+    openModal({
+      icon: '⚠️',
+      title: 'Dismiss All Users?',
+      message: 'This removes all ' + others.length + ' registered students from this device. Your own account will be kept. This cannot be undone.',
+      confirmText: 'Yes, dismiss all',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        /* Clear favourites for dismissed users */
+        others.forEach((u) => {
+          try { localStorage.removeItem(favKey(u.email)); } catch (e) {}
+        });
+        saveUsers(users.filter((u) => isOwnerEmail(u.email)));
+        toast('All students dismissed.');
+        renderAdmin();
+        return true;
+      }
+    });
+  });
+
+  /* ---------- Lock / unlock toggle ---------- */
+  function updateLockButton() {
+    const btn = $('adminToggleLock');
+    if (!btn) return;
+    if (isSiteLocked()) {
+      btn.textContent = '🔓 Unlock All';
+      btn.classList.remove('gold');
+      btn.classList.add('danger');
+    } else {
+      btn.textContent = '🔒 Lock All';
+      btn.classList.remove('danger');
+      btn.classList.add('gold');
+    }
+  }
+
+  $('adminToggleLock').addEventListener('click', () => {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+
+    if (isSiteLocked()) {
+      /* Unlock */
+      openModal({
+        icon: '🔓',
+        title: 'Unlock Site Access?',
+        message: 'Students will be able to sign in again.',
+        confirmText: 'Unlock',
+        confirmClass: 'primary',
+        onConfirm: () => {
+          setSiteLocked(false);
+          toast('Site access unlocked.');
+          renderAdmin();
+          return true;
+        }
+      });
+    } else {
+      /* Lock */
+      openModal({
+        icon: '🔒',
+        title: 'Lock Site Access?',
+        message: 'All students (except you) will be blocked from signing in. Existing sessions stay active until they log out — but new sign-ins will be refused.',
+        confirmText: 'Lock All',
+        confirmClass: 'danger',
+        onConfirm: () => {
+          setSiteLocked(true);
+          toast('Site access locked.');
+          renderAdmin();
+          return true;
+        }
+      });
+    }
+  });
+
+  /* ---------- Helpers ---------- */
+  function formatDate(ts) {
+    if (!ts) return '—';
+    const d = new Date(ts);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    return y + '-' + m + '-' + day + ' ' + hh + ':' + mm;
+  }
+
+  function isSameDay(a, b) {
+    const d1 = new Date(a);
+    const d2 = new Date(b);
+    return d1.getFullYear() === d2.getFullYear()
+      && d1.getMonth() === d2.getMonth()
+      && d1.getDate() === d2.getDate();
+  }
+
+  /* ---------- Render the dashboard ---------- */
+  function renderAdmin() {
+    /* Re-verify owner (in case session changed) */
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) {
+      closeAdmin();
+      return;
+    }
+
+    const users = getUsers().slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    const now = Date.now();
+    const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
+
+    /* Stats */
+    $('statTotal').textContent = String(users.length);
+    $('statToday').textContent = String(users.filter((u) => isSameDay(u.createdAt, now)).length);
+    $('statWeek').textContent = String(users.filter((u) => (u.createdAt || 0) >= weekAgo).length);
+    $('statWithFavs').textContent = String(
+      users.filter((u) => getFavsFor(u.email).length > 0).length
+    );
+
+    /* Lock banner */
+    const banner = $('lockBanner');
+    banner.hidden = !isSiteLocked();
+    updateLockButton();
+
+    /* Search filter */
+    const searchEl = $('adminSearch');
+    const search = (searchEl.value || '').trim().toLowerCase();
+
+    const filtered = users.filter((u) => {
+      if (!search) return true;
+      return (u.name || '').toLowerCase().includes(search)
+          || (u.email || '').toLowerCase().includes(search);
+    });
+
+    /* Table */
+    const table = $('adminTable');
+    table.innerHTML = '';
+
+    if (!filtered.length) {
+      const empty = document.createElement('div');
+      empty.className = 'admin-empty';
+      empty.textContent = users.length
+        ? 'No users match your search.'
+        : 'No users registered yet. Students who create accounts will appear here.';
+      table.appendChild(empty);
+    } else {
+      filtered.forEach((u) => {
+        const isMe = isOwnerEmail(u.email);
+        const row = document.createElement('div');
+        row.className = 'admin-row' + (isMe ? ' is-me' : '');
+
+        const nameCol = document.createElement('div');
+        nameCol.className = 'col name';
+        nameCol.textContent = u.name || 'Unnamed';
+
+        const emailCol = document.createElement('div');
+        emailCol.className = 'col email';
+        emailCol.textContent = u.email || '';
+        emailCol.title = u.email || '';
+
+        const dateCol = document.createElement('div');
+        dateCol.className = 'col date';
+        dateCol.textContent = formatDate(u.createdAt);
+
+        const dismissCol = document.createElement('div');
+        dismissCol.className = 'col dismiss-wrap';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'dismiss-btn';
+        btn.textContent = isMe ? '—' : 'Dismiss';
+        if (isMe) {
+          btn.disabled = true;
+          btn.title = 'You cannot dismiss your own account';
+        } else {
+          btn.addEventListener('click', () => dismissUser(u.email));
+        }
+
+        dismissCol.appendChild(btn);
+
+        row.appendChild(nameCol);
+        row.appendChild(emailCol);
+        row.appendChild(dateCol);
+        row.appendChild(dismissCol);
+
+        table.appendChild(row);
+      });
+    }
+
+    /* Footer info */
+    const info = $('adminFooterInfo');
+    const shownText = filtered.length === users.length
+      ? users.length + ' user' + (users.length === 1 ? '' : 's')
+      : filtered.length + ' of ' + users.length + ' shown';
+    info.textContent = shownText + ' · Stored locally on this device';
+  }
+
+  /* ---------- Dismiss a single user ---------- */
+  function dismissUser(email) {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+    if (isOwnerEmail(email)) {
+      toast('You cannot dismiss your own account.');
+      return;
+    }
+
+    const users = getUsers();
+    const user = users.find((u) => u.email === email);
+    if (!user) return;
+
+    openModal({
+      icon: '⚠️',
+      title: 'Dismiss User?',
+      message: 'Dismiss "' + (user.name || user.email) + '"?\n\nTheir account will be removed from this device.',
+      confirmText: 'Dismiss',
+      confirmClass: 'danger',
+      onConfirm: () => {
+        const next = users.filter((u) => u.email !== email);
+        saveUsers(next);
+        try { localStorage.removeItem(favKey(email)); } catch (e) {}
+        toast('User dismissed.');
+        renderAdmin();
+        return true;
+      }
+    });
+  }
+
+  /* ============================================================
+     BOOT
+     ============================================================ */
+  initCardAiButtons();
+
+  const session = getSession();
+  if (session) {
+    startApp(session);
+  } else {
+    showScreen('auth');
+    showAuthView('signin');
+  }
+
+})();
+</script>
+
+</body>
+</html>
