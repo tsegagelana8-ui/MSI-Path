@@ -187,6 +187,22 @@ section[id] { scroll-margin-top: 84px; }
   right: -70px;
 }
 
+/* New sticker style */
+.welcome-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #bae6fd;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
 .welcome-tag {
   position: relative;
   display: inline-block;
@@ -588,7 +604,7 @@ input:focus-visible {
   background: var(--hover);
 }
 
-/* ---------- CONTACT ---------- */
+/* ---------- CONTACT & NEW SECTION ---------- */
 .contact {
   margin-top: 10px;
   padding: 30px 22px;
@@ -623,6 +639,30 @@ input:focus-visible {
 .telegram-button:hover { filter: brightness(1.08); transform: translateY(-2px); }
 
 .telegram-icon { width: 23px; height: 23px; flex: 0 0 23px; }
+
+/* New section - made by Tsega */
+.made-by {
+  margin-top: 24px;
+  padding: 22px 18px;
+  text-align: center;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.made-by p {
+  max-width: 620px;
+  margin: 0 auto;
+  color: #bae6fd;
+  font-size: clamp(15px, 2.5vw, 18px);
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+.made-by p span {
+  color: var(--accent);
+  font-weight: bold;
+}
 
 /* ---------- FOOTER ---------- */
 footer {
@@ -1299,9 +1339,11 @@ footer {
 
   <main class="container" id="top">
 
+    <!-- UPDATED HERO: Welcome to Medical Exam Practice page Website + sticker -->
     <section class="welcome" aria-labelledby="welcome-title">
+      <div class="welcome-sticker">📘 Welcome sticker: Practice makes perfect</div>
       <div class="welcome-tag">Medical Exam Practice</div>
-      <h1 id="welcome-title">Welcome to <span>Tsega Tech</span></h1>
+      <h1 id="welcome-title">Welcome to <span>Medical Exam Practice page Website</span></h1>
       <p id="welcomeText">
         A focused revision space for medical students, with organized
         pathology, biochemistry and physiology exam practice sets.
@@ -1514,6 +1556,11 @@ footer {
         </svg>
         <span>@blsng10</span>
       </a>
+    </section>
+
+    <!-- NEW SECTION: made by Tsega -->
+    <section class="made-by" aria-label="About the creator">
+      <p>This page is made by <span>Tsega</span> to help medical students practice for free.</p>
     </section>
 
     <footer>Build for focused revision. Verify clinically.</footer>
@@ -2048,7 +2095,6 @@ footer {
 
   /* ---------- Generic modal helper ---------- */
   function openModal(opts) {
-    /* opts: { icon, title, message, fields: [{id, label, type, placeholder}], confirmText, confirmClass, onConfirm } */
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
 
@@ -2139,11 +2185,9 @@ footer {
 
     document.body.appendChild(overlay);
 
-    /* Focus first field */
     const firstKey = Object.keys(fields)[0];
     if (firstKey) setTimeout(() => fields[firstKey].focus(), 60);
 
-    /* Enter key submits */
     Object.values(fields).forEach((input) => {
       input.addEventListener('keydown', (ev) => {
         if (ev.key === 'Enter') { ev.preventDefault(); confirm.click(); }
@@ -2230,7 +2274,6 @@ footer {
       confirmText: 'Yes, dismiss all',
       confirmClass: 'danger',
       onConfirm: () => {
-        /* Clear favourites for dismissed users */
         others.forEach((u) => {
           try { localStorage.removeItem(favKey(u.email)); } catch (e) {}
         });
@@ -2262,7 +2305,6 @@ footer {
     if (!s || !isOwnerEmail(s.email)) return;
 
     if (isSiteLocked()) {
-      /* Unlock */
       openModal({
         icon: '🔓',
         title: 'Unlock Site Access?',
@@ -2277,7 +2319,6 @@ footer {
         }
       });
     } else {
-      /* Lock */
       openModal({
         icon: '🔒',
         title: 'Lock Site Access?',
@@ -2316,7 +2357,6 @@ footer {
 
   /* ---------- Render the dashboard ---------- */
   function renderAdmin() {
-    /* Re-verify owner (in case session changed) */
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) {
       closeAdmin();
@@ -2460,4 +2500,4 @@ footer {
 </script>
 
 </body>
-  </html>
+</html>
