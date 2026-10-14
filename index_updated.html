@@ -187,22 +187,6 @@ section[id] { scroll-margin-top: 84px; }
   right: -70px;
 }
 
-/* New sticker style */
-.welcome-sticker {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  margin-bottom: 18px;
-  border-radius: 999px;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: #bae6fd;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-}
-
 .welcome-tag {
   position: relative;
   display: inline-block;
@@ -216,6 +200,14 @@ section[id] { scroll-margin-top: 84px; }
   font-weight: bold;
   letter-spacing: 1.2px;
   text-transform: uppercase;
+}
+
+/* Welcome sticker style - now inline before Welcome */
+.welcome-sticker {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1.1em;
+  vertical-align: middle;
 }
 
 .welcome h1 {
@@ -1339,11 +1331,10 @@ footer {
 
   <main class="container" id="top">
 
-    <!-- UPDATED HERO: Welcome to Medical Exam Practice page Website + sticker -->
+    <!-- UPDATED HERO: Welcome sticker inline + no practice makes perfect -->
     <section class="welcome" aria-labelledby="welcome-title">
-      <div class="welcome-sticker">📘 Welcome sticker: Practice makes perfect</div>
       <div class="welcome-tag">Medical Exam Practice</div>
-      <h1 id="welcome-title">Welcome to <span>Medical Exam Practice page Website</span></h1>
+      <h1 id="welcome-title"><span class="welcome-sticker">📘</span> Welcome to <span>Medical Exam Practice page Website</span></h1>
       <p id="welcomeText">
         A focused revision space for medical students, with organized
         pathology, biochemistry and physiology exam practice sets.
@@ -1631,7 +1622,7 @@ footer {
 </div>
 
 <!-- ============================================================
-     LOCAL ACCOUNT + ADMIN SCRIPT
+     LOCAL ACCOUNT + ADMIN SCRIPT (enhanced)
      ============================================================ -->
 <script>
 (function () {
@@ -1639,8 +1630,6 @@ footer {
 
   /* ============================================================
      ⚙️ OWNER CONFIGURATION
-     ------------------------------------------------------------
-     Change these two values if you ever need to.
      ============================================================ */
   const OWNER_EMAIL = 'tsegagelana8@gmail.com';   // ← your sign-in email
   const ADMIN_PASSWORD = 'Tse06@ge';              // ← admin panel password
@@ -2087,11 +2076,25 @@ footer {
   }
 
   /* ============================================================
-     🛡 ADMIN SYSTEM
+     🛡 ADMIN SYSTEM (enhanced logging & display)
      ============================================================ */
 
   const adminOverlay = $('adminOverlay');
   let adminOpen = false;
+
+  /* ---------- Debug helper: print all users to console ---------- */
+  function debugUsers() {
+    const users = getUsers();
+    console.log('=== [ADMIN DEBUG] All registered users ===');
+    if (!users.length) {
+      console.log('(no users found in localStorage)');
+      return;
+    }
+    users.forEach((u, i) => {
+      console.log(`#${i+1} | Name: ${u.name} | Email: ${u.email} | Created: ${new Date(u.createdAt).toLocaleString()}`);
+    });
+    console.log('=== End of user list ===');
+  }
 
   /* ---------- Generic modal helper ---------- */
   function openModal(opts) {
@@ -2231,6 +2234,8 @@ footer {
     adminOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
     renderAdmin();
+    /* Debug: log users to console for troubleshooting */
+    debugUsers();
   }
 
   function closeAdmin() {
@@ -2245,6 +2250,7 @@ footer {
   /* ---------- Refresh / close buttons ---------- */
   $('adminRefresh').addEventListener('click', () => {
     renderAdmin();
+    debugUsers();
     toast('Refreshed.');
   });
   $('adminClose').addEventListener('click', closeAdmin);
