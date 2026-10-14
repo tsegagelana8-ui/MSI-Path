@@ -142,7 +142,6 @@ section[id] { scroll-margin-top: 84px; }
 
 .ghost-btn b { color: var(--gold); }
 
-/* Hidden admin button — only visible to the site owner */
 .admin-access-btn {
   padding: 7px 14px;
   border: 1px solid rgba(251,191,36,.45);
@@ -202,18 +201,17 @@ section[id] { scroll-margin-top: 84px; }
   text-transform: uppercase;
 }
 
-/* Welcome sticker style - now inline before Welcome */
 .welcome-sticker {
   display: inline-block;
   margin-right: 10px;
-  font-size: 1.1em;
+  font-size: 1.05em;
   vertical-align: middle;
 }
 
 .welcome h1 {
   position: relative;
-  font-size: clamp(30px, 6vw, 48px);
-  line-height: 1.15;
+  font-size: clamp(28px, 5.5vw, 44px);
+  line-height: 1.2;
   margin-bottom: 16px;
 }
 
@@ -319,7 +317,6 @@ section[id] { scroll-margin-top: 84px; }
   margin-bottom: 22px;
 }
 
-/* Star button */
 .star-btn {
   position: absolute;
   top: 14px;
@@ -351,7 +348,6 @@ section[id] { scroll-margin-top: 84px; }
   background: rgba(251,191,36,.14);
 }
 
-/* Buttons */
 .button {
   display: inline-flex;
   align-items: center;
@@ -381,7 +377,6 @@ input:focus-visible {
   outline-offset: 3px;
 }
 
-/* Mini ChatGPT button inside cards */
 .ai-mini {
   margin-top: 10px;
   padding: 9px 12px;
@@ -632,7 +627,6 @@ input:focus-visible {
 
 .telegram-icon { width: 23px; height: 23px; flex: 0 0 23px; }
 
-/* New section - made by Tsega */
 .made-by {
   margin-top: 24px;
   padding: 22px 18px;
@@ -656,7 +650,6 @@ input:focus-visible {
   font-weight: bold;
 }
 
-/* ---------- FOOTER ---------- */
 footer {
   margin-top: 26px;
   padding-top: 18px;
@@ -842,7 +835,7 @@ footer {
   transform: translate(-50%, 0);
 }
 
-/* ---------- MODAL (password prompt + confirm) ---------- */
+/* ---------- MODAL ---------- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1209,6 +1202,27 @@ footer {
   border-color: var(--gold);
 }
 
+.admin-status {
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.admin-status.cloud {
+  border: 1px solid rgba(52,211,153,.4);
+  background: rgba(52,211,153,.08);
+  color: #6ee7b7;
+}
+
+.admin-status.local {
+  border: 1px solid rgba(251,191,36,.4);
+  background: rgba(251,191,36,.08);
+  color: #fcd34d;
+}
+
 /* ---------- MOBILE ---------- */
 @media (max-width: 560px) {
   .topbar-inner { width: min(100% - 22px, 1080px); padding: 8px 0; }
@@ -1257,47 +1271,37 @@ footer {
       <button type="button" class="auth-tab" data-view="signup" role="tab" aria-selected="false">Create account</button>
     </div>
 
-    <!-- SIGN IN -->
     <form class="auth-form" id="signinForm" data-view="signin" novalidate>
       <label class="field">
         <span>Email</span>
         <input type="email" id="signinEmail" autocomplete="email" placeholder="you@example.com" required>
       </label>
-
       <label class="field">
         <span>Password</span>
         <input type="password" id="signinPassword" autocomplete="current-password" placeholder="••••••••" required>
       </label>
-
       <p class="auth-error" id="signinError" hidden></p>
-
       <button type="submit" class="auth-submit">Sign in</button>
     </form>
 
-    <!-- SIGN UP -->
     <form class="auth-form" id="signupForm" data-view="signup" hidden novalidate>
       <label class="field">
         <span>Full name</span>
         <input type="text" id="signupName" autocomplete="name" placeholder="Abebe Kebede" required>
       </label>
-
       <label class="field">
         <span>Email</span>
         <input type="email" id="signupEmail" autocomplete="email" placeholder="you@example.com" required>
       </label>
-
       <label class="field">
         <span>Password</span>
         <input type="password" id="signupPassword" autocomplete="new-password" placeholder="At least 6 characters" required>
       </label>
-
       <label class="field">
         <span>Confirm password</span>
         <input type="password" id="signupConfirm" autocomplete="new-password" placeholder="Repeat password" required>
       </label>
-
       <p class="auth-error" id="signupError" hidden></p>
-
       <button type="submit" class="auth-submit">Create account</button>
     </form>
 
@@ -1315,11 +1319,8 @@ footer {
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand-link" href="#top">Tsega<span>Tech</span></a>
-
       <div class="topbar-actions">
-        <!-- ADMIN BUTTON: only shown to the site owner -->
         <button type="button" class="admin-access-btn" id="adminAccessBtn" hidden>🛡 Admin Panel</button>
-
         <button type="button" class="ghost-btn" id="favShortcut">
           ★ Favourites <b id="favCountTop">0</b>
         </button>
@@ -1331,7 +1332,6 @@ footer {
 
   <main class="container" id="top">
 
-    <!-- UPDATED HERO: Welcome sticker inline + no practice makes perfect -->
     <section class="welcome" aria-labelledby="welcome-title">
       <div class="welcome-tag">Medical Exam Practice</div>
       <h1 id="welcome-title"><span class="welcome-sticker">📘</span> Welcome to <span>Medical Exam Practice page Website</span></h1>
@@ -1341,18 +1341,13 @@ footer {
       </p>
     </section>
 
-    <!-- ChatGPT -->
     <section class="ai-section" aria-labelledby="ai-heading">
       <h2 id="ai-heading">✦ Ask ChatGPT</h2>
       <p>Stuck on a concept? Search it or ask a full question — ChatGPT opens in a new tab.</p>
-
       <form class="ai-form" id="aiForm">
-        <input type="text" id="aiInput"
-               placeholder="e.g. Explain the Frank–Starling mechanism simply"
-               aria-label="Ask ChatGPT a question">
+        <input type="text" id="aiInput" placeholder="e.g. Explain the Frank–Starling mechanism simply" aria-label="Ask ChatGPT a question">
         <button type="submit">Ask ChatGPT</button>
       </form>
-
       <div class="ai-chips">
         <button type="button" class="ai-chip" data-q="Explain the difference between necrosis and apoptosis with examples.">Necrosis vs apoptosis</button>
         <button type="button" class="ai-chip" data-q="Explain the sliding filament theory of muscle contraction step by step.">Sliding filament theory</button>
@@ -1362,7 +1357,6 @@ footer {
       </div>
     </section>
 
-    <!-- Quick nav -->
     <nav class="quick-nav" aria-label="Exam sections">
       <a href="#favorites">★ Favourites</a>
       <a href="#pathology">Pathology</a>
@@ -1371,7 +1365,6 @@ footer {
       <a href="#contact">Contact</a>
     </nav>
 
-    <!-- FAVOURITES -->
     <section class="exam-section favorites" id="favorites" aria-labelledby="favorites-heading" hidden>
       <div class="section-heading">
         <h2 id="favorites-heading">★ My Favourite Exam Sets</h2>
@@ -1380,176 +1373,124 @@ footer {
       <div class="fav-list" id="favList"></div>
     </section>
 
-    <!-- PATHOLOGY -->
     <section class="exam-section" id="pathology" aria-labelledby="pathology-heading">
       <div class="section-heading">
         <h2 id="pathology-heading">Pathology Exam Sets</h2>
         <p>Choose an exam set to begin practicing.</p>
       </div>
-
       <div class="exam-list">
         <article class="exam-card" data-exam="path-2015">
           <div class="exam-year">2015</div>
           <h3>2015 Pathology</h3>
           <div class="question-count">30 Questions</div>
           <div class="contents-label">Contents</div>
-          <p class="contents">
-            General pathology, skin pathology, bone and joint disorders,
-            and related pathology topics.
-          </p>
+          <p class="contents">General pathology, skin pathology, bone and joint disorders, and related pathology topics.</p>
           <a class="button" href="/2015-images.html">Start Exam Set</a>
         </article>
-
         <article class="exam-card" data-exam="path-2016">
           <div class="exam-year">2016</div>
           <h3>2016 Pathology</h3>
           <div class="question-count">22 Questions</div>
           <div class="contents-label">Contents</div>
-          <p class="contents">
-            Skin pathology, bone and joint disorders,
-            neuromuscular diseases, and peripheral nerve disorders.
-          </p>
+          <p class="contents">Skin pathology, bone and joint disorders, neuromuscular diseases, and peripheral nerve disorders.</p>
           <a class="button" href="/2016.html">Start Exam Set</a>
         </article>
-
         <article class="exam-card" data-exam="path-2017">
           <div class="exam-year">2017</div>
           <h3>2017 Pathology</h3>
           <div class="question-count">41 Questions</div>
           <div class="contents-label">Contents</div>
-          <p class="contents">
-            Skin diseases, bone and joint disorders,
-            neuromuscular diseases, fractures, and bone
-            and soft-tissue tumors.
-          </p>
+          <p class="contents">Skin diseases, bone and joint disorders, neuromuscular diseases, fractures, and bone and soft-tissue tumors.</p>
           <a class="button" href="/2017.html">Start Exam Set</a>
         </article>
       </div>
     </section>
 
-    <!-- BIOCHEMISTRY -->
     <section class="exam-section biochemistry" id="biochemistry" aria-labelledby="biochemistry-heading">
       <div class="section-heading">
         <h2 id="biochemistry-heading">Biochemistry Exam Sets</h2>
         <p>Practice the 2015–2018 biochemistry question sets.</p>
       </div>
-
       <div class="exam-list">
         <article class="exam-card" data-exam="bio-2015">
           <div class="exam-year">2015</div>
           <h3>2015 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
           <div class="contents-label">Study features</div>
-          <p class="contents">
-            Study mode, exam mode, answer explanations, question flagging,
-            progress tracking, and review tools.
-          </p>
+          <p class="contents">Study mode, exam mode, answer explanations, question flagging, progress tracking, and review tools.</p>
           <a class="button" href="/Biochemistry2015.html">Start Biochemistry</a>
         </article>
-
         <article class="exam-card" data-exam="bio-2016">
           <div class="exam-year">2016</div>
           <h3>2016 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
           <div class="contents-label">Study features</div>
-          <p class="contents">
-            Practice questions with immediate study feedback or complete
-            the full set in exam mode before reviewing answers.
-          </p>
+          <p class="contents">Practice questions with immediate study feedback or complete the full set in exam mode before reviewing answers.</p>
           <a class="button" href="/Biochemistry2016.html">Start Biochemistry</a>
         </article>
-
         <article class="exam-card" data-exam="bio-2017">
           <div class="exam-year">2017</div>
           <h3>2017 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
           <div class="contents-label">Study features</div>
-          <p class="contents">
-            Detailed option explanations, progress tracking, flagged
-            questions, and a focused dark exam interface.
-          </p>
+          <p class="contents">Detailed option explanations, progress tracking, flagged questions, and a focused dark exam interface.</p>
           <a class="button" href="/Biochemistry2017.html">Start Biochemistry</a>
         </article>
-
         <article class="exam-card" data-exam="bio-2018">
           <div class="exam-year">2018</div>
           <h3>2018 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
           <div class="contents-label">Study features</div>
-          <p class="contents">
-            Use study mode for immediate feedback or exam mode to
-            simulate a timed online examination.
-          </p>
+          <p class="contents">Use study mode for immediate feedback or exam mode to simulate a timed online examination.</p>
           <a class="button" href="/Biochemistry2018.html">Start Biochemistry</a>
         </article>
       </div>
     </section>
 
-    <!-- PHYSIOLOGY -->
     <section class="exam-section biochemistry" id="physiology" aria-labelledby="physiology-heading">
       <div class="section-heading">
         <h2 id="physiology-heading">Physiology Exam Sets</h2>
         <p>Practice the 2016–2018 physiology question sets.</p>
       </div>
-
       <div class="exam-list">
         <article class="exam-card" data-exam="phys-2016">
           <div class="exam-year">2016</div>
           <h3>2016 Physiology</h3>
           <div class="question-count">31 MCQs</div>
           <div class="contents-label">Study features</div>
-          <p class="contents">
-            Musculoskeletal physiology MCQs with study mode,
-            exam mode, explanations, flagging and progress tracking.
-          </p>
+          <p class="contents">Musculoskeletal physiology MCQs with study mode, exam mode, explanations, flagging and progress tracking.</p>
           <a class="button" href="/Physiology2016.html">Start Physiology</a>
         </article>
-
         <article class="exam-card" data-exam="phys-2017">
           <div class="exam-year">2017</div>
           <h3>2017 Physiology</h3>
           <div class="question-count">10 MCQs</div>
           <div class="contents-label">Study features</div>
-          <p class="contents">
-            Musculoskeletal physiology questions with immediate
-            feedback in study mode and hidden answers in exam mode.
-          </p>
+          <p class="contents">Musculoskeletal physiology questions with immediate feedback in study mode and hidden answers in exam mode.</p>
           <a class="button" href="/Physiology2017.html">Start Physiology</a>
         </article>
-
         <article class="exam-card" data-exam="phys-2018">
           <div class="exam-year">2018</div>
           <h3>2018 Physiology</h3>
           <div class="question-count">12 MCQs</div>
           <div class="contents-label">Study features</div>
-          <p class="contents">
-            Musculoskeletal physiology practice with detailed
-            explanations, question navigation, flagging and review.
-          </p>
+          <p class="contents">Musculoskeletal physiology practice with detailed explanations, question navigation, flagging and review.</p>
           <a class="button" href="/Physiology2018.html">Start Physiology</a>
         </article>
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section class="contact" id="contact" aria-labelledby="contact-heading">
       <h2 id="contact-heading">Contact Me</h2>
       <p>Questions or suggestions? Connect with me on Telegram.</p>
-
-      <a class="telegram-button"
-         href="https://t.me/blsng10"
-         target="_blank"
-         rel="noopener noreferrer"
-         aria-label="Contact Tsega Tech on Telegram at blsng10">
+      <a class="telegram-button" href="https://t.me/blsng10" target="_blank" rel="noopener noreferrer" aria-label="Contact Tsega Tech on Telegram at blsng10">
         <svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor"
-            d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"/>
+          <path fill="currentColor" d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"/>
         </svg>
         <span>@blsng10</span>
       </a>
     </section>
 
-    <!-- NEW SECTION: made by Tsega -->
     <section class="made-by" aria-label="About the creator">
       <p>This page is made by <span>Tsega</span> to help medical students practice for free.</p>
     </section>
@@ -1575,6 +1516,8 @@ footer {
       Private dashboard — visible only to the site owner's signed-in account.
     </p>
 
+    <div class="admin-status" id="adminStatus">Checking database…</div>
+
     <div class="admin-stats">
       <div class="admin-stat">
         <div class="num" id="statTotal">0</div>
@@ -1594,7 +1537,6 @@ footer {
       </div>
     </div>
 
-    <!-- Lock banner (visible only when site is locked) -->
     <div class="admin-lock-banner" id="lockBanner" hidden>
       <span style="font-size:20px;">🔒</span>
       <div>
@@ -1603,8 +1545,7 @@ footer {
       </div>
     </div>
 
-    <input type="text" class="admin-search" id="adminSearch"
-           placeholder="🔍  Search by name or email…" autocomplete="off">
+    <input type="text" class="admin-search" id="adminSearch" placeholder="🔍  Search by name or email…" autocomplete="off">
 
     <div class="admin-table" id="adminTable"></div>
 
@@ -1622,17 +1563,36 @@ footer {
 </div>
 
 <!-- ============================================================
-     LOCAL ACCOUNT + ADMIN SCRIPT (enhanced)
+     FIREBASE SDK (compat build — works with plain <script> tags)
+     ============================================================ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<!-- ============================================================
+     MAIN SCRIPT
      ============================================================ -->
 <script>
 (function () {
   'use strict';
 
   /* ============================================================
+     🔥 YOUR FIREBASE CONFIG (already filled in)
+     ============================================================ */
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyA6TEgSthctXGxbHUrLzs70A-AdQygCw38",
+    authDomain: "tsegatechs.firebaseapp.com",
+    projectId: "tsegatechs",
+    storageBucket: "tsegatechs.firebasestorage.app",
+    messagingSenderId: "468147835051",
+    appId: "1:468147835051:web:790741d11ae70168aba7ee",
+    measurementId: "G-8HF8L2GYKS"
+  };
+
+  /* ============================================================
      ⚙️ OWNER CONFIGURATION
      ============================================================ */
-  const OWNER_EMAIL = 'tsegagelana8@gmail.com';   // ← your sign-in email
-  const ADMIN_PASSWORD = 'Tse06@ge';              // ← admin panel password
+  const OWNER_EMAIL = 'tsegagelana8@gmail.com';
+  const ADMIN_PASSWORD = 'Tse06@ge';
 
   /* ============================================================
      DOM HELPERS
@@ -1651,7 +1611,6 @@ footer {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
 
-  /* ---------- TOAST ---------- */
   let toastTimer;
   function toast(msg) {
     const el = $('toast');
@@ -1662,7 +1621,6 @@ footer {
     toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2500);
   }
 
-  /* ---------- ERROR BOXES ---------- */
   function setError(id, msg) {
     const el = $(id);
     if (!el) return;
@@ -1675,10 +1633,8 @@ footer {
     if (el) { el.hidden = true; el.textContent = ''; }
   }
 
-  /* ---------- EMAIL CHECK ---------- */
   const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
-  /* ---------- SIMPLE HASH ---------- */
   function hashText(text) {
     let h = 5381;
     for (let i = 0; i < text.length; i += 1) {
@@ -1690,25 +1646,156 @@ footer {
     hashText(email.toLowerCase() + '|' + password + '|tsega-tech-salt');
 
   /* ============================================================
-     STORAGE
+     🔥 FIREBASE INITIALISATION
+     ============================================================ */
+  let db = null;
+  let cloudReady = false;
+
+  function initFirebase() {
+    try {
+      if (!window.firebase) {
+        console.warn('[TsegaTech] Firebase SDK not loaded — using localStorage fallback.');
+        return false;
+      }
+      firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.firestore();
+      cloudReady = true;
+      console.log('[TsegaTech] ✅ Firebase Firestore connected. Project:', FIREBASE_CONFIG.projectId);
+      return true;
+    } catch (err) {
+      console.error('[TsegaTech] Firebase init failed:', err);
+      return false;
+    }
+  }
+
+  initFirebase();
+
+  /* ============================================================
+     STORAGE (cloud-first, local fallback)
      ============================================================ */
   const USERS_KEY = 'tt_users';
   const SESSION_KEY = 'tt_session';
   const LOCK_KEY = 'tt_site_locked';
+  const USERS_COLLECTION = 'users';
 
-  function getUsers() {
+  function getLocalUsers() {
     try {
       const raw = localStorage.getItem(USERS_KEY);
       const list = raw ? JSON.parse(raw) : [];
       return Array.isArray(list) ? list : [];
-    } catch (e) {
-      return [];
-    }
+    } catch (e) { return []; }
   }
-  function saveUsers(list) {
+  function saveLocalUsers(list) {
     try { localStorage.setItem(USERS_KEY, JSON.stringify(list)); } catch (e) {}
   }
 
+  async function getAllUsers() {
+    if (cloudReady) {
+      try {
+        const snap = await db.collection(USERS_COLLECTION).orderBy('createdAt', 'desc').get();
+        const list = [];
+        snap.forEach((doc) => {
+          const d = doc.data();
+          list.push({
+            name: d.name || '',
+            email: d.email || '',
+            password: d.password || '',
+            createdAt: d.createdAt || 0
+          });
+        });
+        return list;
+      } catch (err) {
+        console.warn('[TsegaTech] Cloud read failed, falling back to local:', err);
+      }
+    }
+    return getLocalUsers();
+  }
+
+  async function findUserByEmail(email) {
+    const normalized = String(email || '').toLowerCase();
+    if (cloudReady) {
+      try {
+        const snap = await db.collection(USERS_COLLECTION).where('email', '==', normalized).limit(1).get();
+        if (!snap.empty) {
+          const d = snap.docs[0].data();
+          return {
+            name: d.name || '',
+            email: d.email || '',
+            password: d.password || '',
+            createdAt: d.createdAt || 0,
+            _docId: snap.docs[0].id
+          };
+        }
+        return null;
+      } catch (err) {
+        console.warn('[TsegaTech] Cloud lookup failed, falling back to local:', err);
+      }
+    }
+    return getLocalUsers().find((u) => u.email === normalized) || null;
+  }
+
+  async function addUser(user) {
+    const normalized = {
+      name: user.name,
+      email: String(user.email || '').toLowerCase(),
+      password: user.password,
+      createdAt: user.createdAt || Date.now()
+    };
+
+    const locals = getLocalUsers();
+    if (!locals.some((u) => u.email === normalized.email)) {
+      locals.push(normalized);
+      saveLocalUsers(locals);
+    }
+
+    if (cloudReady) {
+      try {
+        await db.collection(USERS_COLLECTION).doc(normalized.email).set(normalized);
+        console.log('[TsegaTech] ✅ User saved to Firestore:', normalized.email);
+      } catch (err) {
+        console.warn('[TsegaTech] Cloud write failed, kept locally:', err);
+      }
+    }
+  }
+
+  async function removeUser(email) {
+    const normalized = String(email || '').toLowerCase();
+    saveLocalUsers(getLocalUsers().filter((u) => u.email !== normalized));
+    if (cloudReady) {
+      try {
+        await db.collection(USERS_COLLECTION).doc(normalized).delete();
+      } catch (err) {
+        console.warn('[TsegaTech] Cloud delete failed:', err);
+      }
+    }
+  }
+
+  async function removeAllUsersExceptOwner() {
+    const remainingLocals = getLocalUsers().filter((u) => isOwnerEmail(u.email));
+    saveLocalUsers(remainingLocals);
+
+    let deleted = 0;
+    if (cloudReady) {
+      try {
+        const snap = await db.collection(USERS_COLLECTION).get();
+        const batch = db.batch();
+        snap.forEach((doc) => {
+          const d = doc.data();
+          if (!isOwnerEmail(d.email)) {
+            batch.delete(doc.ref);
+            deleted += 1;
+          }
+        });
+        if (deleted > 0) await batch.commit();
+        console.log('[TsegaTech] Deleted', deleted, 'cloud users (owner kept).');
+      } catch (err) {
+        console.warn('[TsegaTech] Cloud bulk delete failed:', err);
+      }
+    }
+    return deleted;
+  }
+
+  /* ---------- SESSION ---------- */
   function getSession() {
     try {
       const raw = localStorage.getItem(SESSION_KEY);
@@ -1720,9 +1807,7 @@ footer {
         return null;
       }
       return s;
-    } catch (e) {
-      return null;
-    }
+    } catch (e) { return null; }
   }
   function setSession(user) {
     try {
@@ -1747,15 +1832,13 @@ footer {
   }
 
   /* ---------- FAVOURITES ---------- */
-  function favKey(email) {
-    return 'tt_favs_' + (email || 'guest');
-  }
+  function favKey(email) { return 'tt_favs_' + (email || 'guest'); }
   function getFavsFor(email) {
     try { return JSON.parse(localStorage.getItem(favKey(email)) || '[]'); }
     catch (e) { return []; }
   }
 
-  /* ---------- OWNER CHECK ---------- */
+  /* ---------- OWNER ---------- */
   function isOwnerEmail(email) {
     return String(email || '').toLowerCase() === OWNER_EMAIL.toLowerCase();
   }
@@ -1785,7 +1868,7 @@ footer {
   /* ============================================================
      SIGN UP
      ============================================================ */
-  $('signupForm').addEventListener('submit', (e) => {
+  $('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     clearBox('signupError');
 
@@ -1799,23 +1882,22 @@ footer {
     if (password.length < 6) return setError('signupError', 'Password must be at least 6 characters.');
     if (password !== confirm) return setError('signupError', 'The two passwords do not match.');
 
-    /* 🔒 If the site is locked, block all NEW sign-ups except the owner */
     if (isSiteLocked() && !isOwnerEmail(email)) {
       return setError('signupError', 'Access is temporarily closed. Please contact the admin on Telegram.');
     }
 
-    const users = getUsers();
-    if (users.some((u) => u.email === email)) {
+    const existing = await findUserByEmail(email);
+    if (existing) {
       return setError('signupError', 'This email is already registered. Please sign in.');
     }
 
-    users.push({
+    const user = {
       name: name,
       email: email,
       password: hashPassword(email, password),
       createdAt: Date.now()
-    });
-    saveUsers(users);
+    };
+    await addUser(user);
 
     const account = { name: name, email: email };
     setSession(account);
@@ -1826,7 +1908,7 @@ footer {
   /* ============================================================
      SIGN IN
      ============================================================ */
-  $('signinForm').addEventListener('submit', (e) => {
+  $('signinForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     clearBox('signinError');
 
@@ -1837,13 +1919,12 @@ footer {
     if (!password) return setError('signinError', 'Please enter your password.');
 
     const hash = hashPassword(email, password);
-    const user = getUsers().find((u) => u.email === email && u.password === hash);
+    const user = await findUserByEmail(email);
 
-    if (!user) {
+    if (!user || user.password !== hash) {
       return setError('signinError', 'Incorrect email or password.');
     }
 
-    /* 🔒 If the site is locked, block all non-owner sign-ins */
     if (isSiteLocked() && !isOwnerEmail(email)) {
       return setError('signinError', 'Access is temporarily closed. Please contact the admin on Telegram.');
     }
@@ -1868,7 +1949,7 @@ footer {
   });
 
   /* ============================================================
-     START THE APP
+     START APP
      ============================================================ */
   function startApp(account) {
     showScreen('app');
@@ -1896,7 +1977,6 @@ footer {
     }
   }
 
-  /* Show admin button only for the owner's signed-in account */
   function updateAdminButtonVisibility(email) {
     const btn = $('adminAccessBtn');
     if (!btn) return;
@@ -1971,7 +2051,6 @@ footer {
       if (list) list.innerHTML = '';
       return;
     }
-
     if (section) section.hidden = false;
     if (list) list.innerHTML = '';
 
@@ -2054,15 +2133,12 @@ footer {
       const titleEl = card.querySelector('h3');
       const contentsEl = card.querySelector('.contents');
       if (!titleEl) return;
-
       const title = titleEl.textContent.trim();
       const topics = contentsEl ? contentsEl.textContent.replace(/\s+/g, ' ').trim() : '';
-
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'ai-mini';
       btn.textContent = '✦ Ask ChatGPT about this';
-
       btn.addEventListener('click', () => {
         askChatGPT(
           'I am revising "' + title + '" for a medical exam. ' +
@@ -2070,33 +2146,16 @@ footer {
           'Please explain the key concepts, highlight high-yield points, and give me 3 practice MCQs with answers.'
         );
       });
-
       card.appendChild(btn);
     });
   }
 
   /* ============================================================
-     🛡 ADMIN SYSTEM (enhanced logging & display)
+     🛡 ADMIN
      ============================================================ */
-
   const adminOverlay = $('adminOverlay');
   let adminOpen = false;
 
-  /* ---------- Debug helper: print all users to console ---------- */
-  function debugUsers() {
-    const users = getUsers();
-    console.log('=== [ADMIN DEBUG] All registered users ===');
-    if (!users.length) {
-      console.log('(no users found in localStorage)');
-      return;
-    }
-    users.forEach((u, i) => {
-      console.log(`#${i+1} | Name: ${u.name} | Email: ${u.email} | Created: ${new Date(u.createdAt).toLocaleString()}`);
-    });
-    console.log('=== End of user list ===');
-  }
-
-  /* ---------- Generic modal helper ---------- */
   function openModal(opts) {
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
@@ -2179,13 +2238,11 @@ footer {
     actions.appendChild(cancel);
     actions.appendChild(confirm);
     card.appendChild(actions);
-
     overlay.appendChild(card);
     overlay.addEventListener('click', (ev) => { if (ev.target === overlay) overlay.remove(); });
     document.addEventListener('keydown', function esc(ev) {
       if (ev.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', esc); }
     });
-
     document.body.appendChild(overlay);
 
     const firstKey = Object.keys(fields)[0];
@@ -2198,7 +2255,6 @@ footer {
     });
   }
 
-  /* ---------- Open admin (password protected) ---------- */
   function requestAdminOpen() {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) {
@@ -2206,14 +2262,11 @@ footer {
       return;
     }
     if (adminOpen) return;
-
     openModal({
       icon: '🔐',
       title: 'Admin Password Required',
       message: 'Enter the owner password to open the admin panel.',
-      fields: [
-        { id: 'pw', label: 'Password', type: 'password', placeholder: '••••••••' }
-      ],
+      fields: [{ id: 'pw', label: 'Password', type: 'password', placeholder: '••••••••' }],
       confirmText: 'Unlock',
       confirmClass: 'primary',
       onConfirm: (values, errorEl) => {
@@ -2234,8 +2287,6 @@ footer {
     adminOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
     renderAdmin();
-    /* Debug: log users to console for troubleshooting */
-    debugUsers();
   }
 
   function closeAdmin() {
@@ -2244,46 +2295,33 @@ footer {
     document.body.style.overflow = '';
   }
 
-  /* ---------- Admin button click ---------- */
   $('adminAccessBtn').addEventListener('click', requestAdminOpen);
-
-  /* ---------- Refresh / close buttons ---------- */
-  $('adminRefresh').addEventListener('click', () => {
-    renderAdmin();
-    debugUsers();
-    toast('Refreshed.');
-  });
+  $('adminRefresh').addEventListener('click', () => { renderAdmin(); toast('Refreshed.'); });
   $('adminClose').addEventListener('click', closeAdmin);
 
-  /* ---------- Escape key closes admin ---------- */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && adminOpen) closeAdmin();
   });
 
-  /* ---------- Search filter ---------- */
   $('adminSearch').addEventListener('input', () => renderAdmin());
 
-  /* ---------- Dismiss all ---------- */
-  $('adminDismissAll').addEventListener('click', () => {
+  $('adminDismissAll').addEventListener('click', async () => {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) return;
 
-    const users = getUsers();
+    const users = await getAllUsers();
     const others = users.filter((u) => !isOwnerEmail(u.email));
-
     if (!others.length) return toast('No other users to dismiss.');
 
     openModal({
       icon: '⚠️',
       title: 'Dismiss All Users?',
-      message: 'This removes all ' + others.length + ' registered students from this device. Your own account will be kept. This cannot be undone.',
+      message: 'This removes all ' + others.length + ' registered students (from cloud and this device). Your own account will be kept. This cannot be undone.',
       confirmText: 'Yes, dismiss all',
       confirmClass: 'danger',
-      onConfirm: () => {
-        others.forEach((u) => {
-          try { localStorage.removeItem(favKey(u.email)); } catch (e) {}
-        });
-        saveUsers(users.filter((u) => isOwnerEmail(u.email)));
+      onConfirm: async () => {
+        await removeAllUsersExceptOwner();
+        others.forEach((u) => { try { localStorage.removeItem(favKey(u.email)); } catch (e) {} });
         toast('All students dismissed.');
         renderAdmin();
         return true;
@@ -2291,7 +2329,6 @@ footer {
     });
   });
 
-  /* ---------- Lock / unlock toggle ---------- */
   function updateLockButton() {
     const btn = $('adminToggleLock');
     if (!btn) return;
@@ -2317,31 +2354,20 @@ footer {
         message: 'Students will be able to sign in again.',
         confirmText: 'Unlock',
         confirmClass: 'primary',
-        onConfirm: () => {
-          setSiteLocked(false);
-          toast('Site access unlocked.');
-          renderAdmin();
-          return true;
-        }
+        onConfirm: () => { setSiteLocked(false); toast('Site access unlocked.'); renderAdmin(); return true; }
       });
     } else {
       openModal({
         icon: '🔒',
         title: 'Lock Site Access?',
-        message: 'All students (except you) will be blocked from signing in. Existing sessions stay active until they log out — but new sign-ins will be refused.',
+        message: 'All students (except you) will be blocked from signing in.',
         confirmText: 'Lock All',
         confirmClass: 'danger',
-        onConfirm: () => {
-          setSiteLocked(true);
-          toast('Site access locked.');
-          renderAdmin();
-          return true;
-        }
+        onConfirm: () => { setSiteLocked(true); toast('Site access locked.'); renderAdmin(); return true; }
       });
     }
   });
 
-  /* ---------- Helpers ---------- */
   function formatDate(ts) {
     if (!ts) return '—';
     const d = new Date(ts);
@@ -2354,49 +2380,44 @@ footer {
   }
 
   function isSameDay(a, b) {
-    const d1 = new Date(a);
-    const d2 = new Date(b);
+    const d1 = new Date(a); const d2 = new Date(b);
     return d1.getFullYear() === d2.getFullYear()
       && d1.getMonth() === d2.getMonth()
       && d1.getDate() === d2.getDate();
   }
 
-  /* ---------- Render the dashboard ---------- */
-  function renderAdmin() {
+  async function renderAdmin() {
     const s = getSession();
-    if (!s || !isOwnerEmail(s.email)) {
-      closeAdmin();
-      return;
+    if (!s || !isOwnerEmail(s.email)) { closeAdmin(); return; }
+
+    const status = $('adminStatus');
+    if (cloudReady) {
+      status.textContent = '☁️ Cloud mode — showing users from ALL devices';
+      status.className = 'admin-status cloud';
+    } else {
+      status.textContent = '📱 Local mode — showing only users on THIS device. Add Firebase config to see all users.';
+      status.className = 'admin-status local';
     }
 
-    const users = getUsers().slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    const users = (await getAllUsers()).slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     const now = Date.now();
     const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
 
-    /* Stats */
     $('statTotal').textContent = String(users.length);
     $('statToday').textContent = String(users.filter((u) => isSameDay(u.createdAt, now)).length);
     $('statWeek').textContent = String(users.filter((u) => (u.createdAt || 0) >= weekAgo).length);
-    $('statWithFavs').textContent = String(
-      users.filter((u) => getFavsFor(u.email).length > 0).length
-    );
+    $('statWithFavs').textContent = String(users.filter((u) => getFavsFor(u.email).length > 0).length);
 
-    /* Lock banner */
-    const banner = $('lockBanner');
-    banner.hidden = !isSiteLocked();
+    $('lockBanner').hidden = !isSiteLocked();
     updateLockButton();
 
-    /* Search filter */
-    const searchEl = $('adminSearch');
-    const search = (searchEl.value || '').trim().toLowerCase();
-
+    const search = ($('adminSearch').value || '').trim().toLowerCase();
     const filtered = users.filter((u) => {
       if (!search) return true;
       return (u.name || '').toLowerCase().includes(search)
           || (u.email || '').toLowerCase().includes(search);
     });
 
-    /* Table */
     const table = $('adminTable');
     table.innerHTML = '';
 
@@ -2405,7 +2426,9 @@ footer {
       empty.className = 'admin-empty';
       empty.textContent = users.length
         ? 'No users match your search.'
-        : 'No users registered yet. Students who create accounts will appear here.';
+        : (cloudReady
+            ? 'No users registered yet. Students who sign up from any device will appear here.'
+            : 'No users registered on this device yet. Add Firebase config to see users from all devices.');
       table.appendChild(empty);
     } else {
       filtered.forEach((u) => {
@@ -2433,54 +2456,38 @@ footer {
         btn.type = 'button';
         btn.className = 'dismiss-btn';
         btn.textContent = isMe ? '—' : 'Dismiss';
-        if (isMe) {
-          btn.disabled = true;
-          btn.title = 'You cannot dismiss your own account';
-        } else {
-          btn.addEventListener('click', () => dismissUser(u.email));
-        }
+        if (isMe) { btn.disabled = true; btn.title = 'You cannot dismiss your own account'; }
+        else { btn.addEventListener('click', () => dismissUser(u.email)); }
 
         dismissCol.appendChild(btn);
-
         row.appendChild(nameCol);
         row.appendChild(emailCol);
         row.appendChild(dateCol);
         row.appendChild(dismissCol);
-
         table.appendChild(row);
       });
     }
 
-    /* Footer info */
     const info = $('adminFooterInfo');
     const shownText = filtered.length === users.length
       ? users.length + ' user' + (users.length === 1 ? '' : 's')
       : filtered.length + ' of ' + users.length + ' shown';
-    info.textContent = shownText + ' · Stored locally on this device';
+    info.textContent = shownText + (cloudReady ? ' · ☁️ Cloud database' : ' · 📱 Local device only');
   }
 
-  /* ---------- Dismiss a single user ---------- */
   function dismissUser(email) {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) return;
-    if (isOwnerEmail(email)) {
-      toast('You cannot dismiss your own account.');
-      return;
-    }
-
-    const users = getUsers();
-    const user = users.find((u) => u.email === email);
-    if (!user) return;
+    if (isOwnerEmail(email)) { toast('You cannot dismiss your own account.'); return; }
 
     openModal({
       icon: '⚠️',
       title: 'Dismiss User?',
-      message: 'Dismiss "' + (user.name || user.email) + '"?\n\nTheir account will be removed from this device.',
+      message: 'Dismiss "' + email + '"?\n\nTheir account will be removed from the cloud database and this device.',
       confirmText: 'Dismiss',
       confirmClass: 'danger',
-      onConfirm: () => {
-        const next = users.filter((u) => u.email !== email);
-        saveUsers(next);
+      onConfirm: async () => {
+        await removeUser(email);
         try { localStorage.removeItem(favKey(email)); } catch (e) {}
         toast('User dismissed.');
         renderAdmin();
