@@ -21,6 +21,23 @@
   --success: #34d399;
   --gold: #fbbf24;
   --danger: #f87171;
+  --shadow: rgba(0,0,0,.25);
+}
+
+/* ---------- LIGHT THEME ---------- */
+body.light {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --hover: #eef4fb;
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #0284c7;
+  --accent-2: #6366f1;
+  --border: #d5dee9;
+  --success: #059669;
+  --gold: #d97706;
+  --danger: #dc2626;
+  --shadow: rgba(15,23,42,.08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,6 +54,14 @@ body {
     radial-gradient(circle at 90% 20%, rgba(129,140,248,.09), transparent 28rem),
     var(--bg);
   line-height: 1.6;
+  transition: background .3s, color .3s;
+}
+
+body.light {
+  background:
+    radial-gradient(circle at 10% 0%, rgba(2,132,199,.08), transparent 30rem),
+    radial-gradient(circle at 90% 20%, rgba(99,102,241,.06), transparent 28rem),
+    var(--bg);
 }
 
 body.locked { overflow: hidden; }
@@ -49,6 +74,19 @@ body.locked { overflow: hidden; }
 
 section[id] { scroll-margin-top: 84px; }
 
+/* ---------- READING PROGRESS BAR ---------- */
+#readProgress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--success));
+  z-index: 9999;
+  transition: width .15s ease-out;
+  box-shadow: 0 0 12px rgba(56,189,248,.55);
+}
+
 /* ---------- TOP BAR ---------- */
 .topbar {
   position: sticky;
@@ -58,7 +96,10 @@ section[id] { scroll-margin-top: 84px; }
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
+  transition: background .3s;
 }
+
+body.light .topbar { background: rgba(244,247,251,.9); }
 
 .topbar-inner {
   width: min(100% - 32px, 1080px);
@@ -105,6 +146,8 @@ section[id] { scroll-margin-top: 84px; }
   white-space: nowrap;
 }
 
+body.light .user-chip { background: #fff; }
+
 .user-chip::before {
   content: "";
   flex: 0 0 auto;
@@ -142,6 +185,50 @@ section[id] { scroll-margin-top: 84px; }
 
 .ghost-btn b { color: var(--gold); }
 
+.session-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(21,30,48,.9);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .4px;
+}
+
+body.light .session-timer { background: #fff; }
+
+.session-timer::before {
+  content: "⏱";
+  color: var(--accent);
+}
+
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
+  transform: rotate(20deg);
+}
+
 .admin-access-btn {
   padding: 7px 14px;
   border: 1px solid rgba(251,191,36,.45);
@@ -172,7 +259,11 @@ section[id] { scroll-margin-top: 84px; }
   border: 1px solid var(--border);
   border-radius: 26px;
   background: linear-gradient(135deg, rgba(21,30,48,.98), rgba(12,37,59,.94));
-  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  box-shadow: 0 20px 60px var(--shadow);
+}
+
+body.light .welcome {
+  background: linear-gradient(135deg, #ffffff, #eaf3fb);
 }
 
 .welcome::before {
@@ -201,11 +292,23 @@ section[id] { scroll-margin-top: 84px; }
   text-transform: uppercase;
 }
 
+body.light .welcome-tag {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+  color: #075985;
+}
+
 .welcome-sticker {
   display: inline-block;
   margin-right: 10px;
   font-size: 1.05em;
   vertical-align: middle;
+  animation: bounce 2.6s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 .welcome h1 {
@@ -225,6 +328,21 @@ section[id] { scroll-margin-top: 84px; }
   font-size: clamp(15px, 2.5vw, 18px);
 }
 
+.study-tip {
+  position: relative;
+  display: inline-block;
+  margin-top: 18px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px dashed rgba(56,189,248,.4);
+  background: rgba(56,189,248,.06);
+  color: #7dd3fc;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+body.light .study-tip { color: #0369a1; }
+
 /* ---------- SECTIONS ---------- */
 .exam-section { margin-bottom: 46px; }
 
@@ -239,6 +357,54 @@ section[id] { scroll-margin-top: 84px; }
 }
 
 .section-heading p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ---------- SEARCH FILTER BAR ---------- */
+.filter-bar {
+  max-width: 560px;
+  margin: 0 auto 22px;
+  position: relative;
+}
+
+.filter-bar input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.filter-bar input::placeholder { color: var(--muted); }
+
+.filter-bar input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(56,189,248,.15);
+}
+
+.filter-bar::before {
+  content: "🔎";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  pointer-events: none;
+  opacity: .8;
+}
+
+.filter-empty {
+  grid-column: 1 / -1;
+  padding: 26px 16px;
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  text-align: center;
   color: var(--muted);
   font-size: 14px;
 }
@@ -266,7 +432,7 @@ section[id] { scroll-margin-top: 84px; }
   transform: translateY(-5px);
   border-color: var(--accent);
   background: var(--hover);
-  box-shadow: 0 14px 35px rgba(0,0,0,.22);
+  box-shadow: 0 14px 35px var(--shadow);
 }
 
 .biochemistry .exam-card:hover { border-color: var(--accent-2); }
@@ -281,6 +447,7 @@ section[id] { scroll-margin-top: 84px; }
 }
 
 .biochemistry .exam-year { color: #a5b4fc; }
+body.light .biochemistry .exam-year { color: var(--accent-2); }
 
 .exam-card h3 {
   font-size: 23px;
@@ -299,13 +466,23 @@ section[id] { scroll-margin-top: 84px; }
   font-weight: bold;
 }
 
+body.light .question-count {
+  background: #e0f2fe;
+  color: #075985;
+}
+
 .biochemistry .question-count {
   background: #202044;
   color: #c7d2fe;
 }
 
+body.light .biochemistry .question-count {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
 .contents-label {
-  color: #e2e8f0;
+  color: var(--text);
   font-size: 13px;
   font-weight: bold;
   margin-bottom: 4px;
@@ -328,8 +505,8 @@ section[id] { scroll-margin-top: 84px; }
   place-items: center;
   border: 1px solid var(--border);
   border-radius: 50%;
-  background: rgba(13,22,38,.85);
-  color: #64748b;
+  background: var(--card);
+  color: #94a3b8;
   cursor: pointer;
   transition: transform .2s, color .2s, border-color .2s, background .2s;
 }
@@ -346,6 +523,13 @@ section[id] { scroll-margin-top: 84px; }
   color: var(--gold);
   border-color: rgba(251,191,36,.65);
   background: rgba(251,191,36,.14);
+  animation: pop .35s;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.35); }
+  100% { transform: scale(1); }
 }
 
 .button {
@@ -366,9 +550,12 @@ section[id] { scroll-margin-top: 84px; }
   transition: filter .2s, transform .2s;
 }
 
+body.light .button { color: #fff; }
+
 .button:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
 .biochemistry .button { background: var(--accent-2); color: #11152f; }
+body.light .biochemistry .button { color: #fff; }
 
 a:focus-visible,
 button:focus-visible,
@@ -397,8 +584,9 @@ input:focus-visible {
   background: rgba(52,211,153,.07);
 }
 
-/* ---------- FAVOURITES ---------- */
-.favorites { margin-bottom: 42px; }
+/* ---------- FAVOURITES / RECENT ---------- */
+.favorites,
+.recents { margin-bottom: 42px; }
 
 .fav-list {
   display: grid;
@@ -416,6 +604,11 @@ input:focus-visible {
   background: rgba(251,191,36,.06);
 }
 
+.recents .fav-tile {
+  border-color: rgba(56,189,248,.28);
+  background: rgba(56,189,248,.06);
+}
+
 .fav-year {
   flex: 0 0 auto;
   padding: 3px 9px;
@@ -425,6 +618,14 @@ input:focus-visible {
   font-size: 11.5px;
   font-weight: bold;
 }
+
+.recents .fav-year {
+  background: rgba(56,189,248,.16);
+  color: #7dd3fc;
+}
+
+body.light .fav-year { color: #92400e; }
+body.light .recents .fav-year { color: #075985; }
 
 .fav-title {
   flex: 1 1 auto;
@@ -446,6 +647,8 @@ input:focus-visible {
   font-weight: bold;
   transition: .2s;
 }
+
+body.light .fav-open { color: #0369a1; }
 
 .fav-open:hover { background: rgba(56,189,248,.3); }
 
@@ -481,6 +684,12 @@ input:focus-visible {
   text-align: center;
 }
 
+body.light .ai-section {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(16,185,129,.08), transparent 22rem),
+    var(--card);
+}
+
 .ai-section h2 {
   font-size: clamp(22px, 3.6vw, 28px);
   margin-bottom: 6px;
@@ -505,7 +714,7 @@ input:focus-visible {
   padding: 12px 15px;
   border: 1px solid var(--border);
   border-radius: 11px;
-  background: #0d1626;
+  background: var(--card);
   color: var(--text);
   font: inherit;
   font-size: 15px;
@@ -513,7 +722,7 @@ input:focus-visible {
   transition: border-color .2s, box-shadow .2s;
 }
 
-.ai-form input::placeholder { color: #5b6b83; }
+.ai-form input::placeholder { color: var(--muted); }
 
 .ai-form input:focus {
   border-color: var(--success);
@@ -550,7 +759,7 @@ input:focus-visible {
   padding: 7px 14px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(21,30,48,.8);
+  background: var(--card);
   color: var(--muted);
   font: inherit;
   font-size: 12.5px;
@@ -578,7 +787,7 @@ input:focus-visible {
   border: 1px solid var(--border);
   border-radius: 999px;
   color: var(--muted);
-  background: rgba(21,30,48,.72);
+  background: var(--card);
   text-decoration: none;
   font-size: 13px;
   font-weight: bold;
@@ -591,14 +800,14 @@ input:focus-visible {
   background: var(--hover);
 }
 
-/* ---------- CONTACT & NEW SECTION ---------- */
+/* ---------- CONTACT ---------- */
 .contact {
   margin-top: 10px;
   padding: 30px 22px;
   text-align: center;
   border: 1px solid var(--border);
   border-radius: 20px;
-  background: rgba(21,30,48,.86);
+  background: var(--card);
 }
 
 .contact h2 {
@@ -636,6 +845,8 @@ input:focus-visible {
   background: rgba(56, 189, 248, 0.05);
 }
 
+body.light .made-by { background: rgba(2,132,199,.05); }
+
 .made-by p {
   max-width: 620px;
   margin: 0 auto;
@@ -645,12 +856,14 @@ input:focus-visible {
   line-height: 1.7;
 }
 
+body.light .made-by p { color: #075985; }
+
 .made-by p span {
   color: var(--accent);
   font-weight: bold;
 }
 
-/* ---------- PREMIUM FOOTER / COPYRIGHT ---------- */
+/* ---------- PREMIUM FOOTER ---------- */
 .site-footer {
   margin-top: 44px;
   padding: 26px 0 10px;
@@ -691,7 +904,7 @@ input:focus-visible {
   padding: 12px 24px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(21,30,48,.72);
+  background: var(--card);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   color: var(--muted);
@@ -702,7 +915,7 @@ input:focus-visible {
 
 .copyright-panel:hover {
   border-color: rgba(56,189,248,.4);
-  background: rgba(27,41,64,.85);
+  background: var(--hover);
 }
 
 .copyright-panel .copy-symbol {
@@ -738,10 +951,47 @@ input:focus-visible {
   letter-spacing: .8px;
 }
 
+body.light .copyright-panel .copy-year { color: #0369a1; }
+
 .footer-note {
-  color: #6b7c94;
+  color: var(--muted);
   font-size: 12px;
   letter-spacing: .4px;
+  opacity: .8;
+}
+
+/* ---------- SCROLL TOP BUTTON ---------- */
+#scrollTop {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 90;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--accent);
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 12px 30px var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+  transition: opacity .3s, transform .3s, background .2s;
+}
+
+#scrollTop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#scrollTop:hover {
+  background: var(--hover);
+  transform: translateY(-3px);
 }
 
 /* ---------- AUTH GATE ---------- */
@@ -759,6 +1009,13 @@ input:focus-visible {
     #070c17;
 }
 
+body.light .auth-gate {
+  background:
+    radial-gradient(circle at 15% 8%, rgba(2,132,199,.1), transparent 28rem),
+    radial-gradient(circle at 85% 85%, rgba(99,102,241,.08), transparent 26rem),
+    #eef3f9;
+}
+
 .auth-card {
   width: min(100%, 440px);
   padding: 30px 26px 24px;
@@ -766,6 +1023,11 @@ input:focus-visible {
   border-radius: 22px;
   background: linear-gradient(160deg, rgba(21,30,48,.99), rgba(13,22,38,.99));
   box-shadow: 0 30px 70px rgba(0,0,0,.5);
+}
+
+body.light .auth-card {
+  background: linear-gradient(160deg, #ffffff, #f7fafd);
+  box-shadow: 0 30px 70px rgba(15,23,42,.12);
 }
 
 .auth-brand { text-align: center; }
@@ -788,8 +1050,10 @@ input:focus-visible {
   margin: 22px 0 18px;
   border: 1px solid var(--border);
   border-radius: 13px;
-  background: #0e1728;
+  background: rgba(14,23,40,.85);
 }
+
+body.light .auth-tabs { background: #eef3f9; }
 
 .auth-tab {
   padding: 9px 10px;
@@ -808,6 +1072,8 @@ input:focus-visible {
   background: var(--accent);
   color: #082032;
 }
+
+body.light .auth-tab.is-active { color: #fff; }
 
 .auth-form { display: block; }
 
@@ -828,7 +1094,7 @@ input:focus-visible {
   padding: 12px 13px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #0d1626;
+  background: rgba(13,22,38,.85);
   color: var(--text);
   font: inherit;
   font-size: 15px;
@@ -836,7 +1102,9 @@ input:focus-visible {
   transition: border-color .2s, box-shadow .2s;
 }
 
-.field input::placeholder { color: #5b6b83; }
+body.light .field input { background: #fff; }
+
+.field input::placeholder { color: var(--muted); opacity: .7; }
 
 .field input:focus {
   border-color: var(--accent);
@@ -857,6 +1125,8 @@ input:focus-visible {
   cursor: pointer;
   transition: filter .2s, transform .2s, opacity .2s;
 }
+
+body.light .auth-submit { color: #fff; }
 
 .auth-submit:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
@@ -890,10 +1160,39 @@ input:focus-visible {
   margin-top: 18px;
   padding-top: 14px;
   border-top: 1px solid var(--border);
-  color: #6b7c94;
+  color: var(--muted);
   font-size: 12px;
   text-align: center;
+  opacity: .85;
 }
+
+/* ---------- AUTH CONTACT (added to sign-in card) ---------- */
+.auth-contact {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.auth-contact-label {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.auth-contact .telegram-button {
+  min-width: 0;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  border-radius: 10px;
+}
+
+.auth-contact .telegram-icon { width: 20px; height: 20px; flex: 0 0 20px; }
 
 /* ---------- TOAST ---------- */
 .toast {
@@ -905,7 +1204,7 @@ input:focus-visible {
   padding: 11px 20px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: #16233a;
+  background: var(--card);
   color: var(--text);
   font-size: 14px;
   font-weight: bold;
@@ -932,6 +1231,12 @@ input:focus-visible {
   place-items: center;
   padding: 20px;
   overflow-y: auto;
+  animation: fadeIn .2s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-card {
@@ -942,6 +1247,11 @@ input:focus-visible {
   background: linear-gradient(160deg, #131c2e, #0d1626);
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
   text-align: center;
+}
+
+body.light .modal-card {
+  background: linear-gradient(160deg, #fff, #f7fafd);
+  box-shadow: 0 30px 80px rgba(15,23,42,.2);
 }
 
 .modal-icon {
@@ -960,6 +1270,7 @@ input:focus-visible {
   font-size: 14px;
   margin-bottom: 16px;
   line-height: 1.6;
+  white-space: pre-wrap;
 }
 
 .modal-card .field { text-align: left; }
@@ -997,9 +1308,9 @@ input:focus-visible {
   color: #06202f;
 }
 
-.modal-actions button.primary:hover {
-  filter: brightness(1.08);
-}
+body.light .modal-actions button.primary { color: #fff; }
+
+.modal-actions button.primary:hover { filter: brightness(1.08); }
 
 .modal-actions button.danger {
   border: 0;
@@ -1007,9 +1318,7 @@ input:focus-visible {
   color: #450a0a;
 }
 
-.modal-actions button.danger:hover {
-  filter: brightness(1.08);
-}
+.modal-actions button.danger:hover { filter: brightness(1.08); }
 
 .modal-error {
   margin-bottom: 12px;
@@ -1044,6 +1353,10 @@ input:focus-visible {
   border-radius: 20px;
   background: linear-gradient(160deg, #131c2e, #0d1626);
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
+}
+
+body.light .admin-panel {
+  background: linear-gradient(160deg, #ffffff, #f7fafd);
 }
 
 .admin-header {
@@ -1094,6 +1407,8 @@ input:focus-visible {
   background: rgba(13,22,38,.65);
 }
 
+body.light .admin-stat { background: #f1f5f9; }
+
 .admin-stat .num {
   font-size: 26px;
   font-weight: bold;
@@ -1115,7 +1430,7 @@ input:focus-visible {
   margin-bottom: 16px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #0d1626;
+  background: rgba(13,22,38,.85);
   color: var(--text);
   font: inherit;
   font-size: 14px;
@@ -1123,7 +1438,9 @@ input:focus-visible {
   transition: border-color .2s;
 }
 
-.admin-search::placeholder { color: #5b6b83; }
+body.light .admin-search { background: #fff; }
+
+.admin-search::placeholder { color: var(--muted); opacity: .7; }
 
 .admin-search:focus {
   border-color: var(--accent);
@@ -1144,7 +1461,7 @@ input:focus-visible {
   align-items: flex-start;
 }
 
-.admin-lock-banner strong { color: #fff; display: block; margin-bottom: 3px; }
+.admin-lock-banner strong { color: var(--text); display: block; margin-bottom: 3px; }
 
 .admin-table {
   display: grid;
@@ -1163,8 +1480,10 @@ input:focus-visible {
   transition: background .15s, border-color .15s;
 }
 
+body.light .admin-row { background: #f8fafc; }
+
 .admin-row:hover {
-  background: rgba(27,41,64,.85);
+  background: var(--hover);
   border-color: #33415a;
 }
 
@@ -1177,6 +1496,7 @@ input:focus-visible {
 
 .admin-row .col.name { font-weight: bold; color: var(--text); }
 .admin-row .col.email { color: #7dd3fc; }
+body.light .admin-row .col.email { color: #0369a1; }
 .admin-row .col.date { color: var(--muted); font-size: 12.5px; }
 .admin-row .col.dismiss-wrap { text-align: right; }
 
@@ -1208,7 +1528,7 @@ input:focus-visible {
 
 .dismiss-btn:hover {
   background: rgba(248,113,113,.25);
-  color: #fff;
+  color: var(--text);
   border-color: var(--danger);
 }
 
@@ -1226,6 +1546,8 @@ input:focus-visible {
   color: var(--muted);
   font-size: 14px;
 }
+
+body.light .admin-empty { background: #f8fafc; }
 
 .admin-footer {
   display: flex;
@@ -1272,7 +1594,7 @@ input:focus-visible {
 
 .admin-btn.danger:hover {
   background: rgba(248,113,113,.15);
-  color: #fff;
+  color: var(--text);
   border-color: var(--danger);
 }
 
@@ -1283,7 +1605,7 @@ input:focus-visible {
 
 .admin-btn.gold:hover {
   background: rgba(251,191,36,.15);
-  color: #fff;
+  color: var(--text);
   border-color: var(--gold);
 }
 
@@ -1302,11 +1624,15 @@ input:focus-visible {
   color: #6ee7b7;
 }
 
+body.light .admin-status.cloud { color: #047857; }
+
 .admin-status.local {
   border: 1px solid rgba(251,191,36,.4);
   background: rgba(251,191,36,.08);
   color: #fcd34d;
 }
+
+body.light .admin-status.local { color: #b45309; }
 
 /* ---------- MOBILE ---------- */
 @media (max-width: 560px) {
@@ -1314,6 +1640,7 @@ input:focus-visible {
   .user-chip { max-width: 120px; font-size: 11.5px; }
   .ghost-btn,
   .admin-access-btn { padding: 6px 10px; font-size: 11px; }
+  .session-timer { display: none; }
 }
 
 @media (max-width: 480px) {
@@ -1342,6 +1669,9 @@ input:focus-visible {
 </head>
 
 <body class="locked">
+
+<!-- Reading progress bar -->
+<div id="readProgress" aria-hidden="true"></div>
 
 <!-- ============================================================
      AUTH GATE
@@ -1397,6 +1727,17 @@ input:focus-visible {
     <p class="auth-foot">
       Create an account to access all exam sets instantly.
     </p>
+
+    <!-- CONTACT (added to sign-in card) -->
+    <div class="auth-contact">
+      <span class="auth-contact-label">Need help? Contact me</span>
+      <a class="telegram-button" href="https://t.me/blsng10" target="_blank" rel="noopener noreferrer" aria-label="Contact on Telegram at blsng10">
+        <svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"/>
+        </svg>
+        <span>@blsng10</span>
+      </a>
+    </div>
   </div>
 </div>
 
@@ -1409,6 +1750,8 @@ input:focus-visible {
     <div class="topbar-inner">
       <a class="brand-link" href="#top">Medical <span>exam practice</span> page</a>
       <div class="topbar-actions">
+        <span class="session-timer" id="sessionTimer" title="Your revision session time">00:00</span>
+        <button type="button" class="theme-toggle" id="themeToggle" title="Toggle light / dark theme" aria-label="Toggle theme">🌙</button>
         <button type="button" class="admin-access-btn" id="adminAccessBtn" hidden>🛡 Admin Panel</button>
         <button type="button" class="ghost-btn" id="favShortcut">
           ★ Favourites <b id="favCountTop">0</b>
@@ -1428,11 +1771,12 @@ input:focus-visible {
         A focused revision space for medical students, with organized
         pathology, biochemistry and physiology exam practice sets.
       </p>
+      <div class="study-tip" id="studyTip">💡 Tip: Review a topic, then take the exam set twice.</div>
     </section>
 
     <section class="ai-section" aria-labelledby="ai-heading">
       <h2 id="ai-heading">✦ Ask ChatGPT</h2>
-      <p>Stuck on a concept? Search it or ask a full question — ChatGPT opens in a new tab.</p>
+      <p>Stuck on a concept? Search it or ask a full question — ChatGPT opens in a new tab. <em>(Press <strong>Ctrl + K</strong>)</em></p>
       <form class="ai-form" id="aiForm">
         <input type="text" id="aiInput" placeholder="e.g. Explain the Frank–Starling mechanism simply" aria-label="Ask ChatGPT a question">
         <button type="submit">Ask ChatGPT</button>
@@ -1448,6 +1792,7 @@ input:focus-visible {
 
     <nav class="quick-nav" aria-label="Exam sections">
       <a href="#favorites">★ Favourites</a>
+      <a href="#recents">↻ Recent</a>
       <a href="#pathology">Pathology</a>
       <a href="#biochemistry">Biochemistry</a>
       <a href="#physiology">Physiology</a>
@@ -1461,6 +1806,19 @@ input:focus-visible {
       </div>
       <div class="fav-list" id="favList"></div>
     </section>
+
+    <section class="exam-section recents" id="recents" aria-labelledby="recents-heading" hidden>
+      <div class="section-heading">
+        <h2 id="recents-heading">↻ Recently Viewed</h2>
+        <p>Jump back to where you left off.</p>
+      </div>
+      <div class="fav-list" id="recentList"></div>
+    </section>
+
+    <!-- LIVE SEARCH FILTER -->
+    <div class="filter-bar">
+      <input type="text" id="examFilter" placeholder="Filter exam sets by year or topic… (press /)" autocomplete="off" aria-label="Filter exam sets">
+    </div>
 
     <section class="exam-section" id="pathology" aria-labelledby="pathology-heading">
       <div class="section-heading">
@@ -1585,17 +1943,17 @@ input:focus-visible {
     </section>
 
     <!-- ============================================================
-         PREMIUM COPYRIGHT PANEL
+         PREMIUM COPYRIGHT PANEL — REVERTED TO "Tsega Tech"
          ============================================================ -->
     <footer class="site-footer" role="contentinfo">
       <div class="footer-brand">
         <span class="dot"></span>
-        Medical <span>exam practice</span> page
+        Tsega<span>Tech</span>
       </div>
 
       <div class="copyright-panel" aria-label="Copyright information">
         <span class="copy-symbol" aria-hidden="true">©</span>
-        <span class="copy-name">Medical <em>exam practice</em> page</span>
+        <span class="copy-name"><em>Tsega</em>Tech</span>
         <span class="copy-sep" aria-hidden="true"></span>
         <span class="copy-year">2026</span>
         <span class="copy-sep" aria-hidden="true"></span>
@@ -1607,6 +1965,9 @@ input:focus-visible {
 
   </main>
 </div>
+
+<!-- Scroll-to-top button -->
+<button type="button" id="scrollTop" aria-label="Scroll to top">↑</button>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -1672,7 +2033,7 @@ input:focus-visible {
 </div>
 
 <!-- ============================================================
-     FIREBASE SDK (compat build — works with plain <script> tags)
+     FIREBASE SDK (compat build)
      ============================================================ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -1685,7 +2046,7 @@ input:focus-visible {
   'use strict';
 
   /* ============================================================
-     🔥 YOUR FIREBASE CONFIG (already filled in)
+     🔥 FIREBASE CONFIG
      ============================================================ */
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyA6TEgSthctXGxbHUrLzs70A-AdQygCw38",
@@ -1940,17 +2301,128 @@ input:focus-visible {
     try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
   }
 
-  /* ---------- FAVOURITES ---------- */
+  /* ---------- FAVOURITES / RECENTS ---------- */
   function favKey(email) { return 'tt_favs_' + (email || 'guest'); }
   function getFavsFor(email) {
     try { return JSON.parse(localStorage.getItem(favKey(email)) || '[]'); }
     catch (e) { return []; }
   }
 
+  function recentsKey(email) { return 'tt_recents_' + (email || 'guest'); }
+  function getRecentsFor(email) {
+    try { return JSON.parse(localStorage.getItem(recentsKey(email)) || '[]'); }
+    catch (e) { return []; }
+  }
+  function pushRecent(email, examId) {
+    if (!examId) return;
+    try {
+      let list = getRecentsFor(email).filter((x) => x !== examId);
+      list.unshift(examId);
+      list = list.slice(0, 4);
+      localStorage.setItem(recentsKey(email), JSON.stringify(list));
+    } catch (e) {}
+  }
+
   /* ---------- OWNER ---------- */
   function isOwnerEmail(email) {
     return String(email || '').toLowerCase() === OWNER_EMAIL.toLowerCase();
   }
+
+  /* ============================================================
+     THEME
+     ============================================================ */
+  const THEME_KEY = 'tt_theme';
+  function applyTheme(theme) {
+    const light = theme === 'light';
+    document.body.classList.toggle('light', light);
+    const btn = $('themeToggle');
+    if (btn) btn.textContent = light ? '☀️' : '🌙';
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', light ? '#f4f7fb' : '#0b1120');
+  }
+  function initTheme() {
+    let saved = 'dark';
+    try { saved = localStorage.getItem(THEME_KEY) || 'dark'; } catch (e) {}
+    applyTheme(saved);
+    const btn = $('themeToggle');
+    if (btn) {
+      btn.addEventListener('click', () => {
+        const next = document.body.classList.contains('light') ? 'dark' : 'light';
+        try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+        applyTheme(next);
+        toast(next === 'light' ? '☀️ Light mode on' : '🌙 Dark mode on');
+      });
+    }
+  }
+  initTheme();
+
+  /* ============================================================
+     READING PROGRESS + SCROLL TOP
+     ============================================================ */
+  function initScrollUI() {
+    const bar = $('readProgress');
+    const topBtn = $('scrollTop');
+    const update = () => {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+      if (bar) bar.style.width = pct + '%';
+      if (topBtn) topBtn.classList.toggle('is-visible', h.scrollTop > 380);
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+    if (topBtn) {
+      topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    }
+  }
+  initScrollUI();
+
+  /* ============================================================
+     SESSION TIMER
+     ============================================================ */
+  let sessionStart = Date.now();
+  let sessionTimerId = null;
+  function startSessionTimer() {
+    sessionStart = Date.now();
+    const el = $('sessionTimer');
+    if (!el) return;
+    clearInterval(sessionTimerId);
+    const tick = () => {
+      const secs = Math.floor((Date.now() - sessionStart) / 1000);
+      const m = String(Math.floor(secs / 60)).padStart(2, '0');
+      const s = String(secs % 60).padStart(2, '0');
+      el.textContent = m + ':' + s;
+    };
+    tick();
+    sessionTimerId = setInterval(tick, 1000);
+  }
+
+  /* ============================================================
+     STUDY TIPS
+     ============================================================ */
+  const STUDY_TIPS = [
+    '💡 Tip: Review a topic, then take the exam set twice.',
+    '💡 Tip: Study mode first, exam mode second — for real recall.',
+    '💡 Tip: Flag any question you hesitated on, review them last.',
+    '💡 Tip: Space your revision — short daily sessions beat long ones.',
+    '💡 Tip: Explain the concept out loud — if you stumble, revisit it.',
+    '💡 Tip: Star your weak sets so you can find them fast.'
+  ];
+  function rotateTip() {
+    const el = $('studyTip');
+    if (!el) return;
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % STUDY_TIPS.length;
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.textContent = STUDY_TIPS[i];
+        el.style.opacity = '1';
+      }, 260);
+    }, 7000);
+  }
+  rotateTip();
 
   /* ============================================================
      AUTH TABS
@@ -2052,6 +2524,7 @@ input:focus-visible {
     clearSession();
     $('userChip').textContent = '';
     $('adminAccessBtn').hidden = true;
+    clearInterval(sessionTimerId);
     showScreen('auth');
     showAuthView('signin');
     toast('Signed out.');
@@ -2066,7 +2539,10 @@ input:focus-visible {
     updateWelcomeText(account.name);
     initStars();
     renderFavorites();
+    renderRecents();
     updateAdminButtonVisibility(account.email);
+    startSessionTimer();
+    trackCardClicks(account.email);
   }
 
   function renderUserChip(name, email) {
@@ -2090,6 +2566,22 @@ input:focus-visible {
     const btn = $('adminAccessBtn');
     if (!btn) return;
     btn.hidden = !isOwnerEmail(email);
+  }
+
+  /* ============================================================
+     TRACK CARD CLICKS -> RECENTS
+     ============================================================ */
+  let clicksTracked = false;
+  function trackCardClicks(email) {
+    if (clicksTracked) return;
+    clicksTracked = true;
+    document.querySelectorAll('.exam-card a.button').forEach((link) => {
+      link.addEventListener('click', () => {
+        const card = link.closest('.exam-card');
+        if (!card) return;
+        pushRecent(email, card.dataset.exam);
+      });
+    });
   }
 
   /* ============================================================
@@ -2148,6 +2640,49 @@ input:focus-visible {
     renderFavorites();
   }
 
+  function buildTile(id, kind) {
+    const card = document.querySelector('.exam-card[data-exam="' + id + '"]');
+    if (!card) return null;
+    const titleEl = card.querySelector('h3');
+    const yearEl = card.querySelector('.exam-year');
+    const linkEl = card.querySelector('a.button');
+    const title = titleEl ? titleEl.textContent.trim() : '';
+    const year = yearEl ? yearEl.textContent.trim() : '';
+    const href = linkEl ? linkEl.getAttribute('href') : '#';
+
+    const tile = document.createElement('div');
+    tile.className = 'fav-tile';
+
+    const yearSpan = document.createElement('span');
+    yearSpan.className = 'fav-year';
+    yearSpan.textContent = year;
+
+    const titleSpan = document.createElement('span');
+    titleSpan.className = 'fav-title';
+    titleSpan.textContent = title;
+    titleSpan.title = title;
+
+    const openLink = document.createElement('a');
+    openLink.className = 'fav-open';
+    openLink.href = href;
+    openLink.textContent = 'Open';
+
+    tile.appendChild(yearSpan);
+    tile.appendChild(titleSpan);
+    tile.appendChild(openLink);
+
+    if (kind === 'fav') {
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'fav-remove';
+      removeBtn.textContent = '×';
+      removeBtn.setAttribute('aria-label', 'Remove from favourites');
+      removeBtn.addEventListener('click', () => toggleFav(id));
+      tile.appendChild(removeBtn);
+    }
+    return tile;
+  }
+
   function renderFavorites() {
     const favs = getFavs();
     const section = $('favorites');
@@ -2162,46 +2697,28 @@ input:focus-visible {
     }
     if (section) section.hidden = false;
     if (list) list.innerHTML = '';
-
     favs.forEach((id) => {
-      const card = document.querySelector('.exam-card[data-exam="' + id + '"]');
-      if (!card) return;
-      const titleEl = card.querySelector('h3');
-      const yearEl = card.querySelector('.exam-year');
-      const linkEl = card.querySelector('a.button');
-      const title = titleEl ? titleEl.textContent.trim() : '';
-      const year = yearEl ? yearEl.textContent.trim() : '';
-      const href = linkEl ? linkEl.getAttribute('href') : '#';
+      const tile = buildTile(id, 'fav');
+      if (tile) list.appendChild(tile);
+    });
+  }
 
-      const tile = document.createElement('div');
-      tile.className = 'fav-tile';
-
-      const yearSpan = document.createElement('span');
-      yearSpan.className = 'fav-year';
-      yearSpan.textContent = year;
-
-      const titleSpan = document.createElement('span');
-      titleSpan.className = 'fav-title';
-      titleSpan.textContent = title;
-      titleSpan.title = title;
-
-      const openLink = document.createElement('a');
-      openLink.className = 'fav-open';
-      openLink.href = href;
-      openLink.textContent = 'Open';
-
-      const removeBtn = document.createElement('button');
-      removeBtn.type = 'button';
-      removeBtn.className = 'fav-remove';
-      removeBtn.textContent = '×';
-      removeBtn.setAttribute('aria-label', 'Remove from favourites');
-      removeBtn.addEventListener('click', () => toggleFav(id));
-
-      tile.appendChild(yearSpan);
-      tile.appendChild(titleSpan);
-      tile.appendChild(openLink);
-      tile.appendChild(removeBtn);
-      list.appendChild(tile);
+  function renderRecents() {
+    const s = getSession();
+    const recents = s ? getRecentsFor(s.email) : [];
+    const section = $('recents');
+    const list = $('recentList');
+    if (!section || !list) return;
+    if (!recents.length) {
+      section.hidden = true;
+      list.innerHTML = '';
+      return;
+    }
+    section.hidden = false;
+    list.innerHTML = '';
+    recents.forEach((id) => {
+      const tile = buildTile(id, 'recent');
+      if (tile) list.appendChild(tile);
     });
   }
 
@@ -2212,6 +2729,60 @@ input:focus-visible {
     }
     $('favorites').hidden = false;
     $('favorites').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  /* ============================================================
+     LIVE EXAM FILTER
+     ============================================================ */
+  function initExamFilter() {
+    const input = $('examFilter');
+    if (!input) return;
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      document.querySelectorAll('.exam-section').forEach((section) => {
+        if (section.id === 'favorites' || section.id === 'recents') return;
+        const cards = section.querySelectorAll('.exam-card');
+        let visible = 0;
+        cards.forEach((card) => {
+          const text = (card.textContent || '').toLowerCase();
+          const show = !q || text.includes(q);
+          card.style.display = show ? '' : 'none';
+          if (show) visible += 1;
+        });
+        const oldEmpty = section.querySelector('.filter-empty');
+        if (oldEmpty) oldEmpty.remove();
+        const list = section.querySelector('.exam-list');
+        if (list && visible === 0 && q) {
+          const empty = document.createElement('div');
+          empty.className = 'filter-empty';
+          empty.textContent = 'No exam sets match "' + input.value.trim() + '" in this section.';
+          list.appendChild(empty);
+        }
+      });
+    });
+  }
+  initExamFilter();
+
+  /* ============================================================
+     KEYBOARD SHORTCUTS
+     ============================================================ */
+  document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    const inField = tag === 'input' || tag === 'textarea';
+
+    // "/" — focus the exam filter
+    if (e.key === '/' && !inField && !$('app').hidden) {
+      e.preventDefault();
+      const f = $('examFilter');
+      if (f) { f.focus(); f.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    }
+
+    // Ctrl+K — focus the ChatGPT input
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K') && !$('app').hidden) {
+      e.preventDefault();
+      const ai = $('aiInput');
+      if (ai) { ai.focus(); ai.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    }
   });
 
   /* ============================================================
