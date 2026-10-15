@@ -25,6 +25,7 @@ body{
 [data-theme="dark"] body{background:var(--bg)}
 button{font:inherit}
 .app{max-width:1180px;margin:0 auto;padding:18px}
+/* topbar now only has brand and title */
 .topbar{
   position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--card) 92%,transparent);
   backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:18px;
@@ -47,15 +48,10 @@ button{font:inherit}
 }
 .mode button{border:0;background:transparent;padding:9px 12px;color:var(--muted);font-weight:800;cursor:pointer}
 .mode button.active{background:var(--primary);color:#fff}
-.dashboard{display:grid;grid-template-columns:1fr 320px;gap:16px}
-@media(max-width:900px){.dashboard{grid-template-columns:1fr}}
+/* dashboard is now a single column */
+.dashboard{display:block}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.stats{padding:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}}
-.stat{padding:12px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--card) 92%,var(--primary) 8%)}
-.stat b{display:block;font-size:20px}.stat span{font-size:11px;color:var(--muted);font-weight:700}
-.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
-.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));width:0;transition:.3s}
+/* question card holds everything */
 .question-card{padding:22px}
 .qhead{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:15px}
 .qnum{font-size:13px;color:var(--muted);font-weight:800}
@@ -83,20 +79,61 @@ button{font:inherit}
 .explain-good{color:var(--good)} .explain-bad{color:var(--bad)}
 .actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px}
 .actions .left,.actions .right{display:flex;gap:8px;flex-wrap:wrap}
-.palette{padding:15px;position:sticky;top:92px}
-.palette h3{margin:0 0 10px;font-size:15px}
-.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+/* bottom panel wrapper for stats and palette */
+.bottom-panel{
+  margin-top:24px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:flex-start;
+  justify-content:space-between;
+}
+.stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  flex:2 1 360px;
+}
+.stat{
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:color-mix(in srgb,var(--card) 92%,var(--primary) 8%);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:1 1 auto;
+  min-width:110px;
+}
+.stat b{font-size:16px}
+.stat span{font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}
+.progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px;width:60px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));width:0;transition:.3s}
+/* mini controls inside bottom panel */
+.mini-controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.mini-controls .btn{padding:5px 9px;font-size:12px;border-radius:9px}
+.palette-mini{
+  flex:1 1 240px;
+  background:color-mix(in srgb,var(--card) 96%,var(--primary) 4%);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+}
+.palette-mini h3{margin:0 0 8px;font-size:13px;font-weight:700;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}
 .pill{
   aspect-ratio:1;border:1px solid var(--line);background:var(--card);color:var(--text);
-  border-radius:9px;font-weight:800;cursor:pointer
+  border-radius:7px;font-weight:800;font-size:12px;cursor:pointer
 }
 .pill.current{outline:3px solid color-mix(in srgb,var(--primary) 25%,transparent);border-color:var(--primary)}
 .pill.answered{background:color-mix(in srgb,var(--primary) 12%,var(--card))}
-.pill.flagged{box-shadow:inset 0 -4px 0 #e3a31a}
+.pill.flagged{box-shadow:inset 0 -3px 0 #e3a31a}
 .pill.correct{background:color-mix(in srgb,var(--good) 18%,var(--card));border-color:var(--good)}
 .pill.wrong{background:color-mix(in srgb,var(--bad) 14%,var(--card));border-color:var(--bad)}
-.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:11px;color:var(--muted)}
-.legend span{display:flex;gap:4px;align-items:center}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;font-size:10px;color:var(--muted)}
+.legend span{display:flex;gap:3px;align-items:center}.dot{width:8px;height:8px;border-radius:50%;background:var(--line)}
 .timer{font-variant-numeric:tabular-nums;font-weight:900;color:var(--primary)}
 .timer.warn{color:#d17d00}.timer.danger{color:var(--bad)}
 .result{
@@ -105,11 +142,20 @@ button{font:inherit}
 .result.show{display:block}
 .result h2{margin:0 0 5px}.result p{margin:4px 0;opacity:.92}
 .result .big{font-size:38px;font-weight:950}
-.notice{padding:12px 14px;border-radius:12px;background:color-mix(in srgb,#e3a31a 10%,var(--card));border:1px solid color-mix(in srgb,#e3a31a 35%,var(--line));font-size:13px;color:var(--muted);margin-top:12px}
+.notice{padding:10px 14px;border-radius:12px;background:color-mix(in srgb,#e3a31a 10%,var(--card));border:1px solid color-mix(in srgb,#e3a31a 35%,var(--line));font-size:12px;color:var(--muted);margin-top:12px}
 .footer{padding:20px;text-align:center;color:var(--muted);font-size:12px}
 .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:#111827;color:#fff;padding:11px 14px;border-radius:11px;font-weight:700;z-index:50;transition:.2s}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 kbd{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-radius:5px;font-size:11px}
+/* responsive */
+@media(max-width:650px){
+  .bottom-panel{flex-direction:column}
+  .stats{width:100%}
+  .palette-mini{width:100%}
+  .stat{min-width:80px;padding:6px 8px}
+  .stat b{font-size:14px}
+  .grid{grid-template-columns:repeat(8,1fr)}
+}
 </style>
 </head>
 <body>
@@ -120,21 +166,6 @@ kbd{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-rad
         <div class="title">Biochemistry 2015</div>
         <div class="subtitle">Interactive MCQ • 24 questions • Study & online Exam modes</div>
       </div>
-      <div class="controls">
-        <div class="mode" aria-label="Quiz mode">
-          <button id="studyMode">Study</button>
-          <button id="examMode">Exam</button>
-        </div>
-        <button class="btn" id="themeBtn" title="Toggle theme">◐ Theme</button>
-        <button class="btn" id="fullBtn" title="Fullscreen">⛶ Fullscreen</button>
-        <button class="btn" id="resetBtn">↻ Reset</button>
-      </div>
-    </div>
-    <div class="stats">
-      <div class="stat"><span>Progress</span><b id="progressText">0 / 24</b><div class="progress"><i id="progressBar"></i></div></div>
-      <div class="stat"><span>Score</span><b id="scoreText">—</b></div>
-      <div class="stat"><span>Flagged</span><b id="flagText">0</b></div>
-      <div class="stat"><span>Time</span><b class="timer" id="timer">—</b></div>
     </div>
   </header>
 
@@ -165,19 +196,38 @@ kbd{background:var(--bg);border:1px solid var(--line);padding:1px 5px;border-rad
           <button class="btn primary" id="submitBtn">Submit exam</button>
         </div>
       </div>
-    </main>
 
-    <aside class="card palette">
-      <h3>Question navigator</h3>
-      <div class="grid" id="palette"></div>
-      <div class="legend">
-        <span><i class="dot" style="background:var(--primary)"></i>Answered</span>
-        <span><i class="dot" style="background:#e3a31a"></i>Flagged</span>
-        <span><i class="dot" style="background:var(--good)"></i>Correct</span>
-        <span><i class="dot" style="background:var(--bad)"></i>Wrong</span>
+      <!-- ===== MOVED: session overview + palette now at bottom of each question ===== -->
+      <div class="bottom-panel">
+        <div class="stats">
+          <div class="stat"><span>Progress</span><b id="progressText">0 / 24</b><div class="progress"><i id="progressBar"></i></div></div>
+          <div class="stat"><span>Score</span><b id="scoreText">—</b></div>
+          <div class="stat"><span>Flagged</span><b id="flagText">0</b></div>
+          <div class="stat"><span>Time</span><b class="timer" id="timer">—</b></div>
+        </div>
+        <div class="mini-controls">
+          <div class="mode" aria-label="Quiz mode">
+            <button id="studyMode">Study</button>
+            <button id="examMode">Exam</button>
+          </div>
+          <button class="btn" id="themeBtn" title="Toggle theme">◐</button>
+          <button class="btn" id="fullBtn" title="Fullscreen">⛶</button>
+          <button class="btn" id="resetBtn">↻</button>
+        </div>
+        <div class="palette-mini">
+          <h3>Navigator</h3>
+          <div class="grid" id="palette"></div>
+          <div class="legend">
+            <span><i class="dot" style="background:var(--primary)"></i>Ans</span>
+            <span><i class="dot" style="background:#e3a31a"></i>Flag</span>
+            <span><i class="dot" style="background:var(--good)"></i>✓</span>
+            <span><i class="dot" style="background:var(--bad)"></i>✗</span>
+          </div>
+        </div>
       </div>
-      <div class="notice">Autosave is on. Your current answers, flags and mode are kept on this device.</div>
-    </aside>
+      <!-- ===== end moved panel ===== -->
+
+    </main>
   </div>
   <div class="footer">Keyboard: <kbd>←</kbd>/<kbd>→</kbd> navigate • <kbd>1–4</kbd> select an option • <kbd>F</kbd> flag</div>
 </div>
@@ -217,7 +267,7 @@ function toast(msg){
 }
 function setTheme(){
   document.documentElement.dataset.theme=state.theme==="dark"?"dark":"light";
-  $("themeBtn").textContent=state.theme==="dark"?"☀ Light":"◐ Theme";
+  $("themeBtn").textContent=state.theme==="dark"?"☀":"◐";
 }
 function formatTime(sec){
   sec=Math.max(0,Math.floor(sec)); const m=Math.floor(sec/60),s=sec%60;
@@ -371,4 +421,4 @@ document.addEventListener("keydown",e=>{
 load(); setTheme(); render(); setInterval(tick,1000);
 </script>
 </body>
-</html>
+      </html>
