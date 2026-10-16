@@ -1166,7 +1166,7 @@ body.light .auth-submit { color: #fff; }
   opacity: .85;
 }
 
-/* ---------- AUTH CONTACT ---------- */
+/* ---------- AUTH CONTACT (added to sign-in card) ---------- */
 .auth-contact {
   margin-top: 16px;
   padding-top: 16px;
@@ -1728,7 +1728,7 @@ body.light .admin-status.local { color: #b45309; }
       Create an account to access all exam sets instantly.
     </p>
 
-    <!-- CONTACT -->
+    <!-- CONTACT (added to sign-in card) -->
     <div class="auth-contact">
       <span class="auth-contact-label">Need help? Contact me</span>
       <a class="telegram-button" href="https://t.me/blsng10" target="_blank" rel="noopener noreferrer" aria-label="Contact on Telegram at blsng10">
@@ -1942,6 +1942,9 @@ body.light .admin-status.local { color: #b45309; }
       <p>This page is made by <span>Tsega</span> to help medical students practice for free.</p>
     </section>
 
+    <!-- ============================================================
+         PREMIUM COPYRIGHT PANEL — REVERTED TO "Tsega Tech"
+         ============================================================ -->
     <footer class="site-footer" role="contentinfo">
       <div class="footer-brand">
         <span class="dot"></span>
@@ -2043,60 +2046,23 @@ body.light .admin-status.local { color: #b45309; }
   'use strict';
 
   /* ============================================================
-     🔊 CLICK SOUND ENGINE
+     🔥 FIREBASE CONFIG
      ============================================================ */
-  const SoundFX = (() => {
-    let ctx = null;
-    function ensureCtx() {
-      if (!ctx) {
-        try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-      }
-      if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
-      return ctx;
-    }
-    function playClick() {
-      const ac = ensureCtx();
-      if (!ac) return;
-      const now = ac.currentTime;
-      const osc = ac.createOscillator();
-      const gain = ac.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(880, now);
-      osc.frequency.exponentialRampToValueAtTime(420, now + 0.09);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.008);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
-      osc.connect(gain);
-      gain.connect(ac.destination);
-      osc.start(now);
-      osc.stop(now + 0.13);
-      // subtle high tick for clarity
-      const osc2 = ac.createOscillator();
-      const g2 = ac.createGain();
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(1560, now);
-      g2.gain.setValueAtTime(0.0001, now);
-      g2.gain.exponentialRampToValueAtTime(0.06, now + 0.004);
-      g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
-      osc2.connect(g2);
-      g2.connect(ac.destination);
-      osc2.start(now);
-      osc2.stop(now + 0.07);
-    }
-    function attach() {
-      document.querySelectorAll('.exam-card a.button').forEach((btn) => {
-        if (btn.dataset.soundBound === '1') return;
-        btn.dataset.soundBound = '1';
-        btn.addEventListener('click', () => { playClick(); });
-      });
-    }
-    return { playClick, attach, ensureCtx };
-  })();
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyA6TEgSthctXGxbHUrLzs70A-AdQygCw38",
+    authDomain: "tsegatechs.firebaseapp.com",
+    projectId: "tsegatechs",
+    storageBucket: "tsegatechs.firebasestorage.app",
+    messagingSenderId: "468147835051",
+    appId: "1:468147835051:web:790741d11ae70168aba7ee",
+    measurementId: "G-8HF8L2GYKS"
+  };
 
-  // Unlock audio on first user interaction (browsers require gesture)
-  ['pointerdown', 'keydown', 'touchstart'].forEach((evt) => {
-    window.addEventListener(evt, () => SoundFX.ensureCtx(), { once: true, passive: true });
-  });
+  /* ============================================================
+     ⚙️ OWNER CONFIGURATION
+     ============================================================ */
+  const OWNER_EMAIL = 'tsegagelana8@gmail.com';
+  const ADMIN_PASSWORD = 'Tse06@ge';
 
   /* ============================================================
      DOM HELPERS
@@ -2577,7 +2543,6 @@ body.light .admin-status.local { color: #b45309; }
     updateAdminButtonVisibility(account.email);
     startSessionTimer();
     trackCardClicks(account.email);
-    SoundFX.attach();
   }
 
   function renderUserChip(name, email) {
@@ -3223,9 +3188,6 @@ body.light .admin-status.local { color: #b45309; }
     showScreen('auth');
     showAuthView('signin');
   }
-
-  // Attach click sound to exam start buttons on initial load as well
-  SoundFX.attach();
 
 })();
 </script>
