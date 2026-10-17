@@ -471,60 +471,6 @@ body.light .study-tip { color: #0369a1; }
 
 .biochemistry .exam-card:hover { border-color: var(--accent-2); }
 
-.exam-card.is-locked {
-  opacity: .62;
-  pointer-events: none;
-  filter: grayscale(.35);
-}
-
-.exam-card.is-locked::before {
-  content: "🔒 Locked by admin";
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
-  background: rgba(11,17,32,.55);
-  color: #fcd34d;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: .5px;
-  z-index: 4;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-
-.exam-card .lock-btn {
-  position: absolute;
-  top: 14px;
-  right: 58px;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--card);
-  color: #94a3b8;
-  font-size: 15px;
-  cursor: pointer;
-  transition: .2s;
-  z-index: 5;
-}
-
-.exam-card .lock-btn:hover {
-  color: var(--gold);
-  border-color: rgba(251,191,36,.6);
-  transform: scale(1.08);
-}
-
-.exam-card .lock-btn.is-locked {
-  color: var(--danger);
-  border-color: rgba(248,113,113,.55);
-  background: rgba(248,113,113,.1);
-}
-
 .exam-year {
   color: var(--accent);
   font-size: 12px;
@@ -540,7 +486,7 @@ body.light .biochemistry .exam-year { color: var(--accent-2); }
 .exam-card h3 {
   font-size: 23px;
   margin-bottom: 14px;
-  padding-right: 80px;
+  padding-right: 44px;
 }
 
 .question-count {
@@ -1826,7 +1772,7 @@ body.light .admin-status.local { color: #b45309; }
   transform: rotate(25deg) translateX(30%);
 }
 
-/* ---------- NEW: SCROLL REVEAL ANIMATION ---------- */
+/* ---------- SCROLL REVEAL ---------- */
 .reveal {
   opacity: 0;
   transform: translateY(26px);
@@ -1836,38 +1782,6 @@ body.light .admin-status.local { color: #b45309; }
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* ---------- NEW: ADMIN LOCK TOGGLE INSIDE CARDS ---------- */
-.exam-card .lock-btn {
-  position: absolute;
-  top: 14px;
-  right: 58px;
-  width: 34px;
-  height: 34px;
-  padding: 0;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--card);
-  color: #94a3b8;
-  font-size: 15px;
-  cursor: pointer;
-  transition: .2s;
-  z-index: 5;
-}
-
-.exam-card .lock-btn:hover {
-  color: var(--gold);
-  border-color: rgba(251,191,36,.6);
-  transform: scale(1.08);
-}
-
-.exam-card .lock-btn.is-locked {
-  color: var(--danger);
-  border-color: rgba(248,113,113,.55);
-  background: rgba(248,113,113,.1);
 }
 
 /* ---------- MOBILE ---------- */
@@ -2365,7 +2279,6 @@ body.light .admin-status.local { color: #b45309; }
   const USERS_KEY = 'tt_users';
   const SESSION_KEY = 'tt_session';
   const LOCK_KEY = 'tt_site_locked';
-  const LOCKED_EXAMS_KEY = 'tt_locked_exams';
   const USERS_COLLECTION = 'users';
   const PRESENCE_COLLECTION = 'presence';
 
@@ -2501,42 +2414,6 @@ body.light .admin-status.local { color: #b45309; }
   }
   function setSiteLocked(v) {
     try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
-  }
-
-  /* ---------- INDIVIDUAL EXAM LOCKS ---------- */
-  function getLockedExams() {
-    try {
-      const raw = localStorage.getItem(LOCKED_EXAMS_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch (e) { return []; }
-  }
-  function setLockedExams(list) {
-    try { localStorage.setItem(LOCKED_EXAMS_KEY, JSON.stringify(list)); } catch (e) {}
-  }
-  function isExamLocked(examId) {
-    return getLockedExams().includes(examId);
-  }
-  function toggleExamLock(examId) {
-    const list = getLockedExams();
-    const idx = list.indexOf(examId);
-    if (idx === -1) { list.push(examId); toast('🔒 Exam set locked'); }
-    else { list.splice(idx, 1); toast('🔓 Exam set unlocked'); }
-    setLockedExams(list);
-    applyExamLockStates();
-  }
-  function applyExamLockStates() {
-    document.querySelectorAll('.exam-card').forEach((card) => {
-      const id = card.dataset.exam;
-      if (!id) return;
-      const locked = isExamLocked(id);
-      card.classList.toggle('is-locked', locked);
-      const lockBtn = card.querySelector('.lock-btn');
-      if (lockBtn) {
-        lockBtn.textContent = locked ? '🔒' : '🔓';
-        lockBtn.classList.toggle('is-locked', locked);
-        lockBtn.title = locked ? 'Unlock this exam set' : 'Lock this exam set';
-      }
-    });
   }
 
   /* ---------- FAVOURITES / RECENTS ---------- */
@@ -2804,8 +2681,6 @@ body.light .admin-status.local { color: #b45309; }
     startSessionTimer();
     trackCardClicks(account.email);
     startHeartbeat(account.email);
-    applyExamLockStates();
-    initCardLockButtons();
     initCardAiButtons();
   }
 
@@ -2840,40 +2715,12 @@ body.light .admin-status.local { color: #b45309; }
     if (clicksTracked) return;
     clicksTracked = true;
     document.querySelectorAll('.exam-card a.button').forEach((link) => {
-      link.addEventListener('click', (e) => {
+      link.addEventListener('click', () => {
         const card = link.closest('.exam-card');
         if (!card) return;
-        if (card.classList.contains('is-locked')) {
-          e.preventDefault();
-          toast('🔒 This exam set is currently locked by the admin.');
-          return;
-        }
         pushRecent(email, card.dataset.exam);
       });
     });
-  }
-
-  /* ============================================================
-     CARD LOCK BUTTONS (Admin only)
-     ============================================================ */
-  function initCardLockButtons() {
-    const s = getSession();
-    if (!s || !isOwnerEmail(s.email)) return;
-    document.querySelectorAll('.exam-card').forEach((card) => {
-      if (card.querySelector('.lock-btn')) return;
-      const id = card.dataset.exam;
-      if (!id) return;
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'lock-btn';
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleExamLock(id);
-      });
-      card.appendChild(btn);
-    });
-    applyExamLockStates();
   }
 
   /* ============================================================
@@ -2954,9 +2801,6 @@ body.light .admin-status.local { color: #b45309; }
     openLink.className = 'fav-open';
     openLink.href = href;
     openLink.textContent = 'Open';
-    openLink.addEventListener('click', (e) => {
-      if (isExamLocked(id)) { e.preventDefault(); toast('🔒 This exam set is locked.'); }
-    });
     tile.appendChild(yearSpan);
     tile.appendChild(titleSpan);
     tile.appendChild(openLink);
