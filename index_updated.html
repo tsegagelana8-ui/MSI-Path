@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#0b1120">
 <meta name="description" content="Medical exam practice website for pathology, biochemistry and physiology revision.">
 <title>Medical Exam Practice</title>
-
 <style>
 :root {
   --bg: #0b1120;
@@ -1634,6 +1633,124 @@ body.light .admin-status.cloud { color: #047857; }
 
 body.light .admin-status.local { color: #b45309; }
 
+/* ---------- NEW: WELCOME STICKER (modern, animated) ---------- */
+.welcome-sticker-new {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-right: 14px;
+  vertical-align: middle;
+  font-size: 36px;
+  background: linear-gradient(145deg, rgba(56,189,248,.25), rgba(129,140,248,.18));
+  border: 1px solid rgba(56,189,248,.35);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(56,189,248,.18), inset 0 1px 0 rgba(255,255,255,.12);
+  animation: floatSticker 3.2s ease-in-out infinite;
+  transition: box-shadow .3s, transform .3s;
+  transform-origin: center;
+}
+
+.welcome-sticker-new:hover {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: 0 12px 32px rgba(56,189,248,.3);
+}
+
+@keyframes floatSticker {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-8px) rotate(3deg); }
+  60% { transform: translateY(-3px) rotate(-2deg); }
+  80% { transform: translateY(-6px) rotate(1deg); }
+}
+
+/* ---------- NEW: ONLINE / LAST SEEN BADGES ---------- */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.status-dot.online {
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+.status-dot.offline {
+  background: #64748b;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(0.8); }
+}
+
+.last-seen-text {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+.admin-row .col.status-col {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+}
+
+.admin-row .col.status-col.online-text {
+  color: #34d399;
+  font-weight: bold;
+}
+
+.admin-row .col.status-col.offline-text {
+  color: var(--muted);
+}
+
+/* update admin row grid to accommodate status column */
+.admin-row {
+  grid-template-columns: 1.2fr 1.6fr 0.8fr 0.9fr auto;
+}
+
+/* ---------- NEW: MODERN DETAILS ---------- */
+.glass-effect {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255,255,255,.03) 45%,
+    rgba(255,255,255,.06) 50%,
+    transparent 55%
+  );
+  transform: rotate(25deg);
+  transition: transform .6s ease;
+  pointer-events: none;
+}
+
+.card-shine:hover::after {
+  transform: rotate(25deg) translateX(30%);
+}
+
 /* ---------- MOBILE ---------- */
 @media (max-width: 560px) {
   .topbar-inner { width: min(100% - 22px, 1080px); padding: 8px 0; }
@@ -1664,10 +1781,16 @@ body.light .admin-status.local { color: #b45309; }
   .copyright-panel { padding: 10px 16px; gap: 6px 10px; font-size: 12.5px; }
   .copyright-panel .copy-sep { display: none; }
   .footer-brand { font-size: 16px; }
+
+  .welcome-sticker-new {
+    width: 48px;
+    height: 48px;
+    font-size: 26px;
+    border-radius: 14px;
+  }
 }
 </style>
 </head>
-
 <body class="locked">
 
 <!-- Reading progress bar -->
@@ -1678,7 +1801,6 @@ body.light .admin-status.local { color: #b45309; }
      ============================================================ -->
 <div class="auth-gate" id="authGate">
   <div class="auth-card">
-
     <div class="auth-brand">
       <div class="welcome-tag" style="margin-bottom:14px;">Medical Exam Practice</div>
       <h1>Medical <span>exam practice</span> page</h1>
@@ -1745,7 +1867,6 @@ body.light .admin-status.local { color: #b45309; }
      APP
      ============================================================ -->
 <div id="app" hidden>
-
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand-link" href="#top">Medical <span>exam practice</span> page</a>
@@ -1763,10 +1884,11 @@ body.light .admin-status.local { color: #b45309; }
   </header>
 
   <main class="container" id="top">
-
-    <section class="welcome" aria-labelledby="welcome-title">
+    <section class="welcome card-shine" aria-labelledby="welcome-title">
       <div class="welcome-tag">Medical Exam Practice</div>
-      <h1 id="welcome-title"><span class="welcome-sticker">📘</span> Welcome to <span>Medical Exam Practice page Website</span></h1>
+      <h1 id="welcome-title">
+        <span class="welcome-sticker-new">📘</span> Welcome to <span>Medical Exam Practice page Website</span>
+      </h1>
       <p id="welcomeText">
         A focused revision space for medical students, with organized
         pathology, biochemistry and physiology exam practice sets.
@@ -1826,7 +1948,7 @@ body.light .admin-status.local { color: #b45309; }
         <p>Choose an exam set to begin practicing.</p>
       </div>
       <div class="exam-list">
-        <article class="exam-card" data-exam="path-2015">
+        <article class="exam-card card-shine" data-exam="path-2015">
           <div class="exam-year">2015</div>
           <h3>2015 Pathology</h3>
           <div class="question-count">30 Questions</div>
@@ -1834,7 +1956,7 @@ body.light .admin-status.local { color: #b45309; }
           <p class="contents">General pathology, skin pathology, bone and joint disorders, and related pathology topics.</p>
           <a class="button" href="/2015-images.html">Start Pathology</a>
         </article>
-        <article class="exam-card" data-exam="path-2016">
+        <article class="exam-card card-shine" data-exam="path-2016">
           <div class="exam-year">2016</div>
           <h3>2016 Pathology</h3>
           <div class="question-count">22 Questions</div>
@@ -1842,7 +1964,7 @@ body.light .admin-status.local { color: #b45309; }
           <p class="contents">Skin pathology, bone and joint disorders, neuromuscular diseases, and peripheral nerve disorders.</p>
           <a class="button" href="/2016.html">Start Pathology</a>
         </article>
-        <article class="exam-card" data-exam="path-2017">
+        <article class="exam-card card-shine" data-exam="path-2017">
           <div class="exam-year">2017</div>
           <h3>2017 Pathology</h3>
           <div class="question-count">41 Questions</div>
@@ -1859,7 +1981,7 @@ body.light .admin-status.local { color: #b45309; }
         <p>Practice the 2015–2018 biochemistry question sets.</p>
       </div>
       <div class="exam-list">
-        <article class="exam-card" data-exam="bio-2015">
+        <article class="exam-card card-shine" data-exam="bio-2015">
           <div class="exam-year">2015</div>
           <h3>2015 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
@@ -1867,7 +1989,7 @@ body.light .admin-status.local { color: #b45309; }
           <p class="contents">Study mode, exam mode, answer explanations, question flagging, progress tracking, and review tools.</p>
           <a class="button" href="/Biochemistry2015.html">Start Biochemistry</a>
         </article>
-        <article class="exam-card" data-exam="bio-2016">
+        <article class="exam-card card-shine" data-exam="bio-2016">
           <div class="exam-year">2016</div>
           <h3>2016 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
@@ -1875,7 +1997,7 @@ body.light .admin-status.local { color: #b45309; }
           <p class="contents">Practice questions with immediate study feedback or complete the full set in exam mode before reviewing answers.</p>
           <a class="button" href="/Biochemistry2016.html">Start Biochemistry</a>
         </article>
-        <article class="exam-card" data-exam="bio-2017">
+        <article class="exam-card card-shine" data-exam="bio-2017">
           <div class="exam-year">2017</div>
           <h3>2017 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
@@ -1883,7 +2005,7 @@ body.light .admin-status.local { color: #b45309; }
           <p class="contents">Detailed option explanations, progress tracking, flagged questions, and a focused dark exam interface.</p>
           <a class="button" href="/Biochemistry2017.html">Start Biochemistry</a>
         </article>
-        <article class="exam-card" data-exam="bio-2018">
+        <article class="exam-card card-shine" data-exam="bio-2018">
           <div class="exam-year">2018</div>
           <h3>2018 Biochemistry</h3>
           <div class="question-count">Exam Practice</div>
@@ -1900,7 +2022,7 @@ body.light .admin-status.local { color: #b45309; }
         <p>Practice the 2016–2018 physiology question sets.</p>
       </div>
       <div class="exam-list">
-        <article class="exam-card" data-exam="phys-2016">
+        <article class="exam-card card-shine" data-exam="phys-2016">
           <div class="exam-year">2016</div>
           <h3>2016 Physiology</h3>
           <div class="question-count">31 MCQs</div>
@@ -1908,7 +2030,7 @@ body.light .admin-status.local { color: #b45309; }
           <p class="contents">Musculoskeletal physiology MCQs with study mode, exam mode, explanations, flagging and progress tracking.</p>
           <a class="button" href="/Physiology2016.html">Start Physiology</a>
         </article>
-        <article class="exam-card" data-exam="phys-2017">
+        <article class="exam-card card-shine" data-exam="phys-2017">
           <div class="exam-year">2017</div>
           <h3>2017 Physiology</h3>
           <div class="question-count">10 MCQs</div>
@@ -1916,7 +2038,7 @@ body.light .admin-status.local { color: #b45309; }
           <p class="contents">Musculoskeletal physiology questions with immediate feedback in study mode and hidden answers in exam mode.</p>
           <a class="button" href="/Physiology2017.html">Start Physiology</a>
         </article>
-        <article class="exam-card" data-exam="phys-2018">
+        <article class="exam-card card-shine" data-exam="phys-2018">
           <div class="exam-year">2018</div>
           <h3>2018 Physiology</h3>
           <div class="question-count">12 MCQs</div>
@@ -1943,7 +2065,7 @@ body.light .admin-status.local { color: #b45309; }
     </section>
 
     <!-- ============================================================
-         PREMIUM COPYRIGHT PANEL — REVERTED TO "Tsega Tech"
+         PREMIUM COPYRIGHT PANEL
          ============================================================ -->
     <footer class="site-footer" role="contentinfo">
       <div class="footer-brand">
@@ -1962,7 +2084,6 @@ body.light .admin-status.local { color: #b45309; }
 
       <p class="footer-note">Build for focused revision. Verify clinically.</p>
     </footer>
-
   </main>
 </div>
 
@@ -1976,7 +2097,6 @@ body.light .admin-status.local { color: #b45309; }
      ============================================================ -->
 <div class="admin-overlay" id="adminOverlay" hidden>
   <div class="admin-panel">
-
     <div class="admin-header">
       <h2>🛡 Admin <span>Control Room</span></h2>
       <span class="admin-badge" id="adminBadge">Owner Access</span>
@@ -2028,7 +2148,6 @@ body.light .admin-status.local { color: #b45309; }
         <button type="button" class="admin-btn" id="adminClose">Close</button>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -2147,6 +2266,7 @@ body.light .admin-status.local { color: #b45309; }
   const SESSION_KEY = 'tt_session';
   const LOCK_KEY = 'tt_site_locked';
   const USERS_COLLECTION = 'users';
+  const PRESENCE_COLLECTION = 'presence';
 
   function getLocalUsers() {
     try {
@@ -2170,7 +2290,9 @@ body.light .admin-status.local { color: #b45309; }
             name: d.name || '',
             email: d.email || '',
             password: d.password || '',
-            createdAt: d.createdAt || 0
+            createdAt: d.createdAt || 0,
+            lastSeen: d.lastSeen || 0,
+            online: d.online || false
           });
         });
         return list;
@@ -2193,6 +2315,8 @@ body.light .admin-status.local { color: #b45309; }
             email: d.email || '',
             password: d.password || '',
             createdAt: d.createdAt || 0,
+            lastSeen: d.lastSeen || 0,
+            online: d.online || false,
             _docId: snap.docs[0].id
           };
         }
@@ -2209,7 +2333,9 @@ body.light .admin-status.local { color: #b45309; }
       name: user.name,
       email: String(user.email || '').toLowerCase(),
       password: user.password,
-      createdAt: user.createdAt || Date.now()
+      createdAt: user.createdAt || Date.now(),
+      lastSeen: Date.now(),
+      online: true
     };
 
     const locals = getLocalUsers();
@@ -2234,6 +2360,7 @@ body.light .admin-status.local { color: #b45309; }
     if (cloudReady) {
       try {
         await db.collection(USERS_COLLECTION).doc(normalized).delete();
+        await db.collection(PRESENCE_COLLECTION).doc(normalized).delete();
       } catch (err) {
         console.warn('[TsegaTech] Cloud delete failed:', err);
       }
@@ -2447,6 +2574,64 @@ body.light .admin-status.local { color: #b45309; }
   });
 
   /* ============================================================
+     PRESENCE HEARTBEAT
+     ============================================================ */
+  let heartbeatInterval = null;
+
+  async function updatePresence(email, online) {
+    if (!cloudReady || !email) return;
+    try {
+      await db.collection(USERS_COLLECTION).doc(email).update({
+        lastSeen: Date.now(),
+        online: online
+      });
+    } catch (err) {
+      // silently ignore — may not be in cloud yet
+    }
+  }
+
+  function startHeartbeat(email) {
+    stopHeartbeat();
+    updatePresence(email, true);
+    heartbeatInterval = setInterval(() => {
+      updatePresence(email, true);
+    }, 30000); // every 30 seconds
+
+    // Handle page unload / visibility change
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', () => {
+      // Use sendBeacon-like approach for reliability
+      if (cloudReady && email) {
+        try {
+          db.collection(USERS_COLLECTION).doc(email).update({
+            online: false,
+            lastSeen: Date.now()
+          });
+        } catch (e) {}
+      }
+    });
+  }
+
+  function stopHeartbeat() {
+    if (heartbeatInterval) {
+      clearInterval(heartbeatInterval);
+      heartbeatInterval = null;
+    }
+  }
+
+  function handleVisibilityChange() {
+    const s = getSession();
+    if (!s) return;
+    if (document.visibilityState === 'hidden') {
+      updatePresence(s.email, false);
+      stopHeartbeat();
+    } else {
+      updatePresence(s.email, true);
+      startHeartbeat(s.email);
+    }
+  }
+
+  /* ============================================================
      SIGN UP
      ============================================================ */
   $('signupForm').addEventListener('submit', async (e) => {
@@ -2476,7 +2661,9 @@ body.light .admin-status.local { color: #b45309; }
       name: name,
       email: email,
       password: hashPassword(email, password),
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      lastSeen: Date.now(),
+      online: true
     };
     await addUser(user);
 
@@ -2513,6 +2700,10 @@ body.light .admin-status.local { color: #b45309; }
     $('signinForm').reset();
     const account = { name: user.name, email: user.email };
     setSession(account);
+
+    // Mark user as online
+    await updatePresence(email, true);
+
     startApp(account);
     toast('Welcome back, ' + user.name.split(' ')[0] + '!');
   });
@@ -2520,7 +2711,12 @@ body.light .admin-status.local { color: #b45309; }
   /* ============================================================
      LOG OUT
      ============================================================ */
-  $('logoutBtn').addEventListener('click', () => {
+  $('logoutBtn').addEventListener('click', async () => {
+    const s = getSession();
+    if (s) {
+      await updatePresence(s.email, false);
+      stopHeartbeat();
+    }
     clearSession();
     $('userChip').textContent = '';
     $('adminAccessBtn').hidden = true;
@@ -2543,6 +2739,7 @@ body.light .admin-status.local { color: #b45309; }
     updateAdminButtonVisibility(account.email);
     startSessionTimer();
     trackCardClicks(account.email);
+    startHeartbeat(account.email);
   }
 
   function renderUserChip(name, email) {
@@ -3066,6 +3263,19 @@ body.light .admin-status.local { color: #b45309; }
       && d1.getDate() === d2.getDate();
   }
 
+  function formatLastSeen(ts) {
+    if (!ts) return 'Never';
+    const diff = Date.now() - ts;
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return mins + 'm ago';
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return hrs + 'h ago';
+    const days = Math.floor(hrs / 24);
+    if (days < 7) return days + 'd ago';
+    return formatDate(ts);
+  }
+
   async function renderAdmin() {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) { closeAdmin(); return; }
@@ -3113,6 +3323,8 @@ body.light .admin-status.local { color: #b45309; }
     } else {
       filtered.forEach((u) => {
         const isMe = isOwnerEmail(u.email);
+        const isOnline = u.online === true;
+        const lastSeen = u.lastSeen || 0;
         const row = document.createElement('div');
         row.className = 'admin-row' + (isMe ? ' is-me' : '');
 
@@ -3124,6 +3336,16 @@ body.light .admin-status.local { color: #b45309; }
         emailCol.className = 'col email';
         emailCol.textContent = u.email || '';
         emailCol.title = u.email || '';
+
+        const statusCol = document.createElement('div');
+        statusCol.className = 'col status-col' + (isOnline ? ' online-text' : ' offline-text');
+        const dot = document.createElement('span');
+        dot.className = 'status-dot ' + (isOnline ? 'online' : 'offline');
+        statusCol.appendChild(dot);
+        const statusText = document.createElement('span');
+        statusText.textContent = isOnline ? 'Online' : formatLastSeen(lastSeen);
+        statusText.className = 'last-seen-text';
+        statusCol.appendChild(statusText);
 
         const dateCol = document.createElement('div');
         dateCol.className = 'col date';
@@ -3142,6 +3364,7 @@ body.light .admin-status.local { color: #b45309; }
         dismissCol.appendChild(btn);
         row.appendChild(nameCol);
         row.appendChild(emailCol);
+        row.appendChild(statusCol);
         row.appendChild(dateCol);
         row.appendChild(dismissCol);
         table.appendChild(row);
@@ -3189,8 +3412,29 @@ body.light .admin-status.local { color: #b45309; }
     showAuthView('signin');
   }
 
+  // Refresh presence on app visibility
+  document.addEventListener('visibilitychange', () => {
+    const s = getSession();
+    if (!s || !cloudReady) return;
+    if (document.visibilityState === 'visible') {
+      updatePresence(s.email, true);
+    }
+  });
+
+  // Cleanup on unload
+  window.addEventListener('beforeunload', () => {
+    const s = getSession();
+    if (s && cloudReady) {
+      try {
+        db.collection(USERS_COLLECTION).doc(s.email).update({
+          online: false,
+          lastSeen: Date.now()
+        });
+      } catch (e) {}
+    }
+  });
+
 })();
 </script>
-
 </body>
-  </html>
+</html>
