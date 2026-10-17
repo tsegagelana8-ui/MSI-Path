@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b1120">
 <meta name="description" content="Medical exam practice website for pathology, biochemistry and physiology revision.">
-<title>Medical Exam Practice</title>
+<title>Medical Exam Practice · Clinix</title>
 <style>
 :root {
   --bg: #0b1120;
@@ -21,9 +21,12 @@
   --gold: #fbbf24;
   --danger: #f87171;
   --shadow: rgba(0,0,0,.25);
+  --glass: rgba(21,30,48,.72);
+  --glass-border: rgba(56,189,248,.14);
+  --ease-out: cubic-bezier(.22,1,.36,1);
+  --ease-spring: cubic-bezier(.34,1.56,.64,1);
 }
 
-/* ---------- LIGHT THEME ---------- */
 body.light {
   --bg: #f4f7fb;
   --card: #ffffff;
@@ -37,6 +40,8 @@ body.light {
   --gold: #d97706;
   --danger: #dc2626;
   --shadow: rgba(15,23,42,.08);
+  --glass: rgba(255,255,255,.7);
+  --glass-border: rgba(2,132,199,.12);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -91,14 +96,14 @@ section[id] { scroll-margin-top: 84px; }
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(11,17,32,.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(11,17,32,.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   transition: background .3s;
 }
 
-body.light .topbar { background: rgba(244,247,251,.9); }
+body.light .topbar { background: rgba(244,247,251,.85); }
 
 .topbar-inner {
   width: min(100% - 32px, 1080px);
@@ -259,10 +264,16 @@ body.light .session-timer { background: #fff; }
   border-radius: 26px;
   background: linear-gradient(135deg, rgba(21,30,48,.98), rgba(12,37,59,.94));
   box-shadow: 0 20px 60px var(--shadow);
+  transition: transform .4s var(--ease-out), box-shadow .4s var(--ease-out);
 }
 
 body.light .welcome {
   background: linear-gradient(135deg, #ffffff, #eaf3fb);
+}
+
+.welcome:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 26px 70px var(--shadow);
 }
 
 .welcome::before {
@@ -274,6 +285,12 @@ body.light .welcome {
   background: rgba(56,189,248,.08);
   top: -90px;
   right: -70px;
+  animation: glowPulse 6s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); opacity: .8; }
+  50% { transform: scale(1.25); opacity: 1; }
 }
 
 .welcome-tag {
@@ -297,17 +314,34 @@ body.light .welcome-tag {
   color: #075985;
 }
 
-.welcome-sticker {
-  display: inline-block;
-  margin-right: 10px;
-  font-size: 1.05em;
+.welcome-sticker-new {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin-right: 14px;
   vertical-align: middle;
-  animation: bounce 2.6s ease-in-out infinite;
+  font-size: 36px;
+  background: linear-gradient(145deg, rgba(56,189,248,.25), rgba(129,140,248,.18));
+  border: 1px solid rgba(56,189,248,.35);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(56,189,248,.18), inset 0 1px 0 rgba(255,255,255,.12);
+  animation: floatSticker 3.2s ease-in-out infinite;
+  transition: box-shadow .3s, transform .3s;
+  transform-origin: center;
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+.welcome-sticker-new:hover {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: 0 12px 32px rgba(56,189,248,.3);
+}
+
+@keyframes floatSticker {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  30% { transform: translateY(-8px) rotate(3deg); }
+  60% { transform: translateY(-3px) rotate(-2deg); }
+  80% { transform: translateY(-6px) rotate(1deg); }
 }
 
 .welcome h1 {
@@ -338,6 +372,7 @@ body.light .welcome-tag {
   color: #7dd3fc;
   font-size: 13px;
   font-weight: bold;
+  transition: opacity .25s ease;
 }
 
 body.light .study-tip { color: #0369a1; }
@@ -424,7 +459,7 @@ body.light .study-tip { color: #0369a1; }
   border: 1px solid var(--border);
   border-radius: 18px;
   background: var(--card);
-  transition: transform .2s, border-color .2s, background .2s, box-shadow .2s;
+  transition: transform .3s var(--ease-out), border-color .25s, background .25s, box-shadow .3s var(--ease-out);
 }
 
 .exam-card:hover {
@@ -435,6 +470,60 @@ body.light .study-tip { color: #0369a1; }
 }
 
 .biochemistry .exam-card:hover { border-color: var(--accent-2); }
+
+.exam-card.is-locked {
+  opacity: .62;
+  pointer-events: none;
+  filter: grayscale(.35);
+}
+
+.exam-card.is-locked::before {
+  content: "🔒 Locked by admin";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: rgba(11,17,32,.55);
+  color: #fcd34d;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: .5px;
+  z-index: 4;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.exam-card .lock-btn {
+  position: absolute;
+  top: 14px;
+  right: 58px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card);
+  color: #94a3b8;
+  font-size: 15px;
+  cursor: pointer;
+  transition: .2s;
+  z-index: 5;
+}
+
+.exam-card .lock-btn:hover {
+  color: var(--gold);
+  border-color: rgba(251,191,36,.6);
+  transform: scale(1.08);
+}
+
+.exam-card .lock-btn.is-locked {
+  color: var(--danger);
+  border-color: rgba(248,113,113,.55);
+  background: rgba(248,113,113,.1);
+}
 
 .exam-year {
   color: var(--accent);
@@ -451,7 +540,7 @@ body.light .biochemistry .exam-year { color: var(--accent-2); }
 .exam-card h3 {
   font-size: 23px;
   margin-bottom: 14px;
-  padding-right: 44px;
+  padding-right: 80px;
 }
 
 .question-count {
@@ -508,6 +597,7 @@ body.light .biochemistry .question-count {
   color: #94a3b8;
   cursor: pointer;
   transition: transform .2s, color .2s, border-color .2s, background .2s;
+  z-index: 5;
 }
 
 .star-btn svg { width: 19px; height: 19px; fill: currentColor; }
@@ -546,12 +636,12 @@ body.light .biochemistry .question-count {
   text-decoration: none;
   font-size: 15px;
   font-weight: bold;
-  transition: filter .2s, transform .2s;
+  transition: filter .2s, transform .2s, box-shadow .2s;
 }
 
 body.light .button { color: #fff; }
 
-.button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.button:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(56,189,248,.25); }
 
 .biochemistry .button { background: var(--accent-2); color: #11152f; }
 body.light .biochemistry .button { color: #fff; }
@@ -601,12 +691,17 @@ input:focus-visible {
   border: 1px solid rgba(251,191,36,.28);
   border-radius: 14px;
   background: rgba(251,191,36,.06);
+  transition: transform .2s var(--ease-out), background .2s;
 }
+
+.fav-tile:hover { transform: translateY(-2px); background: rgba(251,191,36,.1); }
 
 .recents .fav-tile {
   border-color: rgba(56,189,248,.28);
   background: rgba(56,189,248,.06);
 }
+
+.recents .fav-tile:hover { background: rgba(56,189,248,.1); }
 
 .fav-year {
   flex: 0 0 auto;
@@ -681,7 +776,10 @@ body.light .fav-open { color: #0369a1; }
     radial-gradient(circle at 50% 0%, rgba(52,211,153,.09), transparent 22rem),
     rgba(15,26,42,.85);
   text-align: center;
+  transition: border-color .3s, box-shadow .3s;
 }
+
+.ai-section:hover { border-color: rgba(52,211,153,.5); box-shadow: 0 12px 40px rgba(52,211,153,.06); }
 
 body.light .ai-section {
   background:
@@ -797,6 +895,7 @@ body.light .ai-section {
   color: var(--text);
   border-color: var(--accent);
   background: var(--hover);
+  transform: translateY(-1px);
 }
 
 /* ---------- CONTACT ---------- */
@@ -807,7 +906,10 @@ body.light .ai-section {
   border: 1px solid var(--border);
   border-radius: 20px;
   background: var(--card);
+  transition: border-color .3s, box-shadow .3s;
 }
+
+.contact:hover { border-color: rgba(56,189,248,.35); box-shadow: 0 12px 36px var(--shadow); }
 
 .contact h2 {
   font-size: clamp(24px, 4vw, 30px);
@@ -828,39 +930,12 @@ body.light .ai-section {
   color: #fff;
   font-weight: bold;
   text-decoration: none;
-  transition: filter .2s, transform .2s;
+  transition: filter .2s, transform .2s, box-shadow .2s;
 }
 
-.telegram-button:hover { filter: brightness(1.08); transform: translateY(-2px); }
+.telegram-button:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(34,158,217,.3); }
 
 .telegram-icon { width: 23px; height: 23px; flex: 0 0 23px; }
-
-.made-by {
-  margin-top: 24px;
-  padding: 22px 18px;
-  text-align: center;
-  border: 1px solid rgba(56, 189, 248, 0.2);
-  border-radius: 20px;
-  background: rgba(56, 189, 248, 0.05);
-}
-
-body.light .made-by { background: rgba(2,132,199,.05); }
-
-.made-by p {
-  max-width: 620px;
-  margin: 0 auto;
-  color: #bae6fd;
-  font-size: clamp(15px, 2.5vw, 18px);
-  font-weight: 500;
-  line-height: 1.7;
-}
-
-body.light .made-by p { color: #075985; }
-
-.made-by p span {
-  color: var(--accent);
-  font-weight: bold;
-}
 
 /* ---------- PREMIUM FOOTER ---------- */
 .site-footer {
@@ -1022,6 +1097,12 @@ body.light .auth-gate {
   border-radius: 22px;
   background: linear-gradient(160deg, rgba(21,30,48,.99), rgba(13,22,38,.99));
   box-shadow: 0 30px 70px rgba(0,0,0,.5);
+  animation: cardIn .45s var(--ease-out);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 body.light .auth-card {
@@ -1165,7 +1246,6 @@ body.light .auth-submit { color: #fff; }
   opacity: .85;
 }
 
-/* ---------- AUTH CONTACT (added to sign-in card) ---------- */
 .auth-contact {
   margin-top: 16px;
   padding-top: 16px;
@@ -1246,6 +1326,7 @@ body.light .auth-submit { color: #fff; }
   background: linear-gradient(160deg, #131c2e, #0d1626);
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
   text-align: center;
+  animation: cardIn .35s var(--ease-spring);
 }
 
 body.light .modal-card {
@@ -1344,7 +1425,7 @@ body.light .modal-actions button.primary { color: #fff; }
 }
 
 .admin-panel {
-  width: min(100%, 900px);
+  width: min(100%, 940px);
   max-height: 90vh;
   overflow-y: auto;
   padding: 26px 24px 22px;
@@ -1352,6 +1433,7 @@ body.light .modal-actions button.primary { color: #fff; }
   border-radius: 20px;
   background: linear-gradient(160deg, #131c2e, #0d1626);
   box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  animation: cardIn .35s var(--ease-out);
 }
 
 body.light .admin-panel {
@@ -1404,7 +1486,10 @@ body.light .admin-panel {
   border: 1px solid var(--border);
   border-radius: 12px;
   background: rgba(13,22,38,.65);
+  transition: border-color .25s, transform .25s;
 }
+
+.admin-stat:hover { border-color: rgba(56,189,248,.35); transform: translateY(-2px); }
 
 body.light .admin-stat { background: #f1f5f9; }
 
@@ -1469,7 +1554,7 @@ body.light .admin-search { background: #fff; }
 
 .admin-row {
   display: grid;
-  grid-template-columns: 1.4fr 1.8fr 1fr auto;
+  grid-template-columns: 1.2fr 1.6fr 0.8fr 0.9fr auto;
   gap: 10px;
   align-items: center;
   padding: 12px 14px;
@@ -1633,7 +1718,7 @@ body.light .admin-status.cloud { color: #047857; }
 
 body.light .admin-status.local { color: #b45309; }
 
-/* ---------- NEW: WELCOME STICKER (modern, animated) ---------- */
+/* ---------- NEW: WELCOME STICKER ---------- */
 .welcome-sticker-new {
   display: inline-flex;
   align-items: center;
@@ -1664,7 +1749,7 @@ body.light .admin-status.local { color: #b45309; }
   80% { transform: translateY(-6px) rotate(1deg); }
 }
 
-/* ---------- NEW: ONLINE / LAST SEEN BADGES ---------- */
+/* ---------- STATUS DOTS ---------- */
 .status-dot {
   display: inline-block;
   width: 8px;
@@ -1712,17 +1797,7 @@ body.light .admin-status.local { color: #b45309; }
   color: var(--muted);
 }
 
-/* update admin row grid to accommodate status column */
-.admin-row {
-  grid-template-columns: 1.2fr 1.6fr 0.8fr 0.9fr auto;
-}
-
-/* ---------- NEW: MODERN DETAILS ---------- */
-.glass-effect {
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
+/* ---------- CARD SHINE EFFECT ---------- */
 .card-shine {
   position: relative;
   overflow: hidden;
@@ -1749,6 +1824,50 @@ body.light .admin-status.local { color: #b45309; }
 
 .card-shine:hover::after {
   transform: rotate(25deg) translateX(30%);
+}
+
+/* ---------- NEW: SCROLL REVEAL ANIMATION ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .65s var(--ease-out), transform .65s var(--ease-out);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- NEW: ADMIN LOCK TOGGLE INSIDE CARDS ---------- */
+.exam-card .lock-btn {
+  position: absolute;
+  top: 14px;
+  right: 58px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--card);
+  color: #94a3b8;
+  font-size: 15px;
+  cursor: pointer;
+  transition: .2s;
+  z-index: 5;
+}
+
+.exam-card .lock-btn:hover {
+  color: var(--gold);
+  border-color: rgba(251,191,36,.6);
+  transform: scale(1.08);
+}
+
+.exam-card .lock-btn.is-locked {
+  color: var(--danger);
+  border-color: rgba(248,113,113,.55);
+  background: rgba(248,113,113,.1);
 }
 
 /* ---------- MOBILE ---------- */
@@ -1850,7 +1969,6 @@ body.light .admin-status.local { color: #b45309; }
       Create an account to access all exam sets instantly.
     </p>
 
-    <!-- CONTACT (added to sign-in card) -->
     <div class="auth-contact">
       <span class="auth-contact-label">Need help? Contact me</span>
       <a class="telegram-button" href="https://t.me/blsng10" target="_blank" rel="noopener noreferrer" aria-label="Contact on Telegram at blsng10">
@@ -1869,7 +1987,7 @@ body.light .admin-status.local { color: #b45309; }
 <div id="app" hidden>
   <header class="topbar">
     <div class="topbar-inner">
-      <a class="brand-link" href="#top">Medical <span>exam practice</span> page</a>
+      <a class="brand-link" href="#top">Clinix <span>exam practice</span></a>
       <div class="topbar-actions">
         <span class="session-timer" id="sessionTimer" title="Your revision session time">00:00</span>
         <button type="button" class="theme-toggle" id="themeToggle" title="Toggle light / dark theme" aria-label="Toggle theme">🌙</button>
@@ -1884,10 +2002,10 @@ body.light .admin-status.local { color: #b45309; }
   </header>
 
   <main class="container" id="top">
-    <section class="welcome card-shine" aria-labelledby="welcome-title">
+    <section class="welcome card-shine reveal" aria-labelledby="welcome-title">
       <div class="welcome-tag">Medical Exam Practice</div>
       <h1 id="welcome-title">
-        <span class="welcome-sticker-new">📘</span> Welcome to <span>Medical Exam Practice page Website</span>
+        <span class="welcome-sticker-new">📘</span> Welcome to <span>Clinix Exam Practice</span>
       </h1>
       <p id="welcomeText">
         A focused revision space for medical students, with organized
@@ -1896,7 +2014,7 @@ body.light .admin-status.local { color: #b45309; }
       <div class="study-tip" id="studyTip">💡 Tip: Review a topic, then take the exam set twice.</div>
     </section>
 
-    <section class="ai-section" aria-labelledby="ai-heading">
+    <section class="ai-section reveal" aria-labelledby="ai-heading">
       <h2 id="ai-heading">✦ Ask ChatGPT</h2>
       <p>Stuck on a concept? Search it or ask a full question — ChatGPT opens in a new tab. <em>(Press <strong>Ctrl + K</strong>)</em></p>
       <form class="ai-form" id="aiForm">
@@ -1912,7 +2030,7 @@ body.light .admin-status.local { color: #b45309; }
       </div>
     </section>
 
-    <nav class="quick-nav" aria-label="Exam sections">
+    <nav class="quick-nav reveal" aria-label="Exam sections">
       <a href="#favorites">★ Favourites</a>
       <a href="#recents">↻ Recent</a>
       <a href="#pathology">Pathology</a>
@@ -1921,7 +2039,7 @@ body.light .admin-status.local { color: #b45309; }
       <a href="#contact">Contact</a>
     </nav>
 
-    <section class="exam-section favorites" id="favorites" aria-labelledby="favorites-heading" hidden>
+    <section class="exam-section favorites reveal" id="favorites" aria-labelledby="favorites-heading" hidden>
       <div class="section-heading">
         <h2 id="favorites-heading">★ My Favourite Exam Sets</h2>
         <p>Your starred sets, saved on this device.</p>
@@ -1929,7 +2047,7 @@ body.light .admin-status.local { color: #b45309; }
       <div class="fav-list" id="favList"></div>
     </section>
 
-    <section class="exam-section recents" id="recents" aria-labelledby="recents-heading" hidden>
+    <section class="exam-section recents reveal" id="recents" aria-labelledby="recents-heading" hidden>
       <div class="section-heading">
         <h2 id="recents-heading">↻ Recently Viewed</h2>
         <p>Jump back to where you left off.</p>
@@ -1937,12 +2055,11 @@ body.light .admin-status.local { color: #b45309; }
       <div class="fav-list" id="recentList"></div>
     </section>
 
-    <!-- LIVE SEARCH FILTER -->
-    <div class="filter-bar">
+    <div class="filter-bar reveal">
       <input type="text" id="examFilter" placeholder="Filter exam sets by year or topic… (press /)" autocomplete="off" aria-label="Filter exam sets">
     </div>
 
-    <section class="exam-section" id="pathology" aria-labelledby="pathology-heading">
+    <section class="exam-section reveal" id="pathology" aria-labelledby="pathology-heading">
       <div class="section-heading">
         <h2 id="pathology-heading">Pathology Exam Sets</h2>
         <p>Choose an exam set to begin practicing.</p>
@@ -1975,7 +2092,7 @@ body.light .admin-status.local { color: #b45309; }
       </div>
     </section>
 
-    <section class="exam-section biochemistry" id="biochemistry" aria-labelledby="biochemistry-heading">
+    <section class="exam-section biochemistry reveal" id="biochemistry" aria-labelledby="biochemistry-heading">
       <div class="section-heading">
         <h2 id="biochemistry-heading">Biochemistry Exam Sets</h2>
         <p>Practice the 2015–2018 biochemistry question sets.</p>
@@ -2016,7 +2133,7 @@ body.light .admin-status.local { color: #b45309; }
       </div>
     </section>
 
-    <section class="exam-section biochemistry" id="physiology" aria-labelledby="physiology-heading">
+    <section class="exam-section biochemistry reveal" id="physiology" aria-labelledby="physiology-heading">
       <div class="section-heading">
         <h2 id="physiology-heading">Physiology Exam Sets</h2>
         <p>Practice the 2016–2018 physiology question sets.</p>
@@ -2049,7 +2166,7 @@ body.light .admin-status.local { color: #b45309; }
       </div>
     </section>
 
-    <section class="contact" id="contact" aria-labelledby="contact-heading">
+    <section class="contact reveal" id="contact" aria-labelledby="contact-heading">
       <h2 id="contact-heading">Contact Me</h2>
       <p>Questions or suggestions? Connect with me on Telegram.</p>
       <a class="telegram-button" href="https://t.me/blsng10" target="_blank" rel="noopener noreferrer" aria-label="Contact on Telegram at blsng10">
@@ -2060,22 +2177,15 @@ body.light .admin-status.local { color: #b45309; }
       </a>
     </section>
 
-    <section class="made-by" aria-label="About the creator">
-      <p>This page is made by <span>Tsega</span> to help medical students practice for free.</p>
-    </section>
-
-    <!-- ============================================================
-         PREMIUM COPYRIGHT PANEL
-         ============================================================ -->
     <footer class="site-footer" role="contentinfo">
       <div class="footer-brand">
         <span class="dot"></span>
-        Tsega<span>Tech</span>
+        Clinix<span>Tech</span>
       </div>
 
       <div class="copyright-panel" aria-label="Copyright information">
         <span class="copy-symbol" aria-hidden="true">©</span>
-        <span class="copy-name"><em>Tsega</em>Tech</span>
+        <span class="copy-name"><em>Clinix</em></span>
         <span class="copy-sep" aria-hidden="true"></span>
         <span class="copy-year">2026</span>
         <span class="copy-sep" aria-hidden="true"></span>
@@ -2152,7 +2262,7 @@ body.light .admin-status.local { color: #b45309; }
 </div>
 
 <!-- ============================================================
-     FIREBASE SDK (compat build)
+     FIREBASE SDK
      ============================================================ -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -2177,15 +2287,9 @@ body.light .admin-status.local { color: #b45309; }
     measurementId: "G-8HF8L2GYKS"
   };
 
-  /* ============================================================
-     ⚙️ OWNER CONFIGURATION
-     ============================================================ */
   const OWNER_EMAIL = 'tsegagelana8@gmail.com';
   const ADMIN_PASSWORD = 'Tse06@ge';
 
-  /* ============================================================
-     DOM HELPERS
-     ============================================================ */
   const $ = (id) => document.getElementById(id);
 
   function showScreen(which) {
@@ -2235,36 +2339,33 @@ body.light .admin-status.local { color: #b45309; }
     hashText(email.toLowerCase() + '|' + password + '|tsega-tech-salt');
 
   /* ============================================================
-     🔥 FIREBASE INITIALISATION
+     FIREBASE INIT
      ============================================================ */
   let db = null;
   let cloudReady = false;
 
   function initFirebase() {
     try {
-      if (!window.firebase) {
-        console.warn('[TsegaTech] Firebase SDK not loaded — using localStorage fallback.');
-        return false;
-      }
+      if (!window.firebase) { console.warn('[Clinix] Firebase SDK not loaded'); return false; }
       firebase.initializeApp(FIREBASE_CONFIG);
       db = firebase.firestore();
       cloudReady = true;
-      console.log('[TsegaTech] ✅ Firebase Firestore connected. Project:', FIREBASE_CONFIG.projectId);
+      console.log('[Clinix] Firebase Firestore connected.');
       return true;
     } catch (err) {
-      console.error('[TsegaTech] Firebase init failed:', err);
+      console.error('[Clinix] Firebase init failed:', err);
       return false;
     }
   }
-
   initFirebase();
 
   /* ============================================================
-     STORAGE (cloud-first, local fallback)
+     STORAGE
      ============================================================ */
   const USERS_KEY = 'tt_users';
   const SESSION_KEY = 'tt_session';
   const LOCK_KEY = 'tt_site_locked';
+  const LOCKED_EXAMS_KEY = 'tt_locked_exams';
   const USERS_COLLECTION = 'users';
   const PRESENCE_COLLECTION = 'presence';
 
@@ -2297,7 +2398,7 @@ body.light .admin-status.local { color: #b45309; }
         });
         return list;
       } catch (err) {
-        console.warn('[TsegaTech] Cloud read failed, falling back to local:', err);
+        console.warn('[Clinix] Cloud read failed:', err);
       }
     }
     return getLocalUsers();
@@ -2311,19 +2412,13 @@ body.light .admin-status.local { color: #b45309; }
         if (!snap.empty) {
           const d = snap.docs[0].data();
           return {
-            name: d.name || '',
-            email: d.email || '',
-            password: d.password || '',
-            createdAt: d.createdAt || 0,
-            lastSeen: d.lastSeen || 0,
-            online: d.online || false,
+            name: d.name || '', email: d.email || '', password: d.password || '',
+            createdAt: d.createdAt || 0, lastSeen: d.lastSeen || 0, online: d.online || false,
             _docId: snap.docs[0].id
           };
         }
         return null;
-      } catch (err) {
-        console.warn('[TsegaTech] Cloud lookup failed, falling back to local:', err);
-      }
+      } catch (err) { console.warn('[Clinix] Cloud lookup failed:', err); }
     }
     return getLocalUsers().find((u) => u.email === normalized) || null;
   }
@@ -2337,20 +2432,14 @@ body.light .admin-status.local { color: #b45309; }
       lastSeen: Date.now(),
       online: true
     };
-
     const locals = getLocalUsers();
     if (!locals.some((u) => u.email === normalized.email)) {
       locals.push(normalized);
       saveLocalUsers(locals);
     }
-
     if (cloudReady) {
-      try {
-        await db.collection(USERS_COLLECTION).doc(normalized.email).set(normalized);
-        console.log('[TsegaTech] ✅ User saved to Firestore:', normalized.email);
-      } catch (err) {
-        console.warn('[TsegaTech] Cloud write failed, kept locally:', err);
-      }
+      try { await db.collection(USERS_COLLECTION).doc(normalized.email).set(normalized); }
+      catch (err) { console.warn('[Clinix] Cloud write failed:', err); }
     }
   }
 
@@ -2361,16 +2450,13 @@ body.light .admin-status.local { color: #b45309; }
       try {
         await db.collection(USERS_COLLECTION).doc(normalized).delete();
         await db.collection(PRESENCE_COLLECTION).doc(normalized).delete();
-      } catch (err) {
-        console.warn('[TsegaTech] Cloud delete failed:', err);
-      }
+      } catch (err) { console.warn('[Clinix] Cloud delete failed:', err); }
     }
   }
 
   async function removeAllUsersExceptOwner() {
     const remainingLocals = getLocalUsers().filter((u) => isOwnerEmail(u.email));
     saveLocalUsers(remainingLocals);
-
     let deleted = 0;
     if (cloudReady) {
       try {
@@ -2378,16 +2464,10 @@ body.light .admin-status.local { color: #b45309; }
         const batch = db.batch();
         snap.forEach((doc) => {
           const d = doc.data();
-          if (!isOwnerEmail(d.email)) {
-            batch.delete(doc.ref);
-            deleted += 1;
-          }
+          if (!isOwnerEmail(d.email)) { batch.delete(doc.ref); deleted += 1; }
         });
         if (deleted > 0) await batch.commit();
-        console.log('[TsegaTech] Deleted', deleted, 'cloud users (owner kept).');
-      } catch (err) {
-        console.warn('[TsegaTech] Cloud bulk delete failed:', err);
-      }
+      } catch (err) { console.warn('[Clinix] Cloud bulk delete failed:', err); }
     }
     return deleted;
   }
@@ -2408,11 +2488,7 @@ body.light .admin-status.local { color: #b45309; }
   }
   function setSession(user) {
     try {
-      localStorage.setItem(SESSION_KEY, JSON.stringify({
-        name: user.name,
-        email: user.email,
-        ts: Date.now()
-      }));
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ name: user.name, email: user.email, ts: Date.now() }));
     } catch (e) {}
   }
   function clearSession() {
@@ -2421,24 +2497,56 @@ body.light .admin-status.local { color: #b45309; }
 
   /* ---------- SITE LOCK ---------- */
   function isSiteLocked() {
-    try { return localStorage.getItem(LOCK_KEY) === '1'; }
-    catch (e) { return false; }
+    try { return localStorage.getItem(LOCK_KEY) === '1'; } catch (e) { return false; }
   }
   function setSiteLocked(v) {
     try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
   }
 
+  /* ---------- INDIVIDUAL EXAM LOCKS ---------- */
+  function getLockedExams() {
+    try {
+      const raw = localStorage.getItem(LOCKED_EXAMS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+  function setLockedExams(list) {
+    try { localStorage.setItem(LOCKED_EXAMS_KEY, JSON.stringify(list)); } catch (e) {}
+  }
+  function isExamLocked(examId) {
+    return getLockedExams().includes(examId);
+  }
+  function toggleExamLock(examId) {
+    const list = getLockedExams();
+    const idx = list.indexOf(examId);
+    if (idx === -1) { list.push(examId); toast('🔒 Exam set locked'); }
+    else { list.splice(idx, 1); toast('🔓 Exam set unlocked'); }
+    setLockedExams(list);
+    applyExamLockStates();
+  }
+  function applyExamLockStates() {
+    document.querySelectorAll('.exam-card').forEach((card) => {
+      const id = card.dataset.exam;
+      if (!id) return;
+      const locked = isExamLocked(id);
+      card.classList.toggle('is-locked', locked);
+      const lockBtn = card.querySelector('.lock-btn');
+      if (lockBtn) {
+        lockBtn.textContent = locked ? '🔒' : '🔓';
+        lockBtn.classList.toggle('is-locked', locked);
+        lockBtn.title = locked ? 'Unlock this exam set' : 'Lock this exam set';
+      }
+    });
+  }
+
   /* ---------- FAVOURITES / RECENTS ---------- */
   function favKey(email) { return 'tt_favs_' + (email || 'guest'); }
   function getFavsFor(email) {
-    try { return JSON.parse(localStorage.getItem(favKey(email)) || '[]'); }
-    catch (e) { return []; }
+    try { return JSON.parse(localStorage.getItem(favKey(email)) || '[]'); } catch (e) { return []; }
   }
-
   function recentsKey(email) { return 'tt_recents_' + (email || 'guest'); }
   function getRecentsFor(email) {
-    try { return JSON.parse(localStorage.getItem(recentsKey(email)) || '[]'); }
-    catch (e) { return []; }
+    try { return JSON.parse(localStorage.getItem(recentsKey(email)) || '[]'); } catch (e) { return []; }
   }
   function pushRecent(email, examId) {
     if (!examId) return;
@@ -2450,7 +2558,6 @@ body.light .admin-status.local { color: #b45309; }
     } catch (e) {}
   }
 
-  /* ---------- OWNER ---------- */
   function isOwnerEmail(email) {
     return String(email || '').toLowerCase() === OWNER_EMAIL.toLowerCase();
   }
@@ -2499,11 +2606,27 @@ body.light .admin-status.local { color: #b45309; }
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
     update();
-    if (topBtn) {
-      topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    }
+    if (topBtn) topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
   initScrollUI();
+
+  /* ============================================================
+     SCROLL REVEAL
+     ============================================================ */
+  function initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach((el) => io.observe(el));
+  }
+  initReveal();
 
   /* ============================================================
      SESSION TIMER
@@ -2568,7 +2691,6 @@ body.light .admin-status.local { color: #b45309; }
     const firstInput = document.querySelector('.auth-form[data-view="' + name + '"] input');
     if (firstInput) setTimeout(() => firstInput.focus(), 60);
   }
-
   document.querySelectorAll('.auth-tab').forEach((tab) => {
     tab.addEventListener('click', () => showAuthView(tab.dataset.view));
   });
@@ -2577,67 +2699,39 @@ body.light .admin-status.local { color: #b45309; }
      PRESENCE HEARTBEAT
      ============================================================ */
   let heartbeatInterval = null;
-
   async function updatePresence(email, online) {
     if (!cloudReady || !email) return;
     try {
-      await db.collection(USERS_COLLECTION).doc(email).update({
-        lastSeen: Date.now(),
-        online: online
-      });
-    } catch (err) {
-      // silently ignore — may not be in cloud yet
-    }
+      await db.collection(USERS_COLLECTION).doc(email).update({ lastSeen: Date.now(), online: online });
+    } catch (err) {}
   }
-
   function startHeartbeat(email) {
     stopHeartbeat();
     updatePresence(email, true);
-    heartbeatInterval = setInterval(() => {
-      updatePresence(email, true);
-    }, 30000); // every 30 seconds
-
-    // Handle page unload / visibility change
+    heartbeatInterval = setInterval(() => updatePresence(email, true), 30000);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('beforeunload', () => {
-      // Use sendBeacon-like approach for reliability
       if (cloudReady && email) {
-        try {
-          db.collection(USERS_COLLECTION).doc(email).update({
-            online: false,
-            lastSeen: Date.now()
-          });
-        } catch (e) {}
+        try { db.collection(USERS_COLLECTION).doc(email).update({ online: false, lastSeen: Date.now() }); } catch (e) {}
       }
     });
   }
-
   function stopHeartbeat() {
-    if (heartbeatInterval) {
-      clearInterval(heartbeatInterval);
-      heartbeatInterval = null;
-    }
+    if (heartbeatInterval) { clearInterval(heartbeatInterval); heartbeatInterval = null; }
   }
-
   function handleVisibilityChange() {
     const s = getSession();
     if (!s) return;
-    if (document.visibilityState === 'hidden') {
-      updatePresence(s.email, false);
-      stopHeartbeat();
-    } else {
-      updatePresence(s.email, true);
-      startHeartbeat(s.email);
-    }
+    if (document.visibilityState === 'hidden') { updatePresence(s.email, false); stopHeartbeat(); }
+    else { updatePresence(s.email, true); startHeartbeat(s.email); }
   }
 
   /* ============================================================
-     SIGN UP
+     SIGN UP / SIGN IN
      ============================================================ */
   $('signupForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     clearBox('signupError');
-
     const name = $('signupName').value.trim();
     const email = $('signupEmail').value.trim().toLowerCase();
     const password = $('signupPassword').value;
@@ -2647,39 +2741,23 @@ body.light .admin-status.local { color: #b45309; }
     if (!isEmail(email)) return setError('signupError', 'Please enter a valid email address.');
     if (password.length < 6) return setError('signupError', 'Password must be at least 6 characters.');
     if (password !== confirm) return setError('signupError', 'The two passwords do not match.');
-
     if (isSiteLocked() && !isOwnerEmail(email)) {
       return setError('signupError', 'Access is temporarily closed. Please contact the admin on Telegram.');
     }
-
     const existing = await findUserByEmail(email);
-    if (existing) {
-      return setError('signupError', 'This email is already registered. Please sign in.');
-    }
+    if (existing) return setError('signupError', 'This email is already registered. Please sign in.');
 
-    const user = {
-      name: name,
-      email: email,
-      password: hashPassword(email, password),
-      createdAt: Date.now(),
-      lastSeen: Date.now(),
-      online: true
-    };
+    const user = { name, email, password: hashPassword(email, password), createdAt: Date.now(), lastSeen: Date.now(), online: true };
     await addUser(user);
-
-    const account = { name: name, email: email };
+    const account = { name, email };
     setSession(account);
     startApp(account);
     toast('Welcome, ' + name.split(' ')[0] + '!');
   });
 
-  /* ============================================================
-     SIGN IN
-     ============================================================ */
   $('signinForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     clearBox('signinError');
-
     const email = $('signinEmail').value.trim().toLowerCase();
     const password = $('signinPassword').value;
 
@@ -2688,35 +2766,21 @@ body.light .admin-status.local { color: #b45309; }
 
     const hash = hashPassword(email, password);
     const user = await findUserByEmail(email);
-
-    if (!user || user.password !== hash) {
-      return setError('signinError', 'Incorrect email or password.');
-    }
-
+    if (!user || user.password !== hash) return setError('signinError', 'Incorrect email or password.');
     if (isSiteLocked() && !isOwnerEmail(email)) {
       return setError('signinError', 'Access is temporarily closed. Please contact the admin on Telegram.');
     }
-
     $('signinForm').reset();
     const account = { name: user.name, email: user.email };
     setSession(account);
-
-    // Mark user as online
     await updatePresence(email, true);
-
     startApp(account);
     toast('Welcome back, ' + user.name.split(' ')[0] + '!');
   });
 
-  /* ============================================================
-     LOG OUT
-     ============================================================ */
   $('logoutBtn').addEventListener('click', async () => {
     const s = getSession();
-    if (s) {
-      await updatePresence(s.email, false);
-      stopHeartbeat();
-    }
+    if (s) { await updatePresence(s.email, false); stopHeartbeat(); }
     clearSession();
     $('userChip').textContent = '';
     $('adminAccessBtn').hidden = true;
@@ -2740,6 +2804,9 @@ body.light .admin-status.local { color: #b45309; }
     startSessionTimer();
     trackCardClicks(account.email);
     startHeartbeat(account.email);
+    applyExamLockStates();
+    initCardLockButtons();
+    initCardAiButtons();
   }
 
   function renderUserChip(name, email) {
@@ -2773,12 +2840,40 @@ body.light .admin-status.local { color: #b45309; }
     if (clicksTracked) return;
     clicksTracked = true;
     document.querySelectorAll('.exam-card a.button').forEach((link) => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click', (e) => {
         const card = link.closest('.exam-card');
         if (!card) return;
+        if (card.classList.contains('is-locked')) {
+          e.preventDefault();
+          toast('🔒 This exam set is currently locked by the admin.');
+          return;
+        }
         pushRecent(email, card.dataset.exam);
       });
     });
+  }
+
+  /* ============================================================
+     CARD LOCK BUTTONS (Admin only)
+     ============================================================ */
+  function initCardLockButtons() {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+    document.querySelectorAll('.exam-card').forEach((card) => {
+      if (card.querySelector('.lock-btn')) return;
+      const id = card.dataset.exam;
+      if (!id) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'lock-btn';
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleExamLock(id);
+      });
+      card.appendChild(btn);
+    });
+    applyExamLockStates();
   }
 
   /* ============================================================
@@ -2791,8 +2886,7 @@ body.light .admin-status.local { color: #b45309; }
     return favKey(s ? s.email : null);
   }
   function getFavs() {
-    try { return JSON.parse(localStorage.getItem(getCurrentFavKey()) || '[]'); }
-    catch (e) { return []; }
+    try { return JSON.parse(localStorage.getItem(getCurrentFavKey()) || '[]'); } catch (e) { return []; }
   }
   function setFavs(list) {
     try { localStorage.setItem(getCurrentFavKey(), JSON.stringify(list)); } catch (e) {}
@@ -2809,7 +2903,7 @@ body.light .admin-status.local { color: #b45309; }
         btn.className = 'star-btn';
         btn.dataset.exam = id;
         btn.innerHTML = STAR_SVG;
-        btn.addEventListener('click', () => toggleFav(id));
+        btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); toggleFav(id); });
         card.appendChild(btn);
       });
       starsReady = true;
@@ -2849,25 +2943,23 @@ body.light .admin-status.local { color: #b45309; }
 
     const tile = document.createElement('div');
     tile.className = 'fav-tile';
-
     const yearSpan = document.createElement('span');
     yearSpan.className = 'fav-year';
     yearSpan.textContent = year;
-
     const titleSpan = document.createElement('span');
     titleSpan.className = 'fav-title';
     titleSpan.textContent = title;
     titleSpan.title = title;
-
     const openLink = document.createElement('a');
     openLink.className = 'fav-open';
     openLink.href = href;
     openLink.textContent = 'Open';
-
+    openLink.addEventListener('click', (e) => {
+      if (isExamLocked(id)) { e.preventDefault(); toast('🔒 This exam set is locked.'); }
+    });
     tile.appendChild(yearSpan);
     tile.appendChild(titleSpan);
     tile.appendChild(openLink);
-
     if (kind === 'fav') {
       const removeBtn = document.createElement('button');
       removeBtn.type = 'button';
@@ -2886,18 +2978,10 @@ body.light .admin-status.local { color: #b45309; }
     const list = $('favList');
     const countEl = $('favCountTop');
     if (countEl) countEl.textContent = String(favs.length);
-
-    if (!favs.length) {
-      if (section) section.hidden = true;
-      if (list) list.innerHTML = '';
-      return;
-    }
+    if (!favs.length) { if (section) section.hidden = true; if (list) list.innerHTML = ''; return; }
     if (section) section.hidden = false;
     if (list) list.innerHTML = '';
-    favs.forEach((id) => {
-      const tile = buildTile(id, 'fav');
-      if (tile) list.appendChild(tile);
-    });
+    favs.forEach((id) => { const tile = buildTile(id, 'fav'); if (tile) list.appendChild(tile); });
   }
 
   function renderRecents() {
@@ -2906,24 +2990,14 @@ body.light .admin-status.local { color: #b45309; }
     const section = $('recents');
     const list = $('recentList');
     if (!section || !list) return;
-    if (!recents.length) {
-      section.hidden = true;
-      list.innerHTML = '';
-      return;
-    }
+    if (!recents.length) { section.hidden = true; list.innerHTML = ''; return; }
     section.hidden = false;
     list.innerHTML = '';
-    recents.forEach((id) => {
-      const tile = buildTile(id, 'recent');
-      if (tile) list.appendChild(tile);
-    });
+    recents.forEach((id) => { const tile = buildTile(id, 'recent'); if (tile) list.appendChild(tile); });
   }
 
   $('favShortcut').addEventListener('click', () => {
-    if (!getFavs().length) {
-      toast('No favourites yet — tap the ☆ on any exam set.');
-      return;
-    }
+    if (!getFavs().length) { toast('No favourites yet — tap the ☆ on any exam set.'); return; }
     $('favorites').hidden = false;
     $('favorites').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
@@ -2966,15 +3040,11 @@ body.light .admin-status.local { color: #b45309; }
   document.addEventListener('keydown', (e) => {
     const tag = (e.target && e.target.tagName || '').toLowerCase();
     const inField = tag === 'input' || tag === 'textarea';
-
-    // "/" — focus the exam filter
     if (e.key === '/' && !inField && !$('app').hidden) {
       e.preventDefault();
       const f = $('examFilter');
       if (f) { f.focus(); f.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     }
-
-    // Ctrl+K — focus the ChatGPT input
     if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K') && !$('app').hidden) {
       e.preventDefault();
       const ai = $('aiInput');
@@ -2987,9 +3057,7 @@ body.light .admin-status.local { color: #b45309; }
      ============================================================ */
   function askChatGPT(prompt) {
     const text = String(prompt || '').trim();
-    const url = text
-      ? 'https://chatgpt.com/?q=' + encodeURIComponent(text)
-      : 'https://chatgpt.com/';
+    const url = text ? 'https://chatgpt.com/?q=' + encodeURIComponent(text) : 'https://chatgpt.com/';
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
@@ -3007,6 +3075,7 @@ body.light .admin-status.local { color: #b45309; }
 
   function initCardAiButtons() {
     document.querySelectorAll('.exam-card').forEach((card) => {
+      if (card.querySelector('.ai-mini')) return;
       const titleEl = card.querySelector('h3');
       const contentsEl = card.querySelector('.contents');
       if (!titleEl) return;
@@ -3016,12 +3085,10 @@ body.light .admin-status.local { color: #b45309; }
       btn.type = 'button';
       btn.className = 'ai-mini';
       btn.textContent = '✦ Ask ChatGPT about this';
-      btn.addEventListener('click', () => {
-        askChatGPT(
-          'I am revising "' + title + '" for a medical exam. ' +
-          (topics ? 'Topics covered: ' + topics + ' ' : '') +
-          'Please explain the key concepts, highlight high-yield points, and give me 3 practice MCQs with answers.'
-        );
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        askChatGPT('I am revising "' + title + '" for a medical exam. ' + (topics ? 'Topics covered: ' + topics + ' ' : '') + 'Please explain the key concepts, highlight high-yield points, and give me 3 practice MCQs with answers.');
       });
       card.appendChild(btn);
     });
@@ -3036,108 +3103,53 @@ body.light .admin-status.local { color: #b45309; }
   function openModal(opts) {
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
-
     const card = document.createElement('div');
     card.className = 'modal-card';
-
-    if (opts.icon) {
-      const i = document.createElement('div');
-      i.className = 'modal-icon';
-      i.textContent = opts.icon;
-      card.appendChild(i);
-    }
-
-    const h = document.createElement('h3');
-    h.textContent = opts.title || '';
-    card.appendChild(h);
-
-    if (opts.message) {
-      const p = document.createElement('p');
-      p.textContent = opts.message;
-      card.appendChild(p);
-    }
-
-    const errorEl = document.createElement('p');
-    errorEl.className = 'modal-error';
-    errorEl.hidden = true;
-    card.appendChild(errorEl);
-
+    if (opts.icon) { const i = document.createElement('div'); i.className = 'modal-icon'; i.textContent = opts.icon; card.appendChild(i); }
+    const h = document.createElement('h3'); h.textContent = opts.title || ''; card.appendChild(h);
+    if (opts.message) { const p = document.createElement('p'); p.textContent = opts.message; card.appendChild(p); }
+    const errorEl = document.createElement('p'); errorEl.className = 'modal-error'; errorEl.hidden = true; card.appendChild(errorEl);
     const fields = {};
     if (opts.fields) {
       opts.fields.forEach((f) => {
-        const label = document.createElement('label');
-        label.className = 'field';
-        const span = document.createElement('span');
-        span.textContent = f.label;
-        const input = document.createElement('input');
-        input.type = f.type || 'text';
-        input.placeholder = f.placeholder || '';
-        input.autocomplete = 'off';
-        label.appendChild(span);
-        label.appendChild(input);
-        card.appendChild(label);
-        fields[f.id] = input;
+        const label = document.createElement('label'); label.className = 'field';
+        const span = document.createElement('span'); span.textContent = f.label;
+        const input = document.createElement('input'); input.type = f.type || 'text'; input.placeholder = f.placeholder || ''; input.autocomplete = 'off';
+        label.appendChild(span); label.appendChild(input); card.appendChild(label); fields[f.id] = input;
       });
     }
-
-    const actions = document.createElement('div');
-    actions.className = 'modal-actions';
-
-    const cancel = document.createElement('button');
-    cancel.type = 'button';
-    cancel.textContent = opts.cancelText || 'Cancel';
+    const actions = document.createElement('div'); actions.className = 'modal-actions';
+    const cancel = document.createElement('button'); cancel.type = 'button'; cancel.textContent = opts.cancelText || 'Cancel';
     cancel.addEventListener('click', () => overlay.remove());
-
-    const confirm = document.createElement('button');
-    confirm.type = 'button';
-    confirm.textContent = opts.confirmText || 'Confirm';
-    if (opts.confirmClass) confirm.className = opts.confirmClass;
-    else confirm.className = 'primary';
-
+    const confirm = document.createElement('button'); confirm.type = 'button'; confirm.textContent = opts.confirmText || 'Confirm';
+    if (opts.confirmClass) confirm.className = opts.confirmClass; else confirm.className = 'primary';
     confirm.addEventListener('click', () => {
-      const values = {};
-      let hasEmpty = false;
+      const values = {}; let hasEmpty = false;
       Object.keys(fields).forEach((k) => {
         values[k] = fields[k].value;
-        if (opts.fields.some((f) => f.id === k && f.required !== false) && !values[k].trim()) {
-          hasEmpty = true;
-        }
+        if (opts.fields.some((f) => f.id === k && f.required !== false) && !values[k].trim()) hasEmpty = true;
       });
-      if (hasEmpty) {
-        errorEl.textContent = 'Please fill in all fields.';
-        errorEl.hidden = false;
-        return;
-      }
+      if (hasEmpty) { errorEl.textContent = 'Please fill in all fields.'; errorEl.hidden = false; return; }
       const ok = opts.onConfirm ? opts.onConfirm(values, errorEl) : true;
       if (ok !== false) overlay.remove();
     });
-
-    actions.appendChild(cancel);
-    actions.appendChild(confirm);
-    card.appendChild(actions);
+    actions.appendChild(cancel); actions.appendChild(confirm); card.appendChild(actions);
     overlay.appendChild(card);
     overlay.addEventListener('click', (ev) => { if (ev.target === overlay) overlay.remove(); });
     document.addEventListener('keydown', function esc(ev) {
       if (ev.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', esc); }
     });
     document.body.appendChild(overlay);
-
     const firstKey = Object.keys(fields)[0];
     if (firstKey) setTimeout(() => fields[firstKey].focus(), 60);
-
     Object.values(fields).forEach((input) => {
-      input.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Enter') { ev.preventDefault(); confirm.click(); }
-      });
+      input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') { ev.preventDefault(); confirm.click(); } });
     });
   }
 
   function requestAdminOpen() {
     const s = getSession();
-    if (!s || !isOwnerEmail(s.email)) {
-      toast('Admin panel is not available.');
-      return;
-    }
+    if (!s || !isOwnerEmail(s.email)) { toast('Admin panel is not available.'); return; }
     if (adminOpen) return;
     openModal({
       icon: '🔐',
@@ -3147,11 +3159,7 @@ body.light .admin-status.local { color: #b45309; }
       confirmText: 'Unlock',
       confirmClass: 'primary',
       onConfirm: (values, errorEl) => {
-        if (values.pw !== ADMIN_PASSWORD) {
-          errorEl.textContent = 'Incorrect password.';
-          errorEl.hidden = false;
-          return false;
-        }
+        if (values.pw !== ADMIN_PASSWORD) { errorEl.textContent = 'Incorrect password.'; errorEl.hidden = false; return false; }
         openAdmin();
         return true;
       }
@@ -3176,20 +3184,15 @@ body.light .admin-status.local { color: #b45309; }
   $('adminRefresh').addEventListener('click', () => { renderAdmin(); toast('Refreshed.'); });
   $('adminClose').addEventListener('click', closeAdmin);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && adminOpen) closeAdmin();
-  });
-
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && adminOpen) closeAdmin(); });
   $('adminSearch').addEventListener('input', () => renderAdmin());
 
   $('adminDismissAll').addEventListener('click', async () => {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) return;
-
     const users = await getAllUsers();
     const others = users.filter((u) => !isOwnerEmail(u.email));
     if (!others.length) return toast('No other users to dismiss.');
-
     openModal({
       icon: '⚠️',
       title: 'Dismiss All Users?',
@@ -3211,35 +3214,26 @@ body.light .admin-status.local { color: #b45309; }
     if (!btn) return;
     if (isSiteLocked()) {
       btn.textContent = '🔓 Unlock All';
-      btn.classList.remove('gold');
-      btn.classList.add('danger');
+      btn.classList.remove('gold'); btn.classList.add('danger');
     } else {
       btn.textContent = '🔒 Lock All';
-      btn.classList.remove('danger');
-      btn.classList.add('gold');
+      btn.classList.remove('danger'); btn.classList.add('gold');
     }
   }
 
   $('adminToggleLock').addEventListener('click', () => {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) return;
-
     if (isSiteLocked()) {
       openModal({
-        icon: '🔓',
-        title: 'Unlock Site Access?',
-        message: 'Students will be able to sign in again.',
-        confirmText: 'Unlock',
-        confirmClass: 'primary',
+        icon: '🔓', title: 'Unlock Site Access?', message: 'Students will be able to sign in again.',
+        confirmText: 'Unlock', confirmClass: 'primary',
         onConfirm: () => { setSiteLocked(false); toast('Site access unlocked.'); renderAdmin(); return true; }
       });
     } else {
       openModal({
-        icon: '🔒',
-        title: 'Lock Site Access?',
-        message: 'All students (except you) will be blocked from signing in.',
-        confirmText: 'Lock All',
-        confirmClass: 'danger',
+        icon: '🔒', title: 'Lock Site Access?', message: 'All students (except you) will be blocked from signing in.',
+        confirmText: 'Lock All', confirmClass: 'danger',
         onConfirm: () => { setSiteLocked(true); toast('Site access locked.'); renderAdmin(); return true; }
       });
     }
@@ -3255,14 +3249,10 @@ body.light .admin-status.local { color: #b45309; }
     const mm = String(d.getMinutes()).padStart(2, '0');
     return y + '-' + m + '-' + day + ' ' + hh + ':' + mm;
   }
-
   function isSameDay(a, b) {
     const d1 = new Date(a); const d2 = new Date(b);
-    return d1.getFullYear() === d2.getFullYear()
-      && d1.getMonth() === d2.getMonth()
-      && d1.getDate() === d2.getDate();
+    return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
   }
-
   function formatLastSeen(ts) {
     if (!ts) return 'Never';
     const diff = Date.now() - ts;
@@ -3279,13 +3269,12 @@ body.light .admin-status.local { color: #b45309; }
   async function renderAdmin() {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) { closeAdmin(); return; }
-
     const status = $('adminStatus');
     if (cloudReady) {
       status.textContent = '☁️ Cloud mode — showing users from ALL devices';
       status.className = 'admin-status cloud';
     } else {
-      status.textContent = '📱 Local mode — showing only users on THIS device. Add Firebase config to see all users.';
+      status.textContent = '📱 Local mode — showing only users on THIS device.';
       status.className = 'admin-status local';
     }
 
@@ -3302,11 +3291,7 @@ body.light .admin-status.local { color: #b45309; }
     updateLockButton();
 
     const search = ($('adminSearch').value || '').trim().toLowerCase();
-    const filtered = users.filter((u) => {
-      if (!search) return true;
-      return (u.name || '').toLowerCase().includes(search)
-          || (u.email || '').toLowerCase().includes(search);
-    });
+    const filtered = users.filter((u) => !search || (u.name || '').toLowerCase().includes(search) || (u.email || '').toLowerCase().includes(search));
 
     const table = $('adminTable');
     table.innerHTML = '';
@@ -3314,11 +3299,7 @@ body.light .admin-status.local { color: #b45309; }
     if (!filtered.length) {
       const empty = document.createElement('div');
       empty.className = 'admin-empty';
-      empty.textContent = users.length
-        ? 'No users match your search.'
-        : (cloudReady
-            ? 'No users registered yet. Students who sign up from any device will appear here.'
-            : 'No users registered on this device yet. Add Firebase config to see users from all devices.');
+      empty.textContent = users.length ? 'No users match your search.' : 'No users registered yet.';
       table.appendChild(empty);
     } else {
       filtered.forEach((u) => {
@@ -3328,53 +3309,24 @@ body.light .admin-status.local { color: #b45309; }
         const row = document.createElement('div');
         row.className = 'admin-row' + (isMe ? ' is-me' : '');
 
-        const nameCol = document.createElement('div');
-        nameCol.className = 'col name';
-        nameCol.textContent = u.name || 'Unnamed';
-
-        const emailCol = document.createElement('div');
-        emailCol.className = 'col email';
-        emailCol.textContent = u.email || '';
-        emailCol.title = u.email || '';
-
-        const statusCol = document.createElement('div');
-        statusCol.className = 'col status-col' + (isOnline ? ' online-text' : ' offline-text');
-        const dot = document.createElement('span');
-        dot.className = 'status-dot ' + (isOnline ? 'online' : 'offline');
-        statusCol.appendChild(dot);
-        const statusText = document.createElement('span');
-        statusText.textContent = isOnline ? 'Online' : formatLastSeen(lastSeen);
-        statusText.className = 'last-seen-text';
-        statusCol.appendChild(statusText);
-
-        const dateCol = document.createElement('div');
-        dateCol.className = 'col date';
-        dateCol.textContent = formatDate(u.createdAt);
-
-        const dismissCol = document.createElement('div');
-        dismissCol.className = 'col dismiss-wrap';
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'dismiss-btn';
-        btn.textContent = isMe ? '—' : 'Dismiss';
+        const nameCol = document.createElement('div'); nameCol.className = 'col name'; nameCol.textContent = u.name || 'Unnamed';
+        const emailCol = document.createElement('div'); emailCol.className = 'col email'; emailCol.textContent = u.email || ''; emailCol.title = u.email || '';
+        const statusCol = document.createElement('div'); statusCol.className = 'col status-col' + (isOnline ? ' online-text' : ' offline-text');
+        const dot = document.createElement('span'); dot.className = 'status-dot ' + (isOnline ? 'online' : 'offline'); statusCol.appendChild(dot);
+        const statusText = document.createElement('span'); statusText.textContent = isOnline ? 'Online' : formatLastSeen(lastSeen); statusText.className = 'last-seen-text'; statusCol.appendChild(statusText);
+        const dateCol = document.createElement('div'); dateCol.className = 'col date'; dateCol.textContent = formatDate(u.createdAt);
+        const dismissCol = document.createElement('div'); dismissCol.className = 'col dismiss-wrap';
+        const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'dismiss-btn'; btn.textContent = isMe ? '—' : 'Dismiss';
         if (isMe) { btn.disabled = true; btn.title = 'You cannot dismiss your own account'; }
         else { btn.addEventListener('click', () => dismissUser(u.email)); }
-
         dismissCol.appendChild(btn);
-        row.appendChild(nameCol);
-        row.appendChild(emailCol);
-        row.appendChild(statusCol);
-        row.appendChild(dateCol);
-        row.appendChild(dismissCol);
+        row.appendChild(nameCol); row.appendChild(emailCol); row.appendChild(statusCol); row.appendChild(dateCol); row.appendChild(dismissCol);
         table.appendChild(row);
       });
     }
 
     const info = $('adminFooterInfo');
-    const shownText = filtered.length === users.length
-      ? users.length + ' user' + (users.length === 1 ? '' : 's')
-      : filtered.length + ' of ' + users.length + ' shown';
+    const shownText = filtered.length === users.length ? users.length + ' user' + (users.length === 1 ? '' : 's') : filtered.length + ' of ' + users.length + ' shown';
     info.textContent = shownText + (cloudReady ? ' · ☁️ Cloud database' : ' · 📱 Local device only');
   }
 
@@ -3382,19 +3334,13 @@ body.light .admin-status.local { color: #b45309; }
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) return;
     if (isOwnerEmail(email)) { toast('You cannot dismiss your own account.'); return; }
-
     openModal({
-      icon: '⚠️',
-      title: 'Dismiss User?',
-      message: 'Dismiss "' + email + '"?\n\nTheir account will be removed from the cloud database and this device.',
-      confirmText: 'Dismiss',
-      confirmClass: 'danger',
+      icon: '⚠️', title: 'Dismiss User?', message: 'Dismiss "' + email + '"?\n\nTheir account will be removed from the cloud database and this device.',
+      confirmText: 'Dismiss', confirmClass: 'danger',
       onConfirm: async () => {
         await removeUser(email);
         try { localStorage.removeItem(favKey(email)); } catch (e) {}
-        toast('User dismissed.');
-        renderAdmin();
-        return true;
+        toast('User dismissed.'); renderAdmin(); return true;
       }
     });
   }
@@ -3402,8 +3348,6 @@ body.light .admin-status.local { color: #b45309; }
   /* ============================================================
      BOOT
      ============================================================ */
-  initCardAiButtons();
-
   const session = getSession();
   if (session) {
     startApp(session);
@@ -3412,25 +3356,16 @@ body.light .admin-status.local { color: #b45309; }
     showAuthView('signin');
   }
 
-  // Refresh presence on app visibility
   document.addEventListener('visibilitychange', () => {
     const s = getSession();
     if (!s || !cloudReady) return;
-    if (document.visibilityState === 'visible') {
-      updatePresence(s.email, true);
-    }
+    if (document.visibilityState === 'visible') updatePresence(s.email, true);
   });
 
-  // Cleanup on unload
   window.addEventListener('beforeunload', () => {
     const s = getSession();
     if (s && cloudReady) {
-      try {
-        db.collection(USERS_COLLECTION).doc(s.email).update({
-          online: false,
-          lastSeen: Date.now()
-        });
-      } catch (e) {}
+      try { db.collection(USERS_COLLECTION).doc(s.email).update({ online: false, lastSeen: Date.now() }); } catch (e) {}
     }
   });
 
