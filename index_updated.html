@@ -1784,6 +1784,271 @@ body.light .admin-status.local { color: #b45309; }
   transform: translateY(0);
 }
 
+/* ---------- NEW: ACCESS COUNTDOWN ---------- */
+.access-countdown {
+  margin: 28px auto 18px;
+  max-width: 780px;
+  padding: 18px 22px 16px;
+  border: 1px solid rgba(251,191,36,.45);
+  border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(251,191,36,.1), rgba(248,113,113,.06)),
+    rgba(15,26,42,.88);
+  text-align: center;
+  box-shadow: 0 12px 36px rgba(251,191,36,.08);
+  transition: border-color .3s, box-shadow .3s;
+}
+
+body.light .access-countdown {
+  background:
+    linear-gradient(135deg, rgba(251,191,36,.12), rgba(248,113,113,.06)),
+    #fff;
+  box-shadow: 0 12px 36px rgba(217,119,6,.1);
+}
+
+.access-countdown:hover {
+  border-color: rgba(251,191,36,.7);
+  box-shadow: 0 16px 44px rgba(251,191,36,.14);
+}
+
+.access-countdown .headline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--gold);
+  margin-bottom: 10px;
+  letter-spacing: .2px;
+}
+
+.access-countdown .headline .emoji {
+  font-size: 18px;
+  animation: glowPulse 2.4s ease-in-out infinite;
+}
+
+.access-countdown .headline a {
+  color: #7dd3fc;
+  text-decoration: underline;
+  font-weight: bold;
+  transition: color .2s;
+}
+
+body.light .access-countdown .headline a { color: #0369a1; }
+
+.access-countdown .headline a:hover { color: #fff; }
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 64px;
+  padding: 8px 6px;
+  border: 1px solid rgba(251,191,36,.3);
+  border-radius: 12px;
+  background: rgba(11,17,32,.5);
+}
+
+body.light .timer-block { background: #f1f5f9; }
+
+.timer-block .val {
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 1.1;
+  color: var(--text);
+  transition: color .3s;
+}
+
+.timer-block .unit {
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.timer-colon {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--gold);
+  animation: blinkColon 1s step-end infinite;
+}
+
+@keyframes blinkColon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .25; }
+}
+
+.timer-display.warning .timer-block .val { color: #fca5a5; }
+.timer-display.warning .timer-block { border-color: rgba(248,113,113,.5); }
+.timer-display.warning .timer-colon { color: var(--danger); }
+
+.access-countdown .note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  opacity: .9;
+}
+
+.access-countdown .note strong { color: var(--gold); }
+
+/* ---------- ADMIN EXAM LOCKS ---------- */
+.admin-exam-locks {
+  margin-bottom: 22px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(13,22,38,.55);
+}
+
+body.light .admin-exam-locks { background: #f8fafc; }
+
+.admin-exam-locks h3 {
+  font-size: 15px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-exam-locks h3 .tag {
+  font-size: 10.5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(251,191,36,.15);
+  color: var(--gold);
+  border: 1px solid rgba(251,191,36,.35);
+  font-weight: bold;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+.admin-exam-locks .hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.exam-lock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 8px;
+}
+
+.exam-lock-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  transition: .2s;
+}
+
+.exam-lock-item:hover { border-color: #33415a; }
+
+.exam-lock-item .exam-lock-name {
+  flex: 1 1 auto;
+  font-size: 12.5px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exam-lock-item .exam-lock-id {
+  font-size: 10.5px;
+  color: var(--muted);
+  display: block;
+}
+
+.exam-lock-toggle {
+  flex: 0 0 auto;
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border: 0;
+  border-radius: 999px;
+  background: #334155;
+  cursor: pointer;
+  transition: background .25s;
+}
+
+.exam-lock-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .25s var(--ease-spring);
+}
+
+.exam-lock-toggle.is-locked { background: var(--danger); }
+.exam-lock-toggle.is-locked::after { transform: translateX(18px); }
+
+.exam-lock-state {
+  flex: 0 0 auto;
+  font-size: 10.5px;
+  font-weight: bold;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  min-width: 42px;
+  text-align: right;
+}
+
+.exam-lock-state.locked { color: #fca5a5; }
+
+.exam-card.exam-locked {
+  opacity: .7;
+  border-color: rgba(248,113,113,.4);
+}
+
+.exam-card.exam-locked .button {
+  background: #475569;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
+
+.exam-card.exam-locked .button:hover { filter: none; transform: none; box-shadow: none; }
+
+.exam-lock-ribbon {
+  position: absolute;
+  top: 14px;
+  left: -34px;
+  width: 120px;
+  padding: 3px 0;
+  transform: rotate(-35deg);
+  background: var(--danger);
+  color: #450a0a;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  z-index: 6;
+  pointer-events: none;
+}
+
 /* ---------- MOBILE ---------- */
 @media (max-width: 560px) {
   .topbar-inner { width: min(100% - 22px, 1080px); padding: 8px 0; }
@@ -1791,6 +2056,12 @@ body.light .admin-status.local { color: #b45309; }
   .ghost-btn,
   .admin-access-btn { padding: 6px 10px; font-size: 11px; }
   .session-timer { display: none; }
+
+  .access-countdown { padding: 14px 12px 12px; }
+  .timer-block { min-width: 52px; padding: 6px 4px; }
+  .timer-block .val { font-size: 24px; }
+  .timer-colon { font-size: 20px; }
+  .access-countdown .headline { font-size: 12.5px; }
 }
 
 @media (max-width: 480px) {
@@ -1821,6 +2092,8 @@ body.light .admin-status.local { color: #b45309; }
     font-size: 26px;
     border-radius: 14px;
   }
+
+  .exam-lock-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -1927,6 +2200,32 @@ body.light .admin-status.local { color: #b45309; }
       </p>
       <div class="study-tip" id="studyTip">💡 Tip: Review a topic, then take the exam set twice.</div>
     </section>
+
+    <!-- ===== ACCESS COUNTDOWN TIMER ===== -->
+    <div class="access-countdown reveal" id="accessCountdown" role="timer" aria-live="off">
+      <div class="headline">
+        <span class="emoji">⏳</span>
+        <span>Your access to the page is gonna end in 18 hours for next update access of next modules, join our channel</span>
+        <a href="https://t.me/clnixapp" target="_blank" rel="noopener noreferrer">https://t.me/clnixapp</a>
+      </div>
+      <div class="timer-display" id="timerDisplay">
+        <div class="timer-block">
+          <span class="val" id="timerHours">18</span>
+          <span class="unit">Hours</span>
+        </div>
+        <span class="timer-colon">:</span>
+        <div class="timer-block">
+          <span class="val" id="timerMinutes">00</span>
+          <span class="unit">Mins</span>
+        </div>
+        <span class="timer-colon">:</span>
+        <div class="timer-block">
+          <span class="val" id="timerSeconds">00</span>
+          <span class="unit">Secs</span>
+        </div>
+      </div>
+      <p class="note">⏰ Access resets with new modules. <strong>Don't miss out</strong> — join the channel for updates.</p>
+    </div>
 
     <section class="ai-section reveal" aria-labelledby="ai-heading">
       <h2 id="ai-heading">✦ Ask ChatGPT</h2>
@@ -2159,6 +2458,13 @@ body.light .admin-status.local { color: #b45309; }
       </div>
     </div>
 
+    <!-- ===== ADMIN: PER-EXAM LOCKS ===== -->
+    <div class="admin-exam-locks" id="adminExamLocks">
+      <h3>🔐 Exam Set Locks <span class="tag">Per-set control</span></h3>
+      <p class="hint">Toggle any exam set on/off. Locked sets are blocked for students but still visible to you.</p>
+      <div class="exam-lock-grid" id="examLockGrid"></div>
+    </div>
+
     <input type="text" class="admin-search" id="adminSearch" placeholder="🔍  Search by name or email…" autocomplete="off">
 
     <div class="admin-table" id="adminTable"></div>
@@ -2281,6 +2587,9 @@ body.light .admin-status.local { color: #b45309; }
   const LOCK_KEY = 'tt_site_locked';
   const USERS_COLLECTION = 'users';
   const PRESENCE_COLLECTION = 'presence';
+
+  // Per-exam lock keys
+  const EXAM_LOCK_KEY = 'tt_exam_locks';
 
   function getLocalUsers() {
     try {
@@ -2414,6 +2723,29 @@ body.light .admin-status.local { color: #b45309; }
   }
   function setSiteLocked(v) {
     try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
+  }
+
+  /* ---------- PER-EXAM LOCKS ---------- */
+  function getExamLocks() {
+    try {
+      const raw = localStorage.getItem(EXAM_LOCK_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+    } catch (e) { return {}; }
+  }
+  function setExamLocks(map) {
+    try { localStorage.setItem(EXAM_LOCK_KEY, JSON.stringify(map)); } catch (e) {}
+  }
+  function isExamLocked(examId) {
+    if (!examId) return false;
+    return getExamLocks()[examId] === true;
+  }
+  function setExamLock(examId, locked) {
+    if (!examId) return;
+    const map = getExamLocks();
+    if (locked) map[examId] = true;
+    else delete map[examId];
+    setExamLocks(map);
   }
 
   /* ---------- FAVOURITES / RECENTS ---------- */
@@ -2682,6 +3014,9 @@ body.light .admin-status.local { color: #b45309; }
     trackCardClicks(account.email);
     startHeartbeat(account.email);
     initCardAiButtons();
+    initCountdown();
+    applyExamLocksToUI();
+    initExamLinkGuards();
   }
 
   function renderUserChip(name, email) {
@@ -2939,6 +3274,141 @@ body.light .admin-status.local { color: #b45309; }
   }
 
   /* ============================================================
+     ⏳ COUNTDOWN TIMER (18 hours)
+     ============================================================ */
+  const COUNTDOWN_KEY = 'tt_countdown_end';
+  const COUNTDOWN_DURATION = 18 * 60 * 60 * 1000; // 18 hours in ms
+  let countdownIntervalId = null;
+
+  function getCountdownEnd() {
+    try {
+      let end = Number(localStorage.getItem(COUNTDOWN_KEY));
+      if (!end || Number.isNaN(end) || end <= 0) {
+        end = Date.now() + COUNTDOWN_DURATION;
+        localStorage.setItem(COUNTDOWN_KEY, String(end));
+      }
+      return end;
+    } catch (e) {
+      return Date.now() + COUNTDOWN_DURATION;
+    }
+  }
+
+  function pad2(n) { return String(n).padStart(2, '0'); }
+
+  function updateCountdownUI() {
+    const end = getCountdownEnd();
+    const now = Date.now();
+    let diff = Math.max(0, end - now);
+
+    const totalSecs = Math.floor(diff / 1000);
+    const hours = Math.floor(totalSecs / 3600);
+    const mins = Math.floor((totalSecs % 3600) / 60);
+    const secs = totalSecs % 60;
+
+    const hEl = $('timerHours');
+    const mEl = $('timerMinutes');
+    const sEl = $('timerSeconds');
+    const display = $('timerDisplay');
+    if (hEl) hEl.textContent = pad2(hours);
+    if (mEl) mEl.textContent = pad2(mins);
+    if (sEl) sEl.textContent = pad2(secs);
+
+    if (display) {
+      display.classList.toggle('warning', totalSecs > 0 && totalSecs <= 3600);
+    }
+
+    if (diff <= 0 && countdownIntervalId) {
+      clearInterval(countdownIntervalId);
+      countdownIntervalId = null;
+      if (hEl) hEl.textContent = '00';
+      if (mEl) mEl.textContent = '00';
+      if (sEl) sEl.textContent = '00';
+      const note = document.querySelector('.access-countdown .note');
+      if (note) note.innerHTML = '⌛ <strong>Access window ended.</strong> Join the channel for next module updates.';
+    }
+  }
+
+  function initCountdown() {
+    getCountdownEnd();
+    updateCountdownUI();
+    if (countdownIntervalId) clearInterval(countdownIntervalId);
+    countdownIntervalId = setInterval(updateCountdownUI, 1000);
+  }
+
+  /* ============================================================
+     🔐 PER-EXAM LOCK UI (students)
+     ============================================================ */
+  const EXAM_CATALOG = [
+    { id: 'path-2015', name: '2015 Pathology' },
+    { id: 'path-2016', name: '2016 Pathology' },
+    { id: 'path-2017', name: '2017 Pathology' },
+    { id: 'bio-2015', name: '2015 Biochemistry' },
+    { id: 'bio-2016', name: '2016 Biochemistry' },
+    { id: 'bio-2017', name: '2017 Biochemistry' },
+    { id: 'bio-2018', name: '2018 Biochemistry' },
+    { id: 'phys-2016', name: '2016 Physiology' },
+    { id: 'phys-2017', name: '2017 Physiology' },
+    { id: 'phys-2018', name: '2018 Physiology' }
+  ];
+
+  function applyExamLocksToUI() {
+    const s = getSession();
+    const ownerView = s && isOwnerEmail(s.email);
+    const locks = getExamLocks();
+    document.querySelectorAll('.exam-card').forEach((card) => {
+      const id = card.dataset.exam;
+      if (!id) return;
+      const locked = !!locks[id];
+      card.classList.toggle('exam-locked', locked);
+      const oldRibbon = card.querySelector('.exam-lock-ribbon');
+      if (oldRibbon) oldRibbon.remove();
+      const link = card.querySelector('a.button');
+      if (!link) return;
+      if (locked) {
+        const ribbon = document.createElement('div');
+        ribbon.className = 'exam-lock-ribbon';
+        ribbon.textContent = '🔒 Locked';
+        card.appendChild(ribbon);
+        if (ownerView) {
+          link.title = 'Locked for students — you can still open it';
+          link.style.pointerEvents = '';
+          link.style.opacity = '1';
+        } else {
+          link.title = 'This exam set is temporarily locked';
+          link.setAttribute('aria-disabled', 'true');
+        }
+      } else {
+        link.removeAttribute('aria-disabled');
+        link.title = '';
+        link.style.pointerEvents = '';
+        link.style.opacity = '';
+      }
+    });
+  }
+
+  let examGuardsReady = false;
+  function initExamLinkGuards() {
+    if (examGuardsReady) return;
+    examGuardsReady = true;
+    document.querySelectorAll('.exam-card a.button').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const card = link.closest('.exam-card');
+        if (!card) return;
+        const id = card.dataset.exam;
+        if (!id) return;
+        const s = getSession();
+        const ownerView = s && isOwnerEmail(s.email);
+        if (isExamLocked(id) && !ownerView) {
+          e.preventDefault();
+          e.stopPropagation();
+          toast('🔒 This exam set is temporarily locked. Please check back later or join the Telegram channel.');
+          return;
+        }
+      }, true);
+    });
+  }
+
+  /* ============================================================
      🛡 ADMIN
      ============================================================ */
   const adminOverlay = $('adminOverlay');
@@ -3015,6 +3485,7 @@ body.light .admin-status.local { color: #b45309; }
     adminOpen = true;
     adminOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
+    renderAdminExamLocks();
     renderAdmin();
   }
 
@@ -3025,11 +3496,61 @@ body.light .admin-status.local { color: #b45309; }
   }
 
   $('adminAccessBtn').addEventListener('click', requestAdminOpen);
-  $('adminRefresh').addEventListener('click', () => { renderAdmin(); toast('Refreshed.'); });
+  $('adminRefresh').addEventListener('click', () => { renderAdminExamLocks(); renderAdmin(); toast('Refreshed.'); });
   $('adminClose').addEventListener('click', closeAdmin);
 
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && adminOpen) closeAdmin(); });
   $('adminSearch').addEventListener('input', () => renderAdmin());
+
+  /* ---------- ADMIN: PER-EXAM LOCK TOGGLES ---------- */
+  function renderAdminExamLocks() {
+    const grid = $('examLockGrid');
+    if (!grid) return;
+    const locks = getExamLocks();
+    grid.innerHTML = '';
+    EXAM_CATALOG.forEach((exam) => {
+      const locked = !!locks[exam.id];
+      const item = document.createElement('div');
+      item.className = 'exam-lock-item';
+
+      const info = document.createElement('div');
+      info.style.flex = '1 1 auto';
+      info.style.minWidth = '0';
+      const nameEl = document.createElement('span');
+      nameEl.className = 'exam-lock-name';
+      nameEl.textContent = exam.name;
+      const idEl = document.createElement('span');
+      idEl.className = 'exam-lock-id';
+      idEl.textContent = exam.id;
+      info.appendChild(nameEl);
+      info.appendChild(idEl);
+
+      const stateEl = document.createElement('span');
+      stateEl.className = 'exam-lock-state' + (locked ? ' locked' : '');
+      stateEl.textContent = locked ? 'Locked' : 'Open';
+
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'exam-lock-toggle' + (locked ? ' is-locked' : '');
+      toggle.setAttribute('aria-pressed', String(locked));
+      toggle.setAttribute('aria-label', (locked ? 'Unlock ' : 'Lock ') + exam.name);
+      toggle.title = locked ? 'Unlock this exam set' : 'Lock this exam set';
+      toggle.addEventListener('click', () => {
+        const s = getSession();
+        if (!s || !isOwnerEmail(s.email)) return;
+        const nowLocked = !isExamLocked(exam.id);
+        setExamLock(exam.id, nowLocked);
+        renderAdminExamLocks();
+        applyExamLocksToUI();
+        toast(nowLocked ? '🔒 ' + exam.name + ' locked' : '🔓 ' + exam.name + ' unlocked');
+      });
+
+      item.appendChild(info);
+      item.appendChild(stateEl);
+      item.appendChild(toggle);
+      grid.appendChild(item);
+    });
+  }
 
   $('adminDismissAll').addEventListener('click', async () => {
     const s = getSession();
@@ -3216,4 +3737,4 @@ body.light .admin-status.local { color: #b45309; }
 })();
 </script>
 </body>
-  </html>
+</html>
