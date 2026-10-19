@@ -1664,37 +1664,6 @@ body.light .admin-status.cloud { color: #047857; }
 
 body.light .admin-status.local { color: #b45309; }
 
-/* ---------- NEW: WELCOME STICKER ---------- */
-.welcome-sticker-new {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
-  margin-right: 14px;
-  vertical-align: middle;
-  font-size: 36px;
-  background: linear-gradient(145deg, rgba(56,189,248,.25), rgba(129,140,248,.18));
-  border: 1px solid rgba(56,189,248,.35);
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(56,189,248,.18), inset 0 1px 0 rgba(255,255,255,.12);
-  animation: floatSticker 3.2s ease-in-out infinite;
-  transition: box-shadow .3s, transform .3s;
-  transform-origin: center;
-}
-
-.welcome-sticker-new:hover {
-  transform: scale(1.08) rotate(-4deg);
-  box-shadow: 0 12px 32px rgba(56,189,248,.3);
-}
-
-@keyframes floatSticker {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  30% { transform: translateY(-8px) rotate(3deg); }
-  60% { transform: translateY(-3px) rotate(-2deg); }
-  80% { transform: translateY(-6px) rotate(1deg); }
-}
-
 /* ---------- STATUS DOTS ---------- */
 .status-dot {
   display: inline-block;
@@ -1784,7 +1753,7 @@ body.light .admin-status.local { color: #b45309; }
   transform: translateY(0);
 }
 
-/* ---------- NEW: ACCESS COUNTDOWN ---------- */
+/* ---------- ACCESS COUNTDOWN ---------- */
 .access-countdown {
   margin: 28px auto 18px;
   max-width: 780px;
@@ -2049,6 +2018,237 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
   pointer-events: none;
 }
 
+/* ============================================================
+   SITE CLOSED OVERLAY — FULL PAGE
+   ============================================================ */
+.site-closed-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  text-align: center;
+  background: #0a1a3a; /* darkish blue base */
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(56,189,248,.18), transparent 55%),
+    radial-gradient(circle at 80% 70%, rgba(37,99,235,.25), transparent 55%),
+    linear-gradient(150deg, #0b1f44 0%, #0a2a6e 50%, #0b1f44 100%);
+  color: #e0f2fe;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-y: auto;
+  animation: closedFadeIn .35s ease-out;
+}
+
+@keyframes closedFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.closed-panel {
+  width: min(100%, 780px);
+  margin: auto;
+  padding: clamp(28px, 5vw, 56px) clamp(20px, 4vw, 48px);
+  border: 1px solid rgba(56,189,248,.35);
+  border-radius: 26px;
+  background: rgba(9, 28, 64, .55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 30px 90px rgba(0,0,0,.5);
+}
+
+.closed-icon {
+  font-size: 62px;
+  line-height: 1;
+  margin-bottom: 14px;
+  display: inline-block;
+  filter: drop-shadow(0 0 20px rgba(56,189,248,.4));
+  animation: floatSticker 3.6s ease-in-out infinite;
+}
+
+.closed-tag {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(56,189,248,.5);
+  background: rgba(56,189,248,.12);
+  color: #7dd3fc;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.closed-panel h1 {
+  font-size: clamp(28px, 5.5vw, 46px);
+  line-height: 1.2;
+  margin-bottom: 18px;
+  color: #f0f9ff;
+  font-weight: bold;
+}
+
+.closed-panel h1 span {
+  color: #38bdf8;
+  text-shadow: 0 0 28px rgba(56,189,248,.45);
+}
+
+.closed-panel p.closed-message {
+  max-width: 620px;
+  margin: 0 auto 30px;
+  font-size: clamp(15px, 2.4vw, 18.5px);
+  line-height: 1.75;
+  color: #bae6fd;
+  font-weight: normal;
+}
+
+.closed-panel p.closed-message strong {
+  color: #7dd3fc;
+  font-weight: bold;
+}
+
+.closed-channel-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 15px 28px;
+  border-radius: 14px;
+  background: #229ed9;
+  color: #fff;
+  text-decoration: none;
+  font-size: clamp(15px, 2.2vw, 17px);
+  font-weight: bold;
+  letter-spacing: .4px;
+  box-shadow: 0 14px 40px rgba(34,158,217,.4);
+  transition: transform .25s var(--ease-out), filter .2s, box-shadow .25s;
+}
+
+.closed-channel-link:hover {
+  filter: brightness(1.1);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 50px rgba(34,158,217,.55);
+}
+
+.closed-channel-link .telegram-icon {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+}
+
+.closed-footer-note {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(56,189,248,.18);
+  color: #7da7c9;
+  font-size: 12.5px;
+  letter-spacing: .5px;
+}
+
+body.light .site-closed-overlay {
+  background: #0a1a3a;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(56,189,248,.18), transparent 55%),
+    radial-gradient(circle at 80% 70%, rgba(37,99,235,.25), transparent 55%),
+    linear-gradient(150deg, #0b1f44 0%, #0a2a6e 50%, #0b1f44 100%);
+  color: #e0f2fe;
+}
+
+/* ---------- ADMIN: SITE OPEN/CLOSE CARD ---------- */
+.admin-site-toggle-card {
+  margin-bottom: 22px;
+  padding: 16px 18px;
+  border: 1px solid rgba(248,113,113,.4);
+  border-radius: 14px;
+  background:
+    linear-gradient(135deg, rgba(248,113,113,.08), rgba(251,191,36,.05)),
+    rgba(13,22,38,.55);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+body.light .admin-site-toggle-card {
+  background:
+    linear-gradient(135deg, rgba(248,113,113,.08), rgba(251,191,36,.05)),
+    #f8fafc;
+}
+
+.admin-site-toggle-card .info {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.admin-site-toggle-card .info h3 {
+  font-size: 15px;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-site-toggle-card .info h3 .state-pill {
+  font-size: 10.5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-weight: bold;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  border: 1px solid rgba(52,211,153,.4);
+  background: rgba(52,211,153,.12);
+  color: #6ee7b7;
+}
+
+.admin-site-toggle-card .info h3 .state-pill.closed {
+  border-color: rgba(248,113,113,.5);
+  background: rgba(248,113,113,.14);
+  color: #fca5a5;
+}
+
+body.light .admin-site-toggle-card .info h3 .state-pill { color: #047857; }
+body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c; }
+
+.admin-site-toggle-card .info p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.site-close-btn {
+  flex: 0 0 auto;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform .2s var(--ease-out), filter .2s, box-shadow .2s;
+  white-space: nowrap;
+  background: linear-gradient(135deg, #f87171, #dc2626);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(220,38,38,.3);
+}
+
+.site-close-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(220,38,38,.45);
+}
+
+.site-close-btn.is-closed {
+  background: linear-gradient(135deg, #34d399, #059669);
+  box-shadow: 0 8px 24px rgba(5,150,105,.3);
+}
+
+.site-close-btn.is-closed:hover {
+  box-shadow: 0 12px 32px rgba(5,150,105,.45);
+}
+
 /* ---------- MOBILE ---------- */
 @media (max-width: 560px) {
   .topbar-inner { width: min(100% - 22px, 1080px); padding: 8px 0; }
@@ -2094,6 +2294,10 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
   }
 
   .exam-lock-grid { grid-template-columns: 1fr; }
+
+  .closed-panel { border-radius: 18px; }
+  .closed-icon { font-size: 46px; }
+  .closed-channel-link { padding: 13px 20px; }
 }
 </style>
 </head>
@@ -2101,6 +2305,30 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
 
 <!-- Reading progress bar -->
 <div id="readProgress" aria-hidden="true"></div>
+
+<!-- ============================================================
+     FULL-PAGE "SITE CLOSED" OVERLAY
+     ============================================================ -->
+<div class="site-closed-overlay" id="siteClosedOverlay" hidden>
+  <div class="closed-panel">
+    <div class="closed-icon">🔒</div>
+    <div class="closed-tag">Site Closed</div>
+    <h1>This Site has been <span>closed for now</span></h1>
+    <p class="closed-message">
+      Join our channel for the <strong>next modules</strong> that will be released soon
+      — packed with <strong>cool features</strong> and fresh exam practice sets.
+    </p>
+    <a class="closed-channel-link" href="https://t.me/clnixapp" target="_blank" rel="noopener noreferrer" aria-label="Join the Clinix Telegram channel">
+      <svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M21.7 3.3a1.2 1.2 0 0 0-1.25-.18L2.7 10.05c-1.2.47-1.18 1.14-.2 1.45l4.55 1.42 1.75 5.4c.2.6.1.84.72.84.48 0 .7-.22.97-.48l2.2-2.14 4.58 3.38c.84.46 1.44.22 1.65-.78L22 4.48c.2-.86-.32-1.24-.3-1.18ZM8.1 12.6l9.1-5.74c.45-.27.87-.12.53.18l-7.52 6.8-.3 3.2L8.1 12.6Z"/>
+      </svg>
+      <span>Join @clnixapp on Telegram</span>
+    </a>
+    <div class="closed-footer-note">
+      🔔 Turn on channel notifications so you don't miss the next release.
+    </div>
+  </div>
+</div>
 
 <!-- ============================================================
      AUTH GATE
@@ -2450,10 +2678,24 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
       </div>
     </div>
 
+    <!-- ===== ADMIN: SITE OPEN / CLOSE ===== -->
+    <div class="admin-site-toggle-card" id="adminSiteToggleCard">
+      <div class="info">
+        <h3>
+          🌐 Site Access
+          <span class="state-pill" id="siteStatePill">Open</span>
+        </h3>
+        <p id="siteStateText">
+          Students can sign in and use the site normally. Click the button to close the entire site for everyone.
+        </p>
+      </div>
+      <button type="button" class="site-close-btn" id="siteToggleBtn">🔒 Close Site for Everyone</button>
+    </div>
+
     <div class="admin-lock-banner" id="lockBanner" hidden>
       <span style="font-size:20px;">🔒</span>
       <div>
-        <strong>Site access is currently LOCKED for everyone except you.</strong>
+        <strong>Sign-in is currently LOCKED for everyone except you.</strong>
         Students cannot sign in. Click "Unlock All" below to restore access.
       </div>
     </div>
@@ -2585,6 +2827,7 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
   const USERS_KEY = 'tt_users';
   const SESSION_KEY = 'tt_session';
   const LOCK_KEY = 'tt_site_locked';
+  const SITE_CLOSED_KEY = 'tt_site_closed';        // NEW: whole-site close flag
   const USERS_COLLECTION = 'users';
   const PRESENCE_COLLECTION = 'presence';
 
@@ -2717,12 +2960,20 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
     try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
   }
 
-  /* ---------- SITE LOCK ---------- */
+  /* ---------- SITE LOCK (sign-in lock) ---------- */
   function isSiteLocked() {
     try { return localStorage.getItem(LOCK_KEY) === '1'; } catch (e) { return false; }
   }
   function setSiteLocked(v) {
     try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
+  }
+
+  /* ---------- NEW: WHOLE-SITE CLOSED ---------- */
+  function isSiteClosed() {
+    try { return localStorage.getItem(SITE_CLOSED_KEY) === '1'; } catch (e) { return false; }
+  }
+  function setSiteClosed(v) {
+    try { localStorage.setItem(SITE_CLOSED_KEY, v ? '1' : '0'); } catch (e) {}
   }
 
   /* ---------- PER-EXAM LOCKS ---------- */
@@ -2950,6 +3201,9 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
     if (!isEmail(email)) return setError('signupError', 'Please enter a valid email address.');
     if (password.length < 6) return setError('signupError', 'Password must be at least 6 characters.');
     if (password !== confirm) return setError('signupError', 'The two passwords do not match.');
+    if (isSiteClosed() && !isOwnerEmail(email)) {
+      return setError('signupError', 'The site is temporarily closed. Please join our Telegram channel @clnixapp for updates.');
+    }
     if (isSiteLocked() && !isOwnerEmail(email)) {
       return setError('signupError', 'Access is temporarily closed. Please contact the admin on Telegram.');
     }
@@ -2972,6 +3226,13 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
 
     if (!isEmail(email)) return setError('signinError', 'Please enter a valid email address.');
     if (!password) return setError('signinError', 'Please enter your password.');
+
+    // If the whole site is closed and the visitor is not the owner, block
+    if (isSiteClosed() && !isOwnerEmail(email)) {
+      const closedOverlay = $('siteClosedOverlay');
+      if (closedOverlay) closedOverlay.hidden = false;
+      return setError('signinError', 'The site is currently closed. Join @clnixapp on Telegram for the next modules.');
+    }
 
     const hash = hashPassword(email, password);
     const user = await findUserByEmail(email);
@@ -3017,6 +3278,7 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
     initCountdown();
     applyExamLocksToUI();
     initExamLinkGuards();
+    refreshSiteClosedOverlay(); // NEW: hide overlay for the owner if site is closed
   }
 
   function renderUserChip(name, email) {
@@ -3409,6 +3671,70 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
   }
 
   /* ============================================================
+     🆕 WHOLE-SITE CLOSE / OPEN
+     ============================================================ */
+  function refreshSiteClosedOverlay() {
+    const overlay = $('siteClosedOverlay');
+    if (!overlay) return;
+    const s = getSession();
+    const ownerView = s && isOwnerEmail(s.email);
+
+    if (isSiteClosed() && !ownerView) {
+      // The whole site is closed and the visitor is not the owner
+      overlay.hidden = false;
+      document.body.classList.add('locked');
+      // Hide auth/app behind it so nothing can be interacted with
+      const authGate = $('authGate');
+      const app = $('app');
+      if (authGate) authGate.hidden = true;
+      if (app) app.hidden = true;
+    } else {
+      overlay.hidden = true;
+      document.body.classList.remove('locked');
+    }
+  }
+
+  // One-click toggle from the admin panel
+  function toggleSiteClosed() {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+
+    const willClose = !isSiteClosed();
+
+    if (willClose) {
+      openModal({
+        icon: '🔒',
+        title: 'Close the Whole Site?',
+        message: 'Every visitor will see the "This site has been closed" page until you reopen it.\n\nYour own account will still be able to browse the site normally. Continue?',
+        confirmText: 'Yes, close site',
+        confirmClass: 'danger',
+        onConfirm: () => {
+          setSiteClosed(true);
+          renderAdmin();
+          refreshSiteClosedOverlay();
+          toast('🔒 Site closed for everyone.');
+          return true;
+        }
+      });
+    } else {
+      openModal({
+        icon: '🔓',
+        title: 'Reopen the Site?',
+        message: 'The closed message will disappear and visitors can sign in again. Continue?',
+        confirmText: 'Reopen site',
+        confirmClass: 'primary',
+        onConfirm: () => {
+          setSiteClosed(false);
+          renderAdmin();
+          refreshSiteClosedOverlay();
+          toast('🔓 Site reopened.');
+          return true;
+        }
+      });
+    }
+  }
+
+  /* ============================================================
      🛡 ADMIN
      ============================================================ */
   const adminOverlay = $('adminOverlay');
@@ -3502,6 +3828,13 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && adminOpen) closeAdmin(); });
   $('adminSearch').addEventListener('input', () => renderAdmin());
 
+  // NEW: site open/close toggle button
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'siteToggleBtn') {
+      toggleSiteClosed();
+    }
+  });
+
   /* ---------- ADMIN: PER-EXAM LOCK TOGGLES ---------- */
   function renderAdminExamLocks() {
     const grid = $('examLockGrid');
@@ -3586,20 +3919,42 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
     }
   }
 
+  // NEW: keep the site close/open card in sync
+  function updateSiteToggleCard() {
+    const pill = $('siteStatePill');
+    const text = $('siteStateText');
+    const btn = $('siteToggleBtn');
+    if (!pill || !text || !btn) return;
+
+    if (isSiteClosed()) {
+      pill.textContent = 'Closed';
+      pill.classList.add('closed');
+      text.textContent = 'The whole site is CLOSED. Every visitor sees the closed page. Your own account can still browse normally. Click the button to reopen the site.';
+      btn.textContent = '🔓 Reopen Site for Everyone';
+      btn.classList.add('is-closed');
+    } else {
+      pill.textContent = 'Open';
+      pill.classList.remove('closed');
+      text.textContent = 'Students can sign in and use the site normally. Click the button to close the entire site for everyone.';
+      btn.textContent = '🔒 Close Site for Everyone';
+      btn.classList.remove('is-closed');
+    }
+  }
+
   $('adminToggleLock').addEventListener('click', () => {
     const s = getSession();
     if (!s || !isOwnerEmail(s.email)) return;
     if (isSiteLocked()) {
       openModal({
-        icon: '🔓', title: 'Unlock Site Access?', message: 'Students will be able to sign in again.',
+        icon: '🔓', title: 'Unlock Sign-in?', message: 'Students will be able to sign in again.',
         confirmText: 'Unlock', confirmClass: 'primary',
-        onConfirm: () => { setSiteLocked(false); toast('Site access unlocked.'); renderAdmin(); return true; }
+        onConfirm: () => { setSiteLocked(false); toast('Sign-in unlocked.'); renderAdmin(); return true; }
       });
     } else {
       openModal({
-        icon: '🔒', title: 'Lock Site Access?', message: 'All students (except you) will be blocked from signing in.',
+        icon: '🔒', title: 'Lock Sign-in?', message: 'All students (except you) will be blocked from signing in.',
         confirmText: 'Lock All', confirmClass: 'danger',
-        onConfirm: () => { setSiteLocked(true); toast('Site access locked.'); renderAdmin(); return true; }
+        onConfirm: () => { setSiteLocked(true); toast('Sign-in locked.'); renderAdmin(); return true; }
       });
     }
   });
@@ -3654,6 +4009,7 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
 
     $('lockBanner').hidden = !isSiteLocked();
     updateLockButton();
+    updateSiteToggleCard();
 
     const search = ($('adminSearch').value || '').trim().toLowerCase();
     const filtered = users.filter((u) => !search || (u.name || '').toLowerCase().includes(search) || (u.email || '').toLowerCase().includes(search));
@@ -3711,15 +4067,32 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
   }
 
   /* ============================================================
-     BOOT
+     BOOT — CHECK SITE CLOSED FIRST
      ============================================================ */
-  const session = getSession();
-  if (session) {
-    startApp(session);
-  } else {
-    showScreen('auth');
-    showAuthView('signin');
-  }
+  // On page load, if the whole site is closed and the visitor is not the
+  // owner, show the full-page closed overlay immediately.
+  (function boot() {
+    const session = getSession();
+    const ownerView = session && isOwnerEmail(session.email);
+
+    if (isSiteClosed() && !ownerView) {
+      const overlay = $('siteClosedOverlay');
+      if (overlay) overlay.hidden = false;
+      const authGate = $('authGate');
+      const app = $('app');
+      if (authGate) authGate.hidden = true;
+      if (app) app.hidden = true;
+      document.body.classList.add('locked');
+      return; // stop the rest of the boot flow
+    }
+
+    if (session) {
+      startApp(session);
+    } else {
+      showScreen('auth');
+      showAuthView('signin');
+    }
+  })();
 
   document.addEventListener('visibilitychange', () => {
     const s = getSession();
