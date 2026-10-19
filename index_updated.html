@@ -2019,234 +2019,389 @@ body.light .exam-card.exam-locked .button { background: #94a3b8; color: #fff; }
 }
 
 /* ============================================================
-   SITE CLOSED OVERLAY — FULL PAGE
+   ✨ NEW: PREMIUM FULL-PAGE SITE CLOSED OVERLAY
    ============================================================ */
 .site-closed-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px;
-  text-align: center;
-  background: #0a1a3a; /* darkish blue base */
+  padding: 24px;
+  overflow-y: auto;
+  background: #06122b;
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(56,189,248,.18), transparent 55%),
-    radial-gradient(circle at 80% 70%, rgba(37,99,235,.25), transparent 55%),
-    linear-gradient(150deg, #0b1f44 0%, #0a2a6e 50%, #0b1f44 100%);
+    radial-gradient(circle at 15% 20%, rgba(56,189,248,.22), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(37,99,235,.28), transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(14,165,233,.12), transparent 65%),
+    linear-gradient(155deg, #06122b 0%, #0b2450 45%, #071a3d 100%);
   color: #e0f2fe;
   font-family: Arial, Helvetica, sans-serif;
-  overflow-y: auto;
-  animation: closedFadeIn .35s ease-out;
+  animation: closedFade .4s ease-out;
 }
 
-@keyframes closedFadeIn {
+@keyframes closedFade {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-.closed-panel {
-  width: min(100%, 780px);
-  margin: auto;
-  padding: clamp(28px, 5vw, 56px) clamp(20px, 4vw, 48px);
-  border: 1px solid rgba(56,189,248,.35);
-  border-radius: 26px;
-  background: rgba(9, 28, 64, .55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 30px 90px rgba(0,0,0,.5);
+.site-closed-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56,189,248,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,.05) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 78%);
+  pointer-events: none;
+  animation: gridDrift 24s linear infinite;
 }
 
-.closed-icon {
-  font-size: 62px;
+@keyframes gridDrift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 46px 46px, 46px 46px; }
+}
+
+.closed-panel {
+  position: relative;
+  width: min(100%, 820px);
+  margin: auto;
+  padding: clamp(34px, 6vw, 64px) clamp(22px, 4.5vw, 56px);
+  border-radius: 30px;
+  border: 1px solid rgba(56,189,248,.32);
+  background:
+    linear-gradient(160deg, rgba(11,36,80,.92), rgba(6,18,43,.94));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 40px 110px rgba(0,0,0,.65),
+    inset 0 1px 0 rgba(125,211,252,.14);
+  text-align: center;
+  animation: closedPanelIn .55s var(--ease-out);
+}
+
+@keyframes closedPanelIn {
+  from { opacity: 0; transform: translateY(26px) scale(.965); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.closed-panel::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, #38bdf8, #818cf8, transparent);
+  filter: blur(.4px);
+  opacity: .9;
+}
+
+.closed-lock-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 22px;
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(56,189,248,.26), rgba(129,140,248,.18));
+  border: 1px solid rgba(125,211,252,.42);
+  box-shadow:
+    0 14px 40px rgba(56,189,248,.25),
+    inset 0 1px 0 rgba(255,255,255,.15);
+  font-size: 48px;
   line-height: 1;
-  margin-bottom: 14px;
-  display: inline-block;
-  filter: drop-shadow(0 0 20px rgba(56,189,248,.4));
-  animation: floatSticker 3.6s ease-in-out infinite;
+  animation: lockPulse 2.8s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+  0%, 100% { box-shadow: 0 14px 40px rgba(56,189,248,.25), inset 0 1px 0 rgba(255,255,255,.15); }
+  50% { box-shadow: 0 18px 54px rgba(56,189,248,.45), inset 0 1px 0 rgba(255,255,255,.2); }
 }
 
 .closed-tag {
   display: inline-block;
-  margin-bottom: 18px;
-  padding: 6px 16px;
+  margin-bottom: 16px;
+  padding: 7px 18px;
   border-radius: 999px;
-  border: 1px solid rgba(56,189,248,.5);
-  background: rgba(56,189,248,.12);
+  border: 1px solid rgba(125,211,252,.5);
+  background: rgba(56,189,248,.14);
   color: #7dd3fc;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: bold;
-  letter-spacing: 2px;
+  letter-spacing: 2.4px;
   text-transform: uppercase;
 }
 
 .closed-panel h1 {
-  font-size: clamp(28px, 5.5vw, 46px);
-  line-height: 1.2;
-  margin-bottom: 18px;
+  font-size: clamp(30px, 5.6vw, 50px);
+  line-height: 1.16;
+  margin-bottom: 20px;
   color: #f0f9ff;
   font-weight: bold;
+  letter-spacing: -.4px;
 }
 
-.closed-panel h1 span {
+.closed-panel h1 .highlight {
   color: #38bdf8;
-  text-shadow: 0 0 28px rgba(56,189,248,.45);
+  text-shadow: 0 0 32px rgba(56,189,248,.5);
 }
 
-.closed-panel p.closed-message {
-  max-width: 620px;
-  margin: 0 auto 30px;
-  font-size: clamp(15px, 2.4vw, 18.5px);
-  line-height: 1.75;
+.closed-panel .closed-message {
+  max-width: 640px;
+  margin: 0 auto 32px;
+  font-size: clamp(15px, 2.3vw, 18.5px);
+  line-height: 1.8;
   color: #bae6fd;
-  font-weight: normal;
 }
 
-.closed-panel p.closed-message strong {
+.closed-panel .closed-message strong {
   color: #7dd3fc;
   font-weight: bold;
 }
 
+.closed-panel .closed-message .channel-name {
+  color: #38bdf8;
+  font-weight: bold;
+  letter-spacing: .3px;
+  text-shadow: 0 0 18px rgba(56,189,248,.4);
+}
+
 .closed-channel-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 15px 28px;
-  border-radius: 14px;
-  background: #229ed9;
+  gap: 13px;
+  padding: 17px 32px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #229ed9, #1c8ac1);
   color: #fff;
   text-decoration: none;
-  font-size: clamp(15px, 2.2vw, 17px);
+  font-size: clamp(15px, 2.2vw, 17.5px);
   font-weight: bold;
   letter-spacing: .4px;
-  box-shadow: 0 14px 40px rgba(34,158,217,.4);
-  transition: transform .25s var(--ease-out), filter .2s, box-shadow .25s;
+  box-shadow:
+    0 16px 44px rgba(34,158,217,.42),
+    inset 0 1px 0 rgba(255,255,255,.18);
+  transition: transform .28s var(--ease-out), filter .2s, box-shadow .28s;
 }
 
 .closed-channel-link:hover {
-  filter: brightness(1.1);
-  transform: translateY(-3px);
-  box-shadow: 0 18px 50px rgba(34,158,217,.55);
+  filter: brightness(1.09);
+  transform: translateY(-3px) scale(1.01);
+  box-shadow:
+    0 22px 58px rgba(34,158,217,.58),
+    inset 0 1px 0 rgba(255,255,255,.22);
 }
 
 .closed-channel-link .telegram-icon {
-  width: 26px;
-  height: 26px;
-  flex: 0 0 26px;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 27px;
+}
+
+.closed-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.closed-info-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(56,189,248,.22);
+  background: rgba(56,189,248,.06);
+  color: #93c5fd;
+  font-size: 12.5px;
+  font-weight: bold;
+  letter-spacing: .3px;
+}
+
+.closed-info-chip .dot-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+  animation: pulseDot 1.8s ease-in-out infinite;
 }
 
 .closed-footer-note {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(56,189,248,.18);
+  margin-top: 32px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(56,189,248,.16);
   color: #7da7c9;
   font-size: 12.5px;
   letter-spacing: .5px;
 }
 
-body.light .site-closed-overlay {
-  background: #0a1a3a;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(56,189,248,.18), transparent 55%),
-    radial-gradient(circle at 80% 70%, rgba(37,99,235,.25), transparent 55%),
-    linear-gradient(150deg, #0b1f44 0%, #0a2a6e 50%, #0b1f44 100%);
-  color: #e0f2fe;
-}
-
-/* ---------- ADMIN: SITE OPEN/CLOSE CARD ---------- */
-.admin-site-toggle-card {
+/* ============================================================
+   ✨ NEW: ADMIN FULL-PAGE CLOSURE CARD
+   ============================================================ */
+.admin-site-panel {
+  position: relative;
   margin-bottom: 22px;
-  padding: 16px 18px;
-  border: 1px solid rgba(248,113,113,.4);
-  border-radius: 14px;
+  padding: 20px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(56,189,248,.3);
   background:
-    linear-gradient(135deg, rgba(248,113,113,.08), rgba(251,191,36,.05)),
-    rgba(13,22,38,.55);
+    radial-gradient(circle at 0% 0%, rgba(56,189,248,.1), transparent 60%),
+    linear-gradient(150deg, rgba(13,22,38,.9), rgba(9,17,32,.9));
+  overflow: hidden;
+}
+
+body.light .admin-site-panel {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(2,132,199,.08), transparent 60%),
+    linear-gradient(150deg, #ffffff, #f7fafd);
+}
+
+.admin-site-panel::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8, #34d399);
+  opacity: .85;
+}
+
+.admin-site-panel-head {
   display: flex;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
   justify-content: space-between;
-}
-
-body.light .admin-site-toggle-card {
-  background:
-    linear-gradient(135deg, rgba(248,113,113,.08), rgba(251,191,36,.05)),
-    #f8fafc;
-}
-
-.admin-site-toggle-card .info {
-  flex: 1 1 260px;
-  min-width: 0;
-}
-
-.admin-site-toggle-card .info h3 {
-  font-size: 15px;
-  margin-bottom: 3px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 12px;
+  margin-bottom: 14px;
   flex-wrap: wrap;
 }
 
-.admin-site-toggle-card .info h3 .state-pill {
-  font-size: 10.5px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  font-weight: bold;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  border: 1px solid rgba(52,211,153,.4);
-  background: rgba(52,211,153,.12);
-  color: #6ee7b7;
+.admin-site-panel-head h3 {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  letter-spacing: .3px;
 }
 
-.admin-site-toggle-card .info h3 .state-pill.closed {
+.admin-site-panel-head h3 .icon {
+  font-size: 20px;
+}
+
+.admin-site-state-pill {
+  padding: 5px 13px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid rgba(52,211,153,.45);
+  background: rgba(52,211,153,.14);
+  color: #6ee7b7;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+body.light .admin-site-state-pill { color: #047857; }
+
+.admin-site-state-pill.closed {
   border-color: rgba(248,113,113,.5);
-  background: rgba(248,113,113,.14);
+  background: rgba(248,113,113,.16);
   color: #fca5a5;
 }
 
-body.light .admin-site-toggle-card .info h3 .state-pill { color: #047857; }
-body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c; }
+body.light .admin-site-state-pill.closed { color: #b91c1c; }
 
-.admin-site-toggle-card .info p {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.55;
+.admin-site-state-pill .pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
 }
 
-.site-close-btn {
-  flex: 0 0 auto;
-  padding: 12px 22px;
+.admin-site-panel p.site-desc {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+  margin-bottom: 16px;
+  max-width: 640px;
+}
+
+.admin-site-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.admin-site-primary-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 26px;
   border: 0;
-  border-radius: 11px;
-  font: inherit;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform .2s var(--ease-out), filter .2s, box-shadow .2s;
-  white-space: nowrap;
+  border-radius: 12px;
   background: linear-gradient(135deg, #f87171, #dc2626);
   color: #fff;
-  box-shadow: 0 8px 24px rgba(220,38,38,.3);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: bold;
+  letter-spacing: .3px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(220,38,38,.34);
+  transition: transform .22s var(--ease-out), filter .2s, box-shadow .22s;
+  white-space: nowrap;
 }
 
-.site-close-btn:hover {
-  filter: brightness(1.08);
+.admin-site-primary-btn:hover {
+  filter: brightness(1.1);
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(220,38,38,.45);
+  box-shadow: 0 14px 40px rgba(220,38,38,.5);
 }
 
-.site-close-btn.is-closed {
+.admin-site-primary-btn:active { transform: translateY(0); }
+
+.admin-site-primary-btn.is-open-state {
   background: linear-gradient(135deg, #34d399, #059669);
-  box-shadow: 0 8px 24px rgba(5,150,105,.3);
+  box-shadow: 0 10px 30px rgba(5,150,105,.34);
 }
 
-.site-close-btn.is-closed:hover {
-  box-shadow: 0 12px 32px rgba(5,150,105,.45);
+.admin-site-primary-btn.is-open-state:hover {
+  box-shadow: 0 14px 40px rgba(5,150,105,.5);
+}
+
+.admin-site-secondary-btn {
+  padding: 13px 22px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+}
+
+.admin-site-secondary-btn:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--hover);
 }
 
 /* ---------- MOBILE ---------- */
@@ -2295,9 +2450,15 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
 
   .exam-lock-grid { grid-template-columns: 1fr; }
 
-  .closed-panel { border-radius: 18px; }
-  .closed-icon { font-size: 46px; }
-  .closed-channel-link { padding: 13px 20px; }
+  .closed-panel { border-radius: 22px; padding: 30px 20px; }
+  .closed-lock-badge { width: 74px; height: 74px; font-size: 38px; border-radius: 22px; }
+  .closed-channel-link { padding: 14px 22px; width: 100%; }
+  .closed-info-chip { font-size: 11.5px; padding: 8px 14px; }
+
+  .admin-site-panel { padding: 16px 16px; }
+  .admin-site-actions { flex-direction: column; align-items: stretch; }
+  .admin-site-primary-btn,
+  .admin-site-secondary-btn { width: 100%; }
 }
 </style>
 </head>
@@ -2307,16 +2468,17 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
 <div id="readProgress" aria-hidden="true"></div>
 
 <!-- ============================================================
-     FULL-PAGE "SITE CLOSED" OVERLAY
+     ✨ NEW PREMIUM FULL-PAGE SITE CLOSED OVERLAY
      ============================================================ -->
 <div class="site-closed-overlay" id="siteClosedOverlay" hidden>
   <div class="closed-panel">
-    <div class="closed-icon">🔒</div>
-    <div class="closed-tag">Site Closed</div>
-    <h1>This Site has been <span>closed for now</span></h1>
+    <div class="closed-lock-badge">🔒</div>
+    <div class="closed-tag">Site Offline</div>
+    <h1>This Site has been <span class="highlight">closed for now</span></h1>
     <p class="closed-message">
-      Join our channel for the <strong>next modules</strong> that will be released soon
-      — packed with <strong>cool features</strong> and fresh exam practice sets.
+      Join our channel <span class="channel-name">@clnixapp</span> for the
+      <strong>next modules</strong> that will be released soon — packed with
+      <strong>cool features</strong> and fresh exam practice sets.
     </p>
     <a class="closed-channel-link" href="https://t.me/clnixapp" target="_blank" rel="noopener noreferrer" aria-label="Join the Clinix Telegram channel">
       <svg class="telegram-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -2324,6 +2486,11 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
       </svg>
       <span>Join @clnixapp on Telegram</span>
     </a>
+    <div class="closed-info-row">
+      <span class="closed-info-chip"><span class="dot-live"></span> New modules coming soon</span>
+      <span class="closed-info-chip">✨ Cool new features</span>
+      <span class="closed-info-chip">📚 Fresh exam sets</span>
+    </div>
     <div class="closed-footer-note">
       🔔 Turn on channel notifications so you don't miss the next release.
     </div>
@@ -2678,18 +2845,32 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
       </div>
     </div>
 
-    <!-- ===== ADMIN: SITE OPEN / CLOSE ===== -->
-    <div class="admin-site-toggle-card" id="adminSiteToggleCard">
-      <div class="info">
+    <!-- ============================================================
+         ✨ NEW PREMIUM FULL-PAGE CLOSURE CONTROL
+         ============================================================ -->
+    <div class="admin-site-panel" id="adminSitePanel">
+      <div class="admin-site-panel-head">
         <h3>
-          🌐 Site Access
-          <span class="state-pill" id="siteStatePill">Open</span>
+          <span class="icon">🌐</span>
+          Whole-Site Full-Page Closure
         </h3>
-        <p id="siteStateText">
-          Students can sign in and use the site normally. Click the button to close the entire site for everyone.
-        </p>
+        <span class="admin-site-state-pill" id="siteStatePill">
+          <span class="pill-dot"></span> Open
+        </span>
       </div>
-      <button type="button" class="site-close-btn" id="siteToggleBtn">🔒 Close Site for Everyone</button>
+      <p class="site-desc" id="siteStateDesc">
+        Instantly replace the entire site with a premium full-page announcement.
+        All visitors (except you) will be locked out and shown the Telegram channel
+        link. Your own account stays fully usable.
+      </p>
+      <div class="admin-site-actions">
+        <button type="button" class="admin-site-primary-btn" id="adminSitePrimaryBtn">
+          🔒 Close Site for Everyone
+        </button>
+        <button type="button" class="admin-site-secondary-btn" id="adminSitePreviewBtn">
+          👁 Preview Closed Page
+        </button>
+      </div>
     </div>
 
     <div class="admin-lock-banner" id="lockBanner" hidden>
@@ -2825,9 +3006,9 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
      STORAGE
      ============================================================ */
   const USERS_KEY = 'tt_users';
-  const SESSION_KEY = 'tt_session';
+  const SESSION_KEY = 'tt_session';                // NOT USED ANYMORE (see below)
   const LOCK_KEY = 'tt_site_locked';
-  const SITE_CLOSED_KEY = 'tt_site_closed';        // NEW: whole-site close flag
+  const SITE_CLOSED_KEY = 'tt_site_closed';
   const USERS_COLLECTION = 'users';
   const PRESENCE_COLLECTION = 'presence';
 
@@ -2937,27 +3118,24 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
     return deleted;
   }
 
-  /* ---------- SESSION ---------- */
+  /* ============================================================
+     ✨ SESSION — NOW IN-MEMORY ONLY (forced login every visit)
+     ============================================================ */
+  // The session lives in a JS variable, so refreshing the tab / opening a new
+  // tab / closing the browser always forces a fresh sign-in.
+  let currentSession = null;
+
   function getSession() {
-    try {
-      const raw = localStorage.getItem(SESSION_KEY);
-      if (!raw) return null;
-      const s = JSON.parse(raw);
-      if (!s || !s.email) return null;
-      if (Date.now() - (s.ts || 0) > 30 * 24 * 60 * 60 * 1000) {
-        localStorage.removeItem(SESSION_KEY);
-        return null;
-      }
-      return s;
-    } catch (e) { return null; }
+    return currentSession;
   }
   function setSession(user) {
-    try {
-      localStorage.setItem(SESSION_KEY, JSON.stringify({ name: user.name, email: user.email, ts: Date.now() }));
-    } catch (e) {}
+    currentSession = {
+      name: user.name,
+      email: String(user.email || '').toLowerCase()
+    };
   }
   function clearSession() {
-    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+    currentSession = null;
   }
 
   /* ---------- SITE LOCK (sign-in lock) ---------- */
@@ -2968,7 +3146,7 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
     try { localStorage.setItem(LOCK_KEY, v ? '1' : '0'); } catch (e) {}
   }
 
-  /* ---------- NEW: WHOLE-SITE CLOSED ---------- */
+  /* ---------- WHOLE-SITE CLOSED ---------- */
   function isSiteClosed() {
     try { return localStorage.getItem(SITE_CLOSED_KEY) === '1'; } catch (e) { return false; }
   }
@@ -3258,6 +3436,8 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
     showScreen('auth');
     showAuthView('signin');
     toast('Signed out.');
+    // Also hide app-level content and reset
+    const app = $('app'); if (app) app.hidden = true;
   });
 
   /* ============================================================
@@ -3278,7 +3458,7 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
     initCountdown();
     applyExamLocksToUI();
     initExamLinkGuards();
-    refreshSiteClosedOverlay(); // NEW: hide overlay for the owner if site is closed
+    refreshSiteClosedOverlay();
   }
 
   function renderUserChip(name, email) {
@@ -3671,7 +3851,7 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
   }
 
   /* ============================================================
-     🆕 WHOLE-SITE CLOSE / OPEN
+     ✨ WHOLE-SITE CLOSE / OPEN — PREMIUM VERSION
      ============================================================ */
   function refreshSiteClosedOverlay() {
     const overlay = $('siteClosedOverlay');
@@ -3683,7 +3863,6 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
       // The whole site is closed and the visitor is not the owner
       overlay.hidden = false;
       document.body.classList.add('locked');
-      // Hide auth/app behind it so nothing can be interacted with
       const authGate = $('authGate');
       const app = $('app');
       if (authGate) authGate.hidden = true;
@@ -3705,7 +3884,7 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
       openModal({
         icon: '🔒',
         title: 'Close the Whole Site?',
-        message: 'Every visitor will see the "This site has been closed" page until you reopen it.\n\nYour own account will still be able to browse the site normally. Continue?',
+        message: 'Every visitor (except you) will see the premium "This site has been closed" announcement page until you reopen it.\n\nYour own account will still be able to browse the site normally. Continue?',
         confirmText: 'Yes, close site',
         confirmClass: 'danger',
         onConfirm: () => {
@@ -3720,7 +3899,7 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
       openModal({
         icon: '🔓',
         title: 'Reopen the Site?',
-        message: 'The closed message will disappear and visitors can sign in again. Continue?',
+        message: 'The closed announcement will disappear and visitors can sign in again. Continue?',
         confirmText: 'Reopen site',
         confirmClass: 'primary',
         onConfirm: () => {
@@ -3732,6 +3911,42 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
         }
       });
     }
+  }
+
+  // Preview the closed page without actually closing the site
+  function previewSiteClosed() {
+    const s = getSession();
+    if (!s || !isOwnerEmail(s.email)) return;
+    const overlay = $('siteClosedOverlay');
+    if (!overlay) return;
+
+    // Temporarily show overlay as a preview, with an escape button
+    const previewWasHidden = overlay.hidden;
+    overlay.hidden = false;
+    document.body.classList.add('locked');
+
+    const panel = overlay.querySelector('.closed-panel');
+    let banner = overlay.querySelector('.preview-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.className = 'preview-banner';
+      banner.style.cssText = 'position:absolute;top:18px;left:50%;transform:translateX(-50%);z-index:5;padding:10px 18px;border-radius:999px;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.45);color:#fbbf24;font-size:12.5px;font-weight:bold;letter-spacing:.4px;display:flex;gap:12px;align-items:center;';
+      const label = document.createElement('span');
+      label.textContent = '👁 Preview mode — this is what students see';
+      const exitBtn = document.createElement('button');
+      exitBtn.type = 'button';
+      exitBtn.textContent = 'Exit Preview';
+      exitBtn.style.cssText = 'padding:6px 12px;border-radius:8px;border:0;background:#fbbf24;color:#111;font-weight:bold;cursor:pointer;font-size:12px;';
+      exitBtn.addEventListener('click', () => {
+        overlay.hidden = previewWasHidden;
+        document.body.classList.remove('locked');
+        if (banner.parentNode) banner.remove();
+      });
+      banner.appendChild(label);
+      banner.appendChild(exitBtn);
+      overlay.appendChild(banner);
+    }
+    toast('👁 Preview — click "Exit Preview" to return.');
   }
 
   /* ============================================================
@@ -3828,11 +4043,10 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && adminOpen) closeAdmin(); });
   $('adminSearch').addEventListener('input', () => renderAdmin());
 
-  // NEW: site open/close toggle button
+  // NEW: bind site toggle buttons
   document.addEventListener('click', (e) => {
-    if (e.target && e.target.id === 'siteToggleBtn') {
-      toggleSiteClosed();
-    }
+    if (e.target && e.target.id === 'adminSitePrimaryBtn') toggleSiteClosed();
+    if (e.target && e.target.id === 'adminSitePreviewBtn') previewSiteClosed();
   });
 
   /* ---------- ADMIN: PER-EXAM LOCK TOGGLES ---------- */
@@ -3919,25 +4133,25 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
     }
   }
 
-  // NEW: keep the site close/open card in sync
+  // NEW: keep the site closure card in sync
   function updateSiteToggleCard() {
     const pill = $('siteStatePill');
-    const text = $('siteStateText');
-    const btn = $('siteToggleBtn');
-    if (!pill || !text || !btn) return;
+    const desc = $('siteStateDesc');
+    const btn = $('adminSitePrimaryBtn');
+    if (!pill || !desc || !btn) return;
 
     if (isSiteClosed()) {
-      pill.textContent = 'Closed';
+      pill.innerHTML = '<span class="pill-dot"></span> Closed';
       pill.classList.add('closed');
-      text.textContent = 'The whole site is CLOSED. Every visitor sees the closed page. Your own account can still browse normally. Click the button to reopen the site.';
+      desc.textContent = 'The whole site is CLOSED. Every visitor (except you) sees the premium announcement page. Your own account can still browse normally. Click the button to reopen the site.';
       btn.textContent = '🔓 Reopen Site for Everyone';
-      btn.classList.add('is-closed');
+      btn.classList.add('is-open-state');
     } else {
-      pill.textContent = 'Open';
+      pill.innerHTML = '<span class="pill-dot"></span> Open';
       pill.classList.remove('closed');
-      text.textContent = 'Students can sign in and use the site normally. Click the button to close the entire site for everyone.';
+      desc.textContent = 'Instantly replace the entire site with a premium full-page announcement. All visitors (except you) will be locked out and shown the Telegram channel link. Your own account stays fully usable.';
       btn.textContent = '🔒 Close Site for Everyone';
-      btn.classList.remove('is-closed');
+      btn.classList.remove('is-open-state');
     }
   }
 
@@ -4067,15 +4281,19 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
   }
 
   /* ============================================================
-     BOOT — CHECK SITE CLOSED FIRST
+     BOOT — FORCE SIGN-IN ON EVERY VISIT
      ============================================================ */
-  // On page load, if the whole site is closed and the visitor is not the
-  // owner, show the full-page closed overlay immediately.
+  // Since the session is in-memory only, a fresh page load always has no
+  // session → the user is always forced to sign in. This also keeps the
+  // "sign in every time" behaviour consistent even if they refresh.
   (function boot() {
-    const session = getSession();
-    const ownerView = session && isOwnerEmail(session.email);
+    // Clear any legacy localStorage session that old versions might have written
+    try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
 
-    if (isSiteClosed() && !ownerView) {
+    if (isSiteClosed()) {
+      // Site is closed — show the overlay to everyone on load.
+      // The owner will only see it as the closed page until they sign in;
+      // after sign-in, refreshSiteClosedOverlay() hides it for them.
       const overlay = $('siteClosedOverlay');
       if (overlay) overlay.hidden = false;
       const authGate = $('authGate');
@@ -4083,15 +4301,12 @@ body.light .admin-site-toggle-card .info h3 .state-pill.closed { color: #b91c1c;
       if (authGate) authGate.hidden = true;
       if (app) app.hidden = true;
       document.body.classList.add('locked');
-      return; // stop the rest of the boot flow
+      return;
     }
 
-    if (session) {
-      startApp(session);
-    } else {
-      showScreen('auth');
-      showAuthView('signin');
-    }
+    // No session on load → always go to sign-in
+    showScreen('auth');
+    showAuthView('signin');
   })();
 
   document.addEventListener('visibilitychange', () => {
